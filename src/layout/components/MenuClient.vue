@@ -57,6 +57,12 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
                                 <li>
+                                    <router-link class="dropdown-item" to="/khach-hang/tai-khoan-ca-nhan">
+                                        <i class="fa-solid fa-user me-2"></i>
+                                        <span>Thông tin cá nhân</span>
+                                    </router-link>
+                                </li>
+                                <li>
                                     <a v-on:click="dangXuat()" class="dropdown-item">
                                         <i class="bx bx-log-out-circle me-2"></i>
                                         <span>Đăng Xuất</span>
