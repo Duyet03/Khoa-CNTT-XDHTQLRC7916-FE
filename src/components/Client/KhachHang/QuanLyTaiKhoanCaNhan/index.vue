@@ -7,7 +7,7 @@
                     <div class="card-body text-center">
                         <img src="https://i.pinimg.com/236x/03/19/e7/0319e75748160709ceefa7398a4a7070.jpg"
                             class="rounded-circle mb-3" style="width: 100px;" alt="avatar" />
-                        <h5 class="fw-bold">{{khach_hang.ten_khach_hang}}</h5>
+                        <h5 class="fw-bold">{{ khach_hang.ten_khach_hang }}</h5>
                         <p class="text-muted mb-1"><i class="bi bi-gift"></i> 0 Stars</p>
                         <hr />
                         <h6 class="mb-1">Tổng chi tiêu 2025 <i class="bi bi-info-circle"></i></h6>
@@ -63,11 +63,13 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Họ và tên</label>
-                                        <input type="text" class="form-control" :value="khach_hang.ten_khach_hang" disabled />
+                                        <input type="text" class="form-control" :value="khach_hang.ten_khach_hang"
+                                            disabled />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ngày sinh</label>
-                                        <input type="date" class="form-control" :value="khach_hang.ngay_sinh" disabled />
+                                        <input type="date" class="form-control" :value="khach_hang.ngay_sinh"
+                                            disabled />
                                     </div>
                                 </div>
 
@@ -85,17 +87,18 @@
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <button style="width: 200px;" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#capnhat">Cập
+                                    <button style="width: 200px;" class="btn btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#capnhat">Cập
                                         nhật</button>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="primaryprofile" role="tabpanel">
                                 <label for="">Mật khẩu hiện tại</label>
-                                <input class="form-control mt-1" type="password" name="" id="">
+                                <input v-model="mat_khau.hien_tai" class="form-control mt-1" type="password" name="" id="">
                                 <label for="" class="mt-3">Mật khẩu mới</label>
-                                <input class="form-control mt-1" type="password" name="" id="">
+                                <input v-model="mat_khau.moi" class="form-control mt-1" type="password" name="" id="">
                                 <label for="" class="mt-3">Nhập lại mật khẩu mới</label>
-                                <input class="form-control mt-1" type="password" name="" id="">
+                                <input v-model="mat_khau.re_password" class="form-control mt-1" type="password" name="" id="">
                                 <div class="text-center mt-3">
                                     <button style="width: 200px;" class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#doi">Xác nhận</button>
@@ -121,11 +124,11 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Họ và tên</label>
-                                    <input type="text" class="form-control" value="Trần Văn Duyệt"  />
+                                    <input type="text" class="form-control" value="Trần Văn Duyệt" />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Ngày sinh</label>
-                                    <input type="date" class="form-control" value="2003-01-06"  />
+                                    <input type="date" class="form-control" value="2003-01-06" />
                                 </div>
                             </div>
 
@@ -133,13 +136,12 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Email</label>
                                     <div class="d-flex align-items-center">
-                                        <input type="email" class="form-control" value="duyetvan03@gmail.com"
-                                             />
+                                        <input type="email" class="form-control" value="duyetvan03@gmail.com" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Số điện thoại</label>
-                                    <input type="text" class="form-control" value="0332162386"  />
+                                    <input type="text" class="form-control" value="0332162386" />
                                 </div>
                             </div>
                         </div>
@@ -164,7 +166,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    <button v-on:click="doiMatKhau()" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
                 </div>
             </div>
         </div>
@@ -175,12 +177,18 @@
 <script>
 import axios from 'axios';
 import { createToaster } from "@meforma/vue-toaster";
+import Toaster from '@meforma/vue-toaster/src/Toaster.vue';
 const toaster = createToaster({ position: "top-right" });
 
 export default {
     data() {
         return {
             khach_hang: {},
+            mat_khau:{
+                hien_tai: '',
+                moi: '',
+                re_password:''
+            }
         }
     },
     mounted() {
@@ -197,10 +205,31 @@ export default {
                     }
                 })
                 .then((res) => {
-                        this.khach_hang = res.data.data;
+                    this.khach_hang = res.data.data;
 
                 });
         },
+        doiMatKhau() {
+            var payLoad={
+                email: this.khach_hang.email,
+                password: this.mat_khau.hien_tai,
+                moi: this.mat_khau.moi,
+                re_password: this.mat_khau.re_password
+            }
+            axios
+                .post('http://127.0.0.1:8000/api/khach-hang/doi-mat-khau', payLoad, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem("token_khachhang")
+                    }
+                })
+                .then((res) => {
+                    if(res.data.status){
+                        toaster.success(res.data.message)
+                    }else{
+                        toaster.error(res.data.message)
+                    }
+                });
+        }
     },
 }
 </script>
