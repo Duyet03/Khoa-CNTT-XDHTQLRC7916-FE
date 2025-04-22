@@ -11,11 +11,6 @@
             <div class="card-header bg-primary text-white p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2 class="mb-0"><i class="fas fa-receipt me-2"></i>Chi tiết hóa đơn</h2>
-                    <div>
-                        <button @click="inHoaDon" class="btn btn-light me-2">
-                            <i class="fas fa-print me-1"></i> In hóa đơn
-                        </button>
-                    </div>
                 </div>
             </div>
 
@@ -286,9 +281,6 @@ export default {
             };
             return new Date(dateString).toLocaleDateString('vi-VN', options);
         },
-        inHoaDon() {
-            window.print();
-        }
     }
 }
 </script>

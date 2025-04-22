@@ -74,19 +74,12 @@
                                             <h5>Phương thức thanh toán</h5>
                                         </div>
                                         <div class="card-body">
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input" type="radio"
-                                                    v-model="phuong_thuc_thanh_toan" value="TIEN_MAT" id="tienMat">
-                                                <label class="form-check-label" for="tienMat">
-                                                    <i class="fas fa-money-bill-wave me-2"></i>Tiền mặt
-                                                </label>
-                                            </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio"
                                                     v-model="phuong_thuc_thanh_toan" value="VNPAY" id="vnpay">
                                                 <label class="form-check-label" for="vnpay">
-                                                    <img src="https://vnpay.vn/images/logo/vnpay-logo.png" height="30"
-                                                        class="me-2">
+                                                    <img src="https://stcd02206177151.cloud.edgevnpay.vn/assets/images/logo-icon/logo-primary.svg"
+                                                        height="30" class="me-2">
                                                     Thanh toán VNPay
                                                 </label>
                                             </div>
