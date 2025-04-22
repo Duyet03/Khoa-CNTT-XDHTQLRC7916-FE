@@ -8,12 +8,12 @@
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-xl-2">
                             <button class="btn btn-primary mb-3 mb-lg-0" data-bs-toggle="modal"
-                                data-bs-target="#taoPhongModal">
+                                data-bs-target="#taoThem">
                                 <i class="bx bxs-plus-square"></i>Thêm Chức Vụ
                             </button>
                         </div>
                     </div>
-                    <div class="modal fade" id="taoPhongModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    <div class="modal fade" id="taoThem" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -31,7 +31,16 @@
                                             <div class="mb-2 mt-2">
                                                 <label>Tên chức vụ</label>
                                                 <input v-model="chuc_vu_create.ten_chuc_vu" type="text"
-                                                    class="form-control mt-2" />
+                                                    class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-2 mt-2">
+                                                <label>Master</label>
+                                                <select v-model="chuc_vu_create.is_master" class="form-control">
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -74,6 +83,7 @@
                                 <tr class="text-center">
                                     <th>#</th>
                                     <th>Tên chức vụ</th>
+                                    <th>Master</th>
                                     <th>Tình trạng</th>
                                     <th>Action</th>
                                 </tr>
@@ -83,6 +93,11 @@
                                     <tr class="align-middle">
                                         <td>{{ k + 1 }}</td>
                                         <td>{{ v.ten_chuc_vu }}</td>
+                                        <td class="text-center">
+                                            <button v-on:click="doiMaster(v)" v-if="v.is_master"
+                                                class="btn btn-success">Yes</button>
+                                            <button v-on:click="doiMaster(v)" v-else class="btn btn-primary">No</button>
+                                        </td>
                                         <td class="text-center">
                                             <button v-on:click="doiTrangThai(v)" v-if="v.tinh_trang"
                                                 class="btn btn-success">Hoạt động</button>
@@ -219,6 +234,18 @@ export default {
         doiTrangThai(xxx) {
             baseRequest
                 .put('chuc-vu/doi-trang-thai', xxx)
+                .then((res) => {
+                    if (res.data.status == true) {
+                        toaster.success(res.data.message)
+                        this.layChucVu();
+                    } else {
+                        toaster.error(res.data.message)
+                    }
+                })
+        },
+        doiMaster(xxx) {
+            baseRequest
+                .put('chuc-vu/doi-master', xxx)
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success(res.data.message)
