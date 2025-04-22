@@ -17,19 +17,27 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item mx-2">
-                            <a class="nav-link btn btn-warning text-white px-3 me-3" href="#">Mua Vé</a>
+                            <router-link to="/home-page" class="nav-link" :class="{'btn btn-warning text-white px-3 me-3': $route.path === '/home-page'}">
+                                Phim đang chiếu
+                            </router-link>
+                        </li>
+                        <!-- <li class="nav-item mx-2">
+                            <a class="nav-link" href="#">Phim sắp ra mắt</a>
+                        </li> -->
+                        <li class="nav-item mx-2">
+                            <router-link to="/goc-dien-anh" class="nav-link" :class="{'btn btn-warning text-white px-3 me-3': $route.path === '/goc-dien-anh'}">
+                                Góc Điện Ảnh
+                            </router-link>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">Phim</a>
+                            <router-link to="/su-kien" class="nav-link" :class="{'btn btn-warning text-white px-3 me-3': $route.path === '/su-kien'}">
+                                Sự Kiện
+                            </router-link>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">Góc Điện Ảnh</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">Sự Kiện</a>
-                        </li>
-                        <li class="nav-item mx-2">
-                            <a class="nav-link" href="#">Rạp/Giá Vé</a>
+                            <router-link to="/rap-gia-ve" class="nav-link" :class="{'btn btn-warning text-white px-3 me-3': $route.path === '/rap-gia-ve'}">
+                                Rạp/Giá Vé
+                            </router-link>
                         </li>
                     </ul>
                 </div>

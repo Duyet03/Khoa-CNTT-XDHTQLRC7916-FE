@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: "/shop-qua-tang",
-    component: () => import("../components/Homepage/ShopQuaTang/index.vue"),
+    component: () => import("../components/HomePage/ShopQuaTang/index.vue"),
     meta: { layout: "client" },
   },
   {
@@ -139,7 +139,7 @@ const routes = [
   {
     path: "/admin/nguoi-dung/khach-hang",
     component: () =>
-      import("../components/admin/QuanLyNguoiDung/KhachHang/index.vue"),
+      import("../components/Admin/QuanLyNguoiDung/KhachHang/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },

@@ -1,11 +1,232 @@
 <template>
-    
+    <div>
+        <div id="carouselExampleIndicators" class="carousel slide">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <template v-for="(v, k) in ds_slide.filter(slide => slide.tinh_trang == 1)" :key="k">
+                    <div :class="['carousel-item', { 'active': k === 0 }]">
+                        <img v-bind:src="v.link_hinh_anh" class="d-block w-100 carousel-img" alt="...">
+                    </div>
+                </template>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <!-- Main content - Movies -->
+                <div class="col-12">
+                    <h3 class="section-title mb-4">Phim Đang Chiếu</h3>
+                    <div class="row product-grid">
+                        <template v-for="(value, index) in list_phim" :key="index">
+                            <div class="col-6 col-md-4 col-lg-3 d-flex mb-4">
+                                <router-link :to="'/chi-tiet-phim/' + value.id + '-' + value.slug_phim" class="w-100">
+                                    <div class="card h-100">
+                                        <img class="img-fluid card-img" :src="value.hinh_anh" alt="">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="text-center flex-grow-1">
+                                                <h6 class="card-title">{{ value.ten_phim }}</h6>
+                                                <hr>
+                                                <div class="release-info">
+                                                    <span>{{ value.ngay_chieu }} | {{ value.ten_the_loai }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </router-link>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="text-center mt-4 mb-5">
+                        <a href="" class="btn btn-primary">XEM THÊM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
+
 <script>
+import axios from 'axios';
+import { createToaster } from "@meforma/vue-toaster";
+
+const toaster = createToaster({ position: "top-right" });
+
 export default {
-    
+    data() {
+        return {
+            list_phim: [],
+            ds_slide: [],
+        }
+    },
+    mounted() {
+        this.getDataHomePage();
+        this.layDuLieuSlide();
+    },
+    methods: {
+        getDataHomePage() {
+            axios
+                .get('http://127.0.0.1:8000/api/trang-chu/data')
+                .then((res) => {
+                    this.list_phim = res.data.listPhim;
+                })
+        },
+        layDuLieuSlide() {
+            axios
+                .get('http://127.0.0.1:8000/api/slide/data')
+                .then((res) => {
+                    console.log("Dữ liệu từ API:", res.data.slide);
+                    this.ds_slide = res.data.slide;
+                })
+        },
+    },
 }
 </script>
-<style>
-    
+
+<style scoped>
+/* Carousel Styles */
+.carousel-img {
+    height: 500px;
+    object-fit: cover;
+}
+
+/* Card Styles */
+.card {
+    border-radius: 15px;
+    border: none;
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+}
+
+.card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.release-info {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: auto;
+}
+
+/* Button Styles */
+.btn-primary {
+    padding: 0.5rem 1.5rem;
+    font-weight: bold;
+}
+
+/* Section Title */
+.section-title {
+    position: relative;
+    padding-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #1976d2;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .carousel-img {
+        height: 400px;
+    }
+
+    .card-img {
+        height: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-img {
+        height: 300px;
+    }
+
+    .card-img {
+        height: 200px;
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+    }
+
+    .release-info {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-img {
+        height: 200px;
+    }
+
+    .card-img {
+        height: 180px;
+    }
+
+    .card-body {
+        padding: 0.75rem;
+    }
+
+    .container {
+        margin-top: 2rem;
+    }
+
+    .col-6 {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .card-title {
+        font-size: 0.85rem;
+    }
+
+    .release-info {
+        font-size: 0.7rem;
+    }
+}
 </style>
