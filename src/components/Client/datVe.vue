@@ -89,13 +89,23 @@
                                                     <th class="w-25">Ghế đã chọn: </th>
                                                     <td class="text-center">
                                                         <template v-for="(v, k) in listGheChon" :key="k">
-                                                            <span class="badge bg-success me-2"
-                                                                style="font-size: 16px;">{{ v.ten_ghe }}</span>
+                                                            <span class="badge bg-success me-2" style="font-size: 16px;">
+                                                                {{ v.ten_ghe }}
+                                                            </span>
                                                         </template>
                                                         <span v-if="listGheChon.length === 0"
                                                             class="text-muted fst-italic">
                                                             Vui lòng chọn ghế
                                                         </span>
+                                                    </td>
+                                                </tr>
+                                                <tr v-if="showCountdown">
+                                                    <th>Thời gian để thanh toán:</th>
+                                                    <td class="text-center">
+                                                        <div class="badge bg-warning text-dark p-2" style="font-size: 18px;">
+                                                            <i class="fas fa-clock me-2"></i>
+                                                            {{ formatTime(countdown) }}
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -143,7 +153,11 @@ export default {
             id_suat: null,
             listGheChon: [],
             tong_tien: 0,
-            id_hoa_don: ''
+            id_hoa_don: '',
+            countdown: 10, // Đổi từ 900 (15 phút) thành 10 giây
+            showCountdown: false,
+            timeouts: {}, // Lưu timeout cho từng ghế
+            countdownTimer: null // Lưu interval của đồng hồ đếm ngược
         }
     },
     computed: {
@@ -161,9 +175,18 @@ export default {
         this.id_suat = this.$route.params.id_suat;
         console.log(this.id_suat);
         this.layDichVu();
-        //this.layDuLieuGhe();
         this.layVe();
         this.layVeChon();
+    },
+    beforeUnmount() {
+        // Xóa tất cả các timeout khi component bị hủy
+        Object.values(this.timeouts).forEach(timeout => {
+            clearTimeout(timeout);
+        });
+        // Xóa interval đếm ngược
+        if (this.countdownTimer) {
+            clearInterval(this.countdownTimer);
+        }
     },
     methods: {
         layDichVu() {
@@ -201,7 +224,35 @@ export default {
                     this.tong_tien = res.data.tong_tien;
                 });
         },
+        formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        },
+        startCountdown() {
+            this.countdown = 10; // Đổi từ 900 thành 10 giây
+            this.showCountdown = true;
+            
+            // Xóa interval cũ nếu có
+            if (this.countdownTimer) {
+                clearInterval(this.countdownTimer);
+            }
+            
+            this.countdownTimer = setInterval(() => {
+                if (this.countdown > 0) {
+                    this.countdown--;
+                } else {
+                    clearInterval(this.countdownTimer);
+                    this.showCountdown = false;
+                }
+            }, 1000);
+        },
         datVe(id_suat, id_ghe) {
+            // Xóa timeout cũ của ghế này nếu có
+            if (this.timeouts[id_ghe]) {
+                clearTimeout(this.timeouts[id_ghe]);
+            }
+
             axios
                 .post("http://127.0.0.1:8000/api/lay-ve/doi-trang-thai-dat", {
                     id_suat,
@@ -217,8 +268,43 @@ export default {
                         toaster.success(res.data.message);
                         this.layVe();
                         this.layVeChon();
-                    } else toaster.error(res.data.message);
+                        
+                        // Bắt đầu đếm ngược
+                        this.startCountdown();
+                        
+                        // Lưu timeout mới cho ghế này (10 giây)
+                        this.timeouts[id_ghe] = setTimeout(() => {
+                            this.kiemTraTrangThaiGhe(id_suat, id_ghe);
+                        }, 10000); // Đổi từ 900000 thành 10000 (10 giây)
+                    } else {
+                        toaster.error(res.data.message);
+                    }
                     this.layVe();
+                });
+        },
+        kiemTraTrangThaiGhe(id_suat, id_ghe) {
+            console.log("Kiểm tra trạng thái ghế:", id_suat, id_ghe); // Thêm log để debug
+            axios
+                .post("http://127.0.0.1:8000/api/lay-ve/kiem-tra-trang-thai", {
+                    id_suat: id_suat,
+                    id_ghe: id_ghe,
+                    id_khach_hang: localStorage.getItem('id_khach_hang')
+                }, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token_khachhang")
+                    }
+                })
+                .then((res) => {
+                    if (res.data.status) {
+                        toaster.error(res.data.message);
+                        this.layVe();
+                        this.layVeChon();
+                        // Xóa timeout của ghế này
+                        delete this.timeouts[id_ghe];
+                    }
+                })
+                .catch((error) => {
+                    console.error("Lỗi khi kiểm tra trạng thái ghế:", error);
                 });
         },
         huy(id_suat, id_ghe) {
@@ -347,5 +433,23 @@ export default {
     .screen-container {
         width: 95%;
     }
+}
+
+.countdown-badge {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 14px;
+    padding: 4px 8px;
+}
+
+/* Thêm animation cho countdown */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.countdown-badge {
+    animation: pulse 2s infinite;
 }
 </style>
