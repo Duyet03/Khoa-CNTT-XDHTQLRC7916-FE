@@ -1,91 +1,92 @@
 <template>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-lg-3 col-xl-2">
-                            <button class="btn btn-primary mb-3 mb-lg-0" data-bs-toggle="modal"
-                                data-bs-target="#taoSuatModal">
-                                <i class="bx bxs-plus-square"></i>Tạo Mới Suất Chiếu</button>
+    <div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-lg-3 col-xl-2">
+                                <button class="btn btn-primary mb-3 mb-lg-0" data-bs-toggle="modal"
+                                    data-bs-target="#taoSuatModal">
+                                    <i class="bx bxs-plus-square"></i>Tạo Mới Suất Chiếu</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal fade" id="taoSuatModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tạo Mới Suất Chiếu</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-2">
-                                        <label>Chọn Phim</label>
-                                        <select v-model="suat_create.phim_id" class="form-control mt-2">
-                                            <option value="">-- Chọn phim --</option>
-                                            <option v-for="(quan_ly_phim, k) in ds_phim" :key="k"
-                                                :value="quan_ly_phim.id">
-                                                {{ quan_ly_phim.ten_phim }}
-                                            </option>
-                                        </select>
+                        <div class="modal fade" id="taoSuatModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tạo Mới Suất Chiếu</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
-                                    <div class="mb-2">
-                                        <label>Chọn Phòng</label>
-                                        <select v-model="suat_create.phong_id" class="form-control mt-2">
-                                            <option value="">-- Chọn phòng --</option>
-                                            <option v-for="(phong, k) in list_phong" :key="k" :value="phong.id">
-                                                {{ phong.ten_phong }}
-                                            </option>
-                                        </select>
+                                    <div class="modal-body">
+                                        <div class="mb-2">
+                                            <label>Chọn Phim</label>
+                                            <select v-model="suat_create.phim_id" class="form-control mt-2">
+                                                <option value="">-- Chọn phim --</option>
+                                                <option v-for="(quan_ly_phim, k) in ds_phim" :key="k"
+                                                    :value="quan_ly_phim.id">
+                                                    {{ quan_ly_phim.ten_phim }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Chọn Phòng</label>
+                                            <select v-model="suat_create.phong_id" class="form-control mt-2">
+                                                <option value="">-- Chọn phòng --</option>
+                                                <option v-for="(phong, k) in list_phong" :key="k" :value="phong.id">
+                                                    {{ phong.ten_phong }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <!-- ... -->
+                                        <div class="mb-2">
+                                            <label>Ngày Chiếu</label>
+                                            <input type="date" v-model="suat_create.ngay_chieu"
+                                                class="form-control mt-2" :min="getCurrentDate()">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Giờ Bắt Đầu</label>
+                                            <input v-model="suat_create.gio_bat_dau" type="time"
+                                                class="form-control mt-2">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Giá Vé</label>
+                                            <input v-model="suat_create.gia_ve" type="number" class="form-control mt-2">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Định Dạng</label>
+                                            <select v-model="suat_create.dinh_dang" class="form-control mt-2">
+                                                <option value="2D">2D</option>
+                                                <option value="3D">3D</option>
+                                                <option value="IMAX">IMAX</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Ngôn Ngữ</label>
+                                            <select v-model="suat_create.ngon_ngu" class="form-control mt-2">
+                                                <option value="Phụ đề">Phụ đề</option>
+                                                <option value="Lồng tiếng">Lồng tiếng</option>
+                                                <option value="Nguyên bản">Nguyên bản</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Trạng Thái</label>
+                                            <select v-model="suat_create.trang_thai" class="form-control">
+                                                <option value="Sắp chiếu">Sắp chiếu</option>
+                                                <option value="Đang chiếu">Đang chiếu</option>
+                                                <option value="Hết vé">Hết vé</option>
+                                                <option value="Hủy">Hủy</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="mb-2">
-                                        <label>Ngày Chiếu</label>
-                                        <input v-model="suat_create.ngay_chieu" type="date" class="form-control mt-2">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <button v-on:click="themMoiSuat()" type="button" class="btn btn-primary">Thêm
+                                            Mới</button>
                                     </div>
-                                    <div class="mb-2">
-                                        <label>Giờ Bắt Đầu</label>
-                                        <input v-model="suat_create.gio_bat_dau" type="time" class="form-control mt-2">
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Giờ Bắt Đầu</label>
-                                        <input v-model="suat_create.gio_ket_thuc" type="time" class="form-control mt-2">
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Giá Vé</label>
-                                        <input v-model="suat_create.gia_ve" type="number" class="form-control mt-2">
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Định Dạng</label>
-                                        <select v-model="suat_create.dinh_dang" class="form-control mt-2">
-                                            <option value="2D">2D</option>
-                                            <option value="3D">3D</option>
-                                            <option value="IMAX">IMAX</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Ngôn Ngữ</label>
-                                        <select v-model="suat_create.ngon_ngu" class="form-control mt-2">
-                                            <option value="Phụ đề">Phụ đề</option>
-                                            <option value="Lồng tiếng">Lồng tiếng</option>
-                                            <option value="Nguyên bản">Nguyên bản</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label>Trạng Thái</label>
-                                        <select v-model="suat_create.trang_thai" class="form-control">
-                                            <option value="Sắp chiếu">Sắp chiếu</option>
-                                            <option value="Đang chiếu">Đang chiếu</option>
-                                            <option value="Hết vé">Hết vé</option>
-                                            <option value="Hủy">Hủy</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Đóng</button>
-                                    <button v-on:click="themMoiSuat()" type="button" class="btn btn-primary">Thêm
-                                        Mới</button>
                                 </div>
                             </div>
                         </div>
@@ -93,270 +94,283 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="card">
-            <div class="card-body">
-                <ul class="nav nav-tabs nav-primary mb-0" role="tablist">
-                    <li class="nav-item" role="presentation" v-on:click="loadSuat()">
-                        <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-selected="true">
-                            <div class="d-flex align-items-center">
-                                <div class="tab-icon me-1 text-danger fa-2x">
-                                </div>
-                                <div class="tab-title">Tất cả</div>
-                            </div>
-                        </a>
-                    </li>
-                    <template v-for="(v, k) in list_phong" :key="k">
-                        <li class="nav-item" role="presentation" v-on:click="loadSuatTheoPhong(v)">
-                            <a class="nav-link" data-bs-toggle="tab" v-bind:href="'#suat' + k" role="tab"
-                                aria-selected="false" tabindex="-1">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-primary mb-0" role="tablist">
+                        <li class="nav-item" role="presentation" v-on:click="loadSuat()">
+                            <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-selected="true">
                                 <div class="d-flex align-items-center">
-                                    <div class="tab-icon"><i class="bx bx-bookmark-alt font-18 me-1"></i>
+                                    <div class="tab-icon me-1 text-danger fa-2x">
                                     </div>
-                                    <div class="tab-title">{{ v.ten_phong }}</div>
+                                    <div class="tab-title">Tất cả</div>
                                 </div>
                             </a>
                         </li>
-                    </template>
-                </ul>
-                <div class="tab-content pt-3">
-                    <div class="tab-pane fade show active" id="suat" role="tabpanel">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="mt-2">Danh Sách Suất Chiếu</h5>
-                                    <button class="btn btn-outline-primary" v-on:click="capNhatTrangThaiTuDong()">
-                                        <i class="bx bx-refresh me-1"></i>Cập nhật trạng thái tự động
-                                    </button>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center">#</th>
-                                                    <th class="text-center">Phim</th>
-                                                    <th class="text-center">Phòng</th>
-                                                    <th class="text-center">Ngày Chiếu</th>
-                                                    <th class="text-center">Giờ Bắt Đầu</th>
-                                                    <th class="text-center">Giờ Kết Thúc</th>
-                                                    <th class="text-center">Định Dạng</th>
-                                                    <th class="text-center">Giá Vé</th>
-                                                    <th class="text-center">Ghế Trống</th>
-                                                    <th class="text-center">Trạng Thái</th>
-                                                    <th class="text-center">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(v, k) in ds_suat" :key="k">
-                                                    <th class="text-center align-middle">{{ k + 1 }}</th>
-                                                    <td class="align-middle">{{ getTenPhim(v.phim_id) }}</td>
-                                                    <td class="align-middle">{{ getTenPhong(v.phong_id) }}</td>
-                                                    <td class="align-middle">{{ formatDate(v.ngay_chieu) }}</td>
-                                                    <td class="align-middle">{{ v.gio_bat_dau }}</td>
-                                                    <td class="align-middle">{{ v.gio_ket_thuc }}</td>
-                                                    <td class="align-middle">{{ v.dinh_dang }}</td>
-                                                    <td class="align-middle">{{ formatCurrency(v.gia_ve) }}</td>
-                                                    <td class="align-middle text-center">
-                                                        <button class="btn btn-sm btn-outline-info"
-                                                            v-on:click="kiemTraGheTrong(v.id)">
-                                                            Kiểm tra
-                                                        </button>
-                                                    </td>
-                                                    <td class="text-center align-middle">
-                                                        <span v-if="v.trang_thai === 'Sắp chiếu'"
-                                                            class="badge bg-info">Sắp chiếu</span>
-                                                        <span v-else-if="v.trang_thai === 'Đang chiếu'"
-                                                            class="badge bg-success">Đang
-                                                            chiếu</span>
-                                                        <span v-else-if="v.trang_thai === 'Đã chiếu'"
-                                                            class="badge bg-secondary">Đã
-                                                            chiếu</span>
-                                                        <span v-else-if="v.trang_thai === 'Hết vé'"
-                                                            class="badge bg-warning">Hết
-                                                            vé</span>
-                                                        <span v-else-if="v.trang_thai === 'Hủy'"
-                                                            class="badge bg-danger">Hủy</span>
-                                                        <span v-else class="badge bg-primary">{{ v.trang_thai }}</span>
-                                                    </td>
-                                                    <td class="text-center text-nowrap align-middle">
-                                                        <button v-on:click="suaSuatChieu(v)" data-bs-toggle="modal"
-                                                            data-bs-target="#updateModal" class="btn btn-info me-1">Cập
+                        <template v-for="(v, k) in list_phong" :key="k">
+                            <li class="nav-item" role="presentation" v-on:click="loadSuatTheoPhong(v)">
+                                <a class="nav-link" data-bs-toggle="tab" v-bind:href="'#suat' + k" role="tab"
+                                    aria-selected="false" tabindex="-1">
+                                    <div class="d-flex align-items-center">
+                                        <div class="tab-icon"><i class="bx bx-bookmark-alt font-18 me-1"></i>
+                                        </div>
+                                        <div class="tab-title">{{ v.ten_phong }}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                    <div class="tab-content pt-3">
+                        <div class="tab-pane fade show active" id="suat" role="tabpanel">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mt-2">Danh Sách Suất Chiếu</h5>
+                                        <button class="btn btn-outline-primary" v-on:click="capNhatTrangThaiTuDong()">
+                                            <i class="bx bx-refresh me-1"></i>Cập nhật trạng thái tự động
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th class="text-center">Phim</th>
+                                                        <th class="text-center">Phòng</th>
+                                                        <th class="text-center">Ngày Chiếu</th>
+                                                        <th class="text-center">Giờ Bắt Đầu</th>
+                                                        <th class="text-center">Giờ Kết Thúc</th>
+                                                        <th class="text-center">Định Dạng</th>
+                                                        <th class="text-center">Giá Vé</th>
+                                                        <th class="text-center">Ghế Trống</th>
+                                                        <th class="text-center">Trạng Thái</th>
+                                                        <th class="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(v, k) in ds_suat" :key="k">
+                                                        <th class="text-center align-middle">{{ k + 1 }}</th>
+                                                        <td class="align-middle">{{ getTenPhim(v.phim_id) }}</td>
+                                                        <td class="align-middle">{{ getTenPhong(v.phong_id) }}</td>
+                                                        <td class="align-middle">{{ formatDate(v.ngay_chieu) }}</td>
+                                                        <td class="align-middle">{{ v.gio_bat_dau }}</td>
+                                                        <td class="align-middle">{{ v.gio_ket_thuc }}</td>
+                                                        <td class="align-middle">{{ v.dinh_dang }}</td>
+                                                        <td class="align-middle">{{ formatCurrency(v.gia_ve) }}</td>
+                                                        <td class="align-middle text-center">
+                                                            <button class="btn btn-sm btn-outline-info"
+                                                                v-on:click="kiemTraGheTrong(v.id)">
+                                                                Kiểm tra
+                                                            </button>
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            <span v-if="v.trang_thai === 'Sắp chiếu'"
+                                                                class="badge bg-info">Sắp chiếu</span>
+                                                            <span v-else-if="v.trang_thai === 'Đang chiếu'"
+                                                                class="badge bg-success">Đang
+                                                                chiếu</span>
+                                                            <span v-else-if="v.trang_thai === 'Đã chiếu'"
+                                                                class="badge bg-secondary">Đã
+                                                                chiếu</span>
+                                                            <span v-else-if="v.trang_thai === 'Hết vé'"
+                                                                class="badge bg-warning">Hết
+                                                                vé</span>
+                                                            <span v-else-if="v.trang_thai === 'Hủy'"
+                                                                class="badge bg-danger">Hủy</span>
+                                                            <span v-else class="badge bg-primary">{{ v.trang_thai
+                                                                }}</span>
+                                                        </td>
+                                                        <td class="text-center text-nowrap align-middle">
+                                                            <button v-on:click="suaSuatChieu(v)" data-bs-toggle="modal"
+                                                                data-bs-target="#updateModal"
+                                                                class="btn btn-info me-1">Cập
+                                                                Nhật</button>
+                                                            <button data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                                v-on:click="id_can_xoa = v.id"
+                                                                class="btn btn-danger">Xoá
+                                                                Bỏ</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal fade" id="deleteModal" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Xoá Suất
+                                                            Chiếu
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="alert alert-danger" role="alert">
+                                                            Bạn thật sự có muốn xoá suất chiếu này không?
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button v-on:click="xoaSuat()" type="button"
+                                                            class="btn btn-danger" data-bs-dismiss="modal">Xác Nhận
+                                                            Xoá</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="updateModal" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Cập Nhật
+                                                            Suất
+                                                            Chiếu
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-2">
+                                                            <label>Chọn Phim</label>
+                                                            <select v-model="suat_update.phim_id"
+                                                                class="form-control mt-2"
+                                                                :disabled="suat_update.da_co_nguoi_dat">
+                                                                <option v-for="(phim, k) in ds_phim" :key="k"
+                                                                    :value="phim.id">
+                                                                    {{ phim.ten_phim }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Chọn Phòng</label>
+                                                            <select v-model="suat_update.phong_id"
+                                                                class="form-control mt-2"
+                                                                :disabled="suat_update.da_co_nguoi_dat">
+                                                                <option v-for="(phong, k) in list_phong" :key="k"
+                                                                    :value="phong.id">
+                                                                    {{ phong.ten_phong }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Ngày Chiếu</label>
+                                                            <input v-model="suat_update.ngay_chieu" type="date"
+                                                                class="form-control mt-2"
+                                                                :disabled="suat_update.da_co_nguoi_dat">
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Giờ Bắt Đầu</label>
+                                                            <input v-model="suat_update.gio_bat_dau" type="time"
+                                                                class="form-control mt-2"
+                                                                :disabled="suat_update.da_co_nguoi_dat">
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Giá Vé</label>
+                                                            <input v-model="suat_update.gia_ve" type="number"
+                                                                class="form-control mt-2">
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Định Dạng</label>
+                                                            <select v-model="suat_update.dinh_dang"
+                                                                class="form-control mt-2"
+                                                                :disabled="suat_update.da_co_nguoi_dat">
+                                                                <option value="2D">2D</option>
+                                                                <option value="3D">3D</option>
+                                                                <option value="IMAX">IMAX</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Ngôn Ngữ</label>
+                                                            <select v-model="suat_update.ngon_ngu"
+                                                                class="form-control mt-2"
+                                                                :disabled="suat_update.da_co_nguoi_dat">
+                                                                <option value="Phụ đề">Phụ đề</option>
+                                                                <option value="Lồng tiếng">Lồng tiếng</option>
+                                                                <option value="Nguyên bản">Nguyên bản</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label>Trạng Thái</label>
+                                                            <select v-model="suat_update.trang_thai"
+                                                                class="form-control">
+                                                                <option value="Sắp chiếu">Sắp chiếu</option>
+                                                                <option value="Đang chiếu">Đang chiếu</option>
+                                                                <option value="Hết vé">Hết vé</option>
+                                                                <option value="Hủy">Hủy</option>
+                                                            </select>
+                                                        </div>
+                                                        <div v-if="suat_update.da_co_nguoi_dat"
+                                                            class="alert alert-warning">
+                                                            <i class="bx bx-info-circle me-1"></i>
+                                                            Suất chiếu này đã có người đặt vé. Bạn chỉ có thể thay đổi
+                                                            giá
+                                                            vé và trạng thái.
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button v-on:click="capNhatSuat()" type="button"
+                                                            class="btn btn-info" data-bs-dismiss="modal">Xác Nhận Cập
                                                             Nhật</button>
-                                                        <button data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                            v-on:click="id_can_xoa = v.id" class="btn btn-danger">Xoá
-                                                            Bỏ</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="modal fade" id="deleteModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Xoá Suất Chiếu
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="alert alert-danger" role="alert">
-                                                        Bạn thật sự có muốn xoá suất chiếu này không?
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button v-on:click="xoaSuat()" type="button" class="btn btn-danger"
-                                                        data-bs-dismiss="modal">Xác Nhận Xoá</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="modal fade" id="updateModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cập Nhật Suất
-                                                        Chiếu
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mb-2">
-                                                        <label>Chọn Phim</label>
-                                                        <select v-model="suat_update.phim_id" class="form-control mt-2"
-                                                            :disabled="suat_update.da_co_nguoi_dat">
-                                                            <option v-for="(phim, k) in ds_phim" :key="k"
-                                                                :value="phim.id">
-                                                                {{ phim.ten_phim }}
-                                                            </option>
-                                                        </select>
+                                        <div class="modal fade" id="gheTrongModal" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Thông tin
+                                                            ghế
+                                                        </h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                     </div>
-                                                    <div class="mb-2">
-                                                        <label>Chọn Phòng</label>
-                                                        <select v-model="suat_update.phong_id" class="form-control mt-2"
-                                                            :disabled="suat_update.da_co_nguoi_dat">
-                                                            <option v-for="(phong, k) in list_phong" :key="k"
-                                                                :value="phong.id">
-                                                                {{ phong.ten_phong }}
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label>Ngày Chiếu</label>
-                                                        <input v-model="suat_update.ngay_chieu" type="date"
-                                                            class="form-control mt-2"
-                                                            :disabled="suat_update.da_co_nguoi_dat">
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label>Giờ Bắt Đầu</label>
-                                                        <input v-model="suat_update.gio_bat_dau" type="time"
-                                                            class="form-control mt-2"
-                                                            :disabled="suat_update.da_co_nguoi_dat">
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label>Giá Vé</label>
-                                                        <input v-model="suat_update.gia_ve" type="number"
-                                                            class="form-control mt-2">
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label>Định Dạng</label>
-                                                        <select v-model="suat_update.dinh_dang"
-                                                            class="form-control mt-2"
-                                                            :disabled="suat_update.da_co_nguoi_dat">
-                                                            <option value="2D">2D</option>
-                                                            <option value="3D">3D</option>
-                                                            <option value="IMAX">IMAX</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label>Ngôn Ngữ</label>
-                                                        <select v-model="suat_update.ngon_ngu" class="form-control mt-2"
-                                                            :disabled="suat_update.da_co_nguoi_dat">
-                                                            <option value="Phụ đề">Phụ đề</option>
-                                                            <option value="Lồng tiếng">Lồng tiếng</option>
-                                                            <option value="Nguyên bản">Nguyên bản</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-2">
-                                                        <label>Trạng Thái</label>
-                                                        <select v-model="suat_update.trang_thai" class="form-control">
-                                                            <option value="Sắp chiếu">Sắp chiếu</option>
-                                                            <option value="Đang chiếu">Đang chiếu</option>
-                                                            <option value="Hết vé">Hết vé</option>
-                                                            <option value="Hủy">Hủy</option>
-                                                        </select>
-                                                    </div>
-                                                    <div v-if="suat_update.da_co_nguoi_dat" class="alert alert-warning">
-                                                        <i class="bx bx-info-circle me-1"></i>
-                                                        Suất chiếu này đã có người đặt vé. Bạn chỉ có thể thay đổi giá
-                                                        vé và trạng thái.
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button v-on:click="capNhatSuat()" type="button"
-                                                        class="btn btn-info" data-bs-dismiss="modal">Xác Nhận Cập
-                                                        Nhật</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal fade" id="gheTrongModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Thông tin ghế
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="text-center mb-3">
-                                                        <h5>{{ thong_tin_ghe.ten_phim }}</h5>
-                                                        <p>{{ formatDate(thong_tin_ghe.ngay_chieu) }} - {{
-                                                            thong_tin_ghe.gio_bat_dau }}
-                                                        </p>
-                                                        <p>Phòng: {{ thong_tin_ghe.ten_phong }}</p>
-                                                    </div>
-                                                    <div class="row text-center">
-                                                        <div class="col-md-4">
-                                                            <div class="card bg-light">
-                                                                <div class="card-body">
-                                                                    <h3>{{ thong_tin_ghe.tong_so_ghe }}</h3>
-                                                                    <p>Tổng số ghế</p>
+                                                    <div class="modal-body">
+                                                        <div class="text-center mb-3">
+                                                            <h5>{{ thong_tin_ghe.ten_phim }}</h5>
+                                                            <p>{{ formatDate(thong_tin_ghe.ngay_chieu) }} - {{
+                                                                thong_tin_ghe.gio_bat_dau }}
+                                                            </p>
+                                                            <p>Phòng: {{ thong_tin_ghe.ten_phong }}</p>
+                                                        </div>
+                                                        <div class="row text-center">
+                                                            <div class="col-md-4">
+                                                                <div class="card bg-light">
+                                                                    <div class="card-body">
+                                                                        <h3>{{ thong_tin_ghe.tong_so_ghe }}</h3>
+                                                                        <p>Tổng số ghế</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="card bg-success text-white">
-                                                                <div class="card-body">
-                                                                    <h3>{{ thong_tin_ghe.so_ghe_trong }}</h3>
-                                                                    <p>Ghế trống</p>
+                                                            <div class="col-md-4">
+                                                                <div class="card bg-success text-white">
+                                                                    <div class="card-body">
+                                                                        <h3>{{ thong_tin_ghe.so_ghe_trong }}</h3>
+                                                                        <p>Ghế trống</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <div class="card bg-danger text-white">
-                                                                <div class="card-body">
-                                                                    <h3>{{ thong_tin_ghe.so_ghe_da_dat }}</h3>
-                                                                    <p>Ghế đã đặt</p>
+                                                            <div class="col-md-4">
+                                                                <div class="card bg-danger text-white">
+                                                                    <div class="card-body">
+                                                                        <h3>{{ thong_tin_ghe.so_ghe_da_dat }}</h3>
+                                                                        <p>Ghế đã đặt</p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -411,6 +425,9 @@ export default {
         this.layDuLieuPhim();
     },
     methods: {
+        getCurrentDate() {
+            return new Date().toISOString().split('T')[0];
+        },
         formatCurrency(value) {
             return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
         },
@@ -523,6 +540,13 @@ export default {
         },
 
         themMoiSuat() {
+            const today = new Date().setHours(0, 0, 0, 0);
+            const ngayChieu = new Date(this.suat_create.ngay_chieu).setHours(0, 0, 0, 0);
+
+            if (ngayChieu < today) {
+                toaster.error("Không thể tạo suất chiếu cho ngày trong quá khứ!");
+                return;
+            }
             // Kiểm tra dữ liệu đầu vào
             if (!this.suat_create.phim_id || !this.suat_create.phong_id ||
                 !this.suat_create.ngay_chieu || !this.suat_create.gio_bat_dau ||

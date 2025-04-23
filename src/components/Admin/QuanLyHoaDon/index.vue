@@ -95,7 +95,7 @@
                                     <div class="col-md-6">
                                         <p class="mb-1"><strong>Phim:</strong> {{ chi_tiet_thue[0].ten_phim }}</p>
                                         <p class="mb-1"><strong>Khách hàng:</strong> {{ chi_tiet_thue[0].ten_khach_hang
-                                            }}</p>
+                                        }}</p>
                                     </div>
                                     <div class="col-md-6">
                                         <p class="mb-1"><strong>Ngày chiếu:</strong> {{

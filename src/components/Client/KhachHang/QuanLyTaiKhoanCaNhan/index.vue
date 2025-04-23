@@ -83,7 +83,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" value="0332162386" disabled />
+                                        <input type="text" class="form-control" :value="khach_hang.so_dien_thoai" disabled />
                                     </div>
                                 </div>
                                 <div class="text-center">
