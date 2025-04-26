@@ -124,7 +124,7 @@
                                         data-bs-dismiss="modal">Đóng</button>
                                     <button v-on:click="createQuanLyPhim()" data-bs-dismiss="modal" type="button"
                                         class="btn btn-primary">Thêm
-                                        Mới</button>
+                                        Mới Phim</button>
                                 </div>
                             </div>
                         </div>
@@ -345,7 +345,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                            v-on:click="deleteQuanLyPhim()">Xóa</button>
+                            v-on:click="deleteQuanLyPhim()">Xóa Phim</button>
                     </div>
                 </div>
             </div>
