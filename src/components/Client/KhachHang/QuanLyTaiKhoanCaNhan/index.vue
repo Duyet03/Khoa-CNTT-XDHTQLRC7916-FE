@@ -11,7 +11,7 @@
                         <p class="text-muted mb-1"><i class="bi bi-gift"></i> 0 Stars</p>
                         <hr />
                         <h6 class="mb-1">Tổng chi tiêu 2025 <i class="bi bi-info-circle"></i></h6>
-                        <p class="text-danger fw-bold">{{tong_tien}}</p>
+                        <p class="text-danger fw-bold">{{ tong_tien }}</p>
                         <hr />
                         <div class="text-start">
                             <p><strong>HOTLINE:</strong> <a href="tel:19002224">0332162386</a> (9:00 - 22:00)</p>
@@ -126,7 +126,8 @@
                                                 <td class="text-center align-middle">{{ value.id_khach_hang }}</td>
                                                 <td class="text-center align-middle">{{ value.tong_tien }}</td>
                                                 <td class="text-center align-middle">
-                                                    <button v-if="value.trang_thai==1" class="btn btn-success">Đã thanh toán</button>
+                                                    <button v-if="value.trang_thai == 1" class="btn btn-success">Đã thanh
+                                                        toán</button>
                                                     <button v-else class="btn btn-warning">Chưa thanh toán </button>
                                                 </td>
                                                 <td>{{ value.ngay_thanh_toan }}</td>
@@ -255,9 +256,23 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status) {
+                        this.$router.push('/login');
                         toaster.success(res.data.message)
                     } else {
                         toaster.error(res.data.message)
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        const errors = error.response.data.errors;
+                        // Lặp qua các lỗi và hiển thị từng cái
+                        for (let field in errors) {
+                            if (errors.hasOwnProperty(field)) {
+                                errors[field].forEach(msg => toaster.error(msg));
+                            }
+                        }
+                    } else {
+                        toaster.error("Đã xảy ra lỗi, vui lòng thử lại.");
                     }
                 });
         },
@@ -270,10 +285,10 @@ export default {
                 })
                 .then((res) => {
                     this.list_hd = res.data.data
-                    var tong_tiena=this.list_hd.reduce((sum, list_hdct) => sum + list_hdct.tong_tien, 0)*1
-                    
-                    this.tong_tien=new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tong_tiena);
-                    
+                    var tong_tiena = this.list_hd.reduce((sum, list_hdct) => sum + list_hdct.tong_tien, 0) * 1
+
+                    this.tong_tien = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tong_tiena);
+
                 })
         },
     },

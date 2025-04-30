@@ -2,8 +2,8 @@
     <div>
         <!-- Video Trailer -->
         <div style="margin: 10px;">
-            <iframe class="d-block w-100" style="height: 650px;" :src="phim_chi_tiet.trailer_ytb + '&autoplay=1&mute=1'"
-                title="YouTube video player" frameborder="0"
+            <iframe class="d-block w-100" style="height: 650px;" v-if="phim_chi_tiet.trailer_ytb"
+                :src="phim_chi_tiet.trailer_ytb + '&autoplay=1&mute=1'" title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
@@ -110,8 +110,8 @@
                         </button>
                     </div>
                 </div>
-                
-        
+
+
             </div>
         </div>
     </div>
@@ -316,7 +316,7 @@ export default {
 
     .card-title .badge {
         font-size: 0.8rem;
-    }   
+    }
 
     .card-text {
         font-size: 0.85rem;
