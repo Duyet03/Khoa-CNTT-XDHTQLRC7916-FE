@@ -125,7 +125,10 @@
                                                 <td class="text-center align-middle">{{ value.ma_hoa_don }}</td>
                                                 <td class="text-center align-middle">{{ value.id_khach_hang }}</td>
                                                 <td class="text-center align-middle">{{ value.tong_tien }}</td>
-                                                <td class="text-center align-middle">{{ value.trang_thai }}</td>
+                                                <td class="text-center align-middle">
+                                                    <button v-if="value.trang_thai==1" class="btn btn-success">Đã thanh toán</button>
+                                                    <button v-else class="btn btn-warning">Chưa thanh toán </button>
+                                                </td>
                                                 <td>{{ value.ngay_thanh_toan }}</td>
                                             </tr>
                                         </template>
