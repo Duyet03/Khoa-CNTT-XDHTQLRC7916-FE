@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <!-- DANH SÁCH CHỨC NĂNG -->
+        <!-- DANH SÁCH CÁC CHỨC NĂNG -->
         <div class="col-lg-4 col-md-12">
             <div class="card">
                 <div class="card-header">

@@ -11,7 +11,7 @@
                         <p class="text-muted mb-1"><i class="bi bi-gift"></i> 0 Stars</p>
                         <hr />
                         <h6 class="mb-1">Tổng chi tiêu 2025 <i class="bi bi-info-circle"></i></h6>
-                        <p class="text-danger fw-bold">0 đ</p>
+                        <p class="text-danger fw-bold">{{tong_tien}}</p>
                         <hr />
                         <div class="text-start">
                             <p><strong>HOTLINE:</strong> <a href="tel:19002224">0332162386</a> (9:00 - 22:00)</p>
@@ -83,7 +83,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" :value="khach_hang.so_dien_thoai" disabled />
+                                        <input type="text" class="form-control" :value="khach_hang.so_dien_thoai"
+                                            disabled />
                                     </div>
                                 </div>
                                 <div class="text-center">
@@ -94,11 +95,13 @@
                             </div>
                             <div class="tab-pane fade" id="primaryprofile" role="tabpanel">
                                 <label for="">Mật khẩu hiện tại</label>
-                                <input v-model="mat_khau.hien_tai" class="form-control mt-1" type="password" name="" id="">
+                                <input v-model="mat_khau.hien_tai" class="form-control mt-1" type="password" name=""
+                                    id="">
                                 <label for="" class="mt-3">Mật khẩu mới</label>
                                 <input v-model="mat_khau.moi" class="form-control mt-1" type="password" name="" id="">
                                 <label for="" class="mt-3">Nhập lại mật khẩu mới</label>
-                                <input v-model="mat_khau.re_password" class="form-control mt-1" type="password" name="" id="">
+                                <input v-model="mat_khau.re_password" class="form-control mt-1" type="password" name=""
+                                    id="">
                                 <div class="text-center mt-3">
                                     <button style="width: 200px;" class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#doi">Xác nhận</button>
@@ -106,6 +109,31 @@
                             </div>
                             <div class="tab-pane fade" id="primarycontact" role="tabpanel">
                                 <b>lịch sử thanh toán</b>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã hoá đơn</th>
+                                            <th>ID khách hàng</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Trạng thái</th>
+                                            <th>Ngày thanh toán</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="(value, index) in list_hd" :key="index">
+                                            <tr>
+                                                <td class="text-center align-middle">{{ value.ma_hoa_don }}</td>
+                                                <td class="text-center align-middle">{{ value.id_khach_hang }}</td>
+                                                <td class="text-center align-middle">{{ value.tong_tien }}</td>
+                                                <td class="text-center align-middle">
+                                                    <button v-if="value.trang_thai==1" class="btn btn-success">Đã thanh toán</button>
+                                                    <button v-else class="btn btn-warning">Chưa thanh toán </button>
+                                                </td>
+                                                <td>{{ value.ngay_thanh_toan }}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -166,7 +194,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button v-on:click="doiMatKhau()" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                    <button v-on:click="doiMatKhau()" type="button" class="btn btn-primary"
+                        data-bs-dismiss="modal">Save</button>
                 </div>
             </div>
         </div>
@@ -184,17 +213,19 @@ export default {
     data() {
         return {
             khach_hang: {},
-            mat_khau:{
+            mat_khau: {
                 hien_tai: '',
                 moi: '',
-                re_password:''
-            }
+                re_password: ''
+            },
+            list_hd: [],
+            tong_tien: '',
         }
     },
     mounted() {
 
         this.load();
-
+        this.loadHD()
     },
     methods: {
         load() {
@@ -210,7 +241,7 @@ export default {
                 });
         },
         doiMatKhau() {
-            var payLoad={
+            var payLoad = {
                 email: this.khach_hang.email,
                 password: this.mat_khau.hien_tai,
                 moi: this.mat_khau.moi,
@@ -223,13 +254,28 @@ export default {
                     }
                 })
                 .then((res) => {
-                    if(res.data.status){
+                    if (res.data.status) {
                         toaster.success(res.data.message)
-                    }else{
+                    } else {
                         toaster.error(res.data.message)
                     }
                 });
-        }
+        },
+        loadHD() {
+            axios
+                .get('http://127.0.0.1:8000/api/khach-hang/hoa-don', {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem("token_khachhang")
+                    }
+                })
+                .then((res) => {
+                    this.list_hd = res.data.data
+                    var tong_tiena=this.list_hd.reduce((sum, list_hdct) => sum + list_hdct.tong_tien, 0)*1
+                    
+                    this.tong_tien=new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tong_tiena);
+                    
+                })
+        },
     },
 }
 </script>
