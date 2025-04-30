@@ -3,11 +3,13 @@
         <MenuClient></MenuClient>
         <router-view></router-view>
         <FooterClient></FooterClient>
+        <ChatbotManager />
     </div>
 </template>
 <script>
 import MenuClient from "../components/MenuClient.vue";
 import FooterClient from "../components/FooterClient.vue";
+import ChatbotManager from "../../components/Client/ChatBot/ChatbotManager.vue";
 import "../../assets/js/bootstrap.bundle.min.js";
 import "../../assets/js/jquery.min.js";
 import "../../assets/plugins/simplebar/js/simplebar.min.js";
@@ -18,7 +20,7 @@ import "../../assets/js/app.js";
 export default {
     name: "app",
     components: {
-        MenuClient, FooterClient
+        MenuClient, FooterClient, ChatbotManager
     }
 }
 </script>

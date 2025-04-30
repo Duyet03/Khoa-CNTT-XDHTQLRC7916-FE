@@ -14,11 +14,6 @@ const routes = [
     meta: { layout: "client" },
   },
   {
-    path: "/shop-qua-tang",
-    component: () => import("../components/HomePage/ShopQuaTang/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
     path: "/login",
     component: () => import("../components/Client/login.vue"),
     meta: { layout: "Login" },
@@ -84,6 +79,11 @@ const routes = [
     component: () => import("../components/Client/KichHoat/index.vue"),
     meta: { layout: "index" },
   },
+  {
+    path: "/goc-dien-anh",
+    component: () => import("../components/Client/GocDienAnh/index.vue"),
+    meta: { layout: "client" },
+  },
 
   {
     path: "/auth/callback",
@@ -139,7 +139,7 @@ const routes = [
   {
     path: "/admin/nguoi-dung/khach-hang",
     component: () =>
-      import("../components/Admin/QuanLyNguoiDung/KhachHang/index.vue"),
+      import("../components/admin/QuanLyNguoiDung/KhachHang/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },
@@ -210,13 +210,12 @@ const routes = [
     beforeEnter: kiemTraAdmin,
   },
   {
-    path: "/khach-hang/tai-khoan-ca-nhan",
-    component: () => import("../components/Client/KhachHang/QuanLyTaiKhoanCaNhan/index.vue"),
-    meta: { layout: "client" },
-    beforeEnter: kiemTraKhachHangDangNhap,
+    path: "/admin/goc-dien-anh",
+    component: () => import("../components/Admin/GocDienAnh/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
   },
 ];
-
 
 const router = createRouter({
   history: createWebHistory(),
