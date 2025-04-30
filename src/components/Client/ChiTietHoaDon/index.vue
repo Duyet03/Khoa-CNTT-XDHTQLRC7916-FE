@@ -35,7 +35,7 @@
                                         <span class="fw-semibold text-muted">Phương thức thanh toán:</span>
                                         <span>
                                             <span v-if="hoaDon.phuong_thuc_thanh_toan === 'VNPAY'">
-                                                <img src="https://vnpay.vn/images/logo/vnpay-logo.png" height="20"
+                                                <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" height="20"
                                                     class="me-1"> VNPay
                                             </span>
                                             <span v-else-if="hoaDon.phuong_thuc_thanh_toan === 'TIEN_MAT'">

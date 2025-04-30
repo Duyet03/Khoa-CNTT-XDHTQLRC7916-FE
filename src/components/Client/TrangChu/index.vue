@@ -34,7 +34,7 @@
                 <div class="col-12">
                     <h3 class="section-title mb-4">Phim Đang Chiếu</h3>
                     <div class="row product-grid">
-                        <template v-for="(value, index) in list_phim" :key="index">
+                        <template v-for="(value, index) in paginatedMovies" :key="index">
                             <div class="col-6 col-md-4 col-lg-3 d-flex mb-4">
                                 <router-link :to="'/chi-tiet-phim/' + value.id + '-' + value.slug_phim" class="w-100">
                                     <div class="card h-100">
@@ -53,8 +53,24 @@
                             </div>
                         </template>
                     </div>
-                    <div class="text-center mt-4 mb-5">
-                        <a href="" class="btn btn-primary">XEM THÊM</a>
+                    <div class="d-flex justify-content-center mt-4 mb-5">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li :class="['page-item', { disabled: currentPage === 1 }]">
+                                    <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li v-for="page in totalPages" :key="page" :class="['page-item', { active: currentPage === page }]">
+                                    <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                                </li>
+                                <li :class="['page-item', { disabled: currentPage === totalPages }]">
+                                    <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -73,6 +89,18 @@ export default {
         return {
             list_phim: [],
             ds_slide: [],
+            currentPage: 1,
+            itemsPerPage: 8,
+        }
+    },
+    computed: {
+        paginatedMovies() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.list_phim.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.list_phim.length / this.itemsPerPage);
         }
     },
     mounted() {
@@ -80,6 +108,11 @@ export default {
         this.layDuLieuSlide();
     },
     methods: {
+        changePage(page) {
+            if (page >= 1 && page <= this.totalPages) {
+                this.currentPage = page;
+            }
+        },
         getDataHomePage() {
             axios
                 .get('http://127.0.0.1:8000/api/trang-chu/data')
@@ -228,5 +261,37 @@ export default {
     .release-info {
         font-size: 0.7rem;
     }
+}
+
+/* Pagination Styles */
+.pagination {
+    margin: 0;
+}
+
+.page-link {
+    color: red;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 0.75rem;
+    margin: 0 3px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    color: #fff;
+    background-color: #1976d2;
+    border-color: #1976d2;
+}
+
+.page-item.active .page-link {
+    background-color: #1976d2;
+    border-color: #1976d2;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #dee2e6;
 }
 </style>
