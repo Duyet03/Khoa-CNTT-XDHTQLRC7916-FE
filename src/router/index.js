@@ -23,6 +23,12 @@ const routes = [
     component: () => import("../components/Client/DangKy/index.vue"),
     meta: { layout: "index" },
   },
+  {
+    path: "/khach-hang/tai-khoan-ca-nhan",
+    component: () => import("../components/Client/KhachHang/QuanLyTaiKhoanCaNhan/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: kiemTraKhachHangDangNhap,
+  },
 
   {
     path: "/chi-tiet-phim/:phim_id",
