@@ -71,6 +71,12 @@
                                     </router-link>
                                 </li>
                                 <li>
+                                    <router-link class="dropdown-item" to="/khach-hang/hoa-don">
+                                        <i class="fa-solid fa-file-invoice me-2"></i>
+                                        <span>Hóa đơn</span>
+                                    </router-link>
+                                </li>
+                                <li>
                                     <a v-on:click="dangXuat()" class="dropdown-item">
                                         <i class="bx bx-log-out-circle me-2"></i>
                                         <span>Đăng Xuất</span>
@@ -143,6 +149,8 @@ export default {
                         toaster.success('Thông báo<br>' + res.data.message);
                         window.localStorage.removeItem('token_khachhang');
                         window.localStorage.removeItem('ho_ten');
+                        window.localStorage.removeItem('id_khach_hang');
+                        window.localStorage.removeItem('ho_ten_khach_hang');
                         this.is_check = false;
                         this.$router.push('/');
                     } else {

@@ -61,7 +61,7 @@
                                 <span>Ghế thường chưa đặt</span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
-                                <div class="btn-sm btn-warning me-2" style="width: 30px; height: 30px;"></div>
+                                <div class="btn-sm btn-warning me-2" style="width: 30px; height: 30px; "></div>
                                 <span>Ghế VIP chưa đặt</span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
@@ -154,7 +154,7 @@ export default {
             listGheChon: [],
             tong_tien: 0,
             id_hoa_don: '',
-            countdown: 10, // Đổi từ 900 (15 phút) thành 10 giây
+            countdown: 900, // Đổi từ 900 (15 phút) thành 10 giây
             showCountdown: false,
             timeouts: {}, // Lưu timeout cho từng ghế
             countdownTimer: null // Lưu interval của đồng hồ đếm ngược
@@ -230,7 +230,7 @@ export default {
             return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
         },
         startCountdown() {
-            this.countdown = 10; // Đổi từ 900 thành 10 giây
+            this.countdown = 900; // Đổi từ 900 thành 10 giây
             this.showCountdown = true;
             
             // Xóa interval cũ nếu có
@@ -275,7 +275,7 @@ export default {
                         // Lưu timeout mới cho ghế này (10 giây)
                         this.timeouts[id_ghe] = setTimeout(() => {
                             this.kiemTraTrangThaiGhe(id_suat, id_ghe);
-                        }, 10000); // Đổi từ 900000 thành 10000 (10 giây)
+                        }, 900000); // Đổi từ 900000 thành 10000 (10 giây)
                     } else {
                         toaster.error(res.data.message);
                     }

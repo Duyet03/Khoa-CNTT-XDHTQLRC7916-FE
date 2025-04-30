@@ -132,6 +132,44 @@
                                         </td>
                                         <td class="text-end fw-semibold">{{ formatVND(ve.gia_tien) }}</td>
                                     </tr>
+                                </tbody>                              
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Chi tiết dịch vụ đã đặt -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i>Chi tiết dịch vụ đã đặt</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Tên dịch vụ</th>
+                                        <th>Hình ảnh</th>
+                                        <th class="text-end">Số lượng</th>
+                                        <th class="text-end">Giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(ve, index) in chi_tiet_ve_dich_vus" :key="index">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ ve.ten_dich_vu }}</span>
+                                        </td>
+                                        <td>
+                                            <img :src="ve.hinh_anh" class="img-fluid rounded mb-3"
+                                                style="height: 50px;width: 50px; object-fit: cover;" alt="Poster phim">
+                                        </td>                            
+                                        <td class="text-end fw-semibold">{{ ve.so_luong }}</td>          
+                                        <td class="text-end fw-semibold">{{ formatVND(ve.gia_tien) }}</td>
+                                        
+                                    </tr>
                                 </tbody>
                                 <tfoot class="table-light">
                                     <tr>
@@ -186,6 +224,7 @@ export default {
         return {
             hoaDon: {},
             chiTietVes: [],
+            chi_tiet_ve_dich_vus: [],
             suatChieu: null,
             loading: true
         }
@@ -233,10 +272,11 @@ export default {
                 );
 
                 if (res.data.status) {
-                    const { hoa_don, chi_tiet_ves, suat_chieu } = res.data.data;
+                    const { hoa_don, chi_tiet_ves, suat_chieu, chi_tiet_ve_dich_vus } = res.data.data;
                     this.hoaDon = hoa_don;
                     this.chiTietVes = chi_tiet_ves || [];
                     this.suatChieu = suat_chieu || null;
+                    this.chi_tiet_ve_dich_vus = chi_tiet_ve_dich_vus || [];
                 } else {
                     toaster.error(res.data.message);
                     this.$router.push('/');

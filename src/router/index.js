@@ -10,12 +10,12 @@ const routes = [
   },
   {
     path: "/home-page",
-    component: () => import("../components/Client/home.vue"),
+    component: () => import("../components/Client/TrangChu/index.vue"),
     meta: { layout: "client" },
   },
   {
     path: "/login",
-    component: () => import("../components/Client/login.vue"),
+    component: () => import("../components/Client/DangNhap/index.vue"),
     meta: { layout: "Login" },
   },
   {
@@ -32,34 +32,40 @@ const routes = [
   },
   {
     path: "/dat-suat/:phim_id",
-    component: () => import("../components/Client/datSuat.vue"),
+    component: () => import("../components/Client/DatSuat/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/dat-ve/:id_suat",
-    component: () => import("../components/Client/datVe.vue"),
+    component: () => import("../components/Client/DatVe/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/thanh-toan/:id_suat",
     name: "thanh-toan",
-    component: () => import("../components/Client/thanhToan.vue"),
+    component: () => import("../components/Client/ThanhToan/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/thanh-toan/ket-qua",
     name: "thanh-toan-ket-qua",
-    component: () => import("../components/Client/thanhToan.vue"),
+    component: () => import("../components/Client/ThanhToan/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/chi-tiet-hoa-don/:ma_hoa_don",
     name: "chi-tiet-hoa-don",
-    component: () => import("../components/Client/ChiTietHoaDon.vue"),
+    component: () => import("../components/Client/ChiTietHoaDon/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: kiemTraKhachHangDangNhap,
+  },
+  {
+    path: "/khach-hang/hoa-don",
+    component: () => import("../components/Client/LichSuDatVe/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
@@ -88,7 +94,7 @@ const routes = [
   {
     path: "/auth/callback",
     name: "AuthCallback",
-    component: () => import("../components/Client/AuthCallback.vue"),
+    component: () => import("../components/Client/DangNhapGoogle/AuthCallback.vue"),
   },
 
   //ADMIN

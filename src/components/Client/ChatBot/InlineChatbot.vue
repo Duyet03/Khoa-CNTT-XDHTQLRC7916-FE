@@ -44,19 +44,45 @@ export default {
       ],
       userInput: '',
       isLoading: false,
-      userId: null
+      userId: null,
+      isLoggedIn: false
     };
   },
   
   mounted() {
-    this.userId = localStorage.getItem('id_khach_hang') || 'guest';
-    // Tự động đề xuất phim khi mở chatbot
-    this.getMovieSuggestions();
-    this.scrollToBottom();
+    const userId = localStorage.getItem('id_khach_hang');
+    this.userId = userId || 'guest';
+    this.isLoggedIn = !!userId;
+
+    // Chỉ tự động đề xuất phim khi đã đăng nhập
+    if (this.isLoggedIn) {
+      this.getMovieSuggestions();
+      this.scrollToBottom();
+    } else {
+      this.messages = [
+        { text: 'Vui lòng đăng nhập để sử dụng tính năng chat với trợ lý ảo.', sender: 'bot' }
+      ];
+    }
   },
   
   methods: {
     async sendMessage() {
+      if (!this.isLoggedIn) {
+        this.$swal({
+          title: 'Yêu cầu đăng nhập',
+          text: 'Vui lòng đăng nhập để sử dụng tính năng chat',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Đăng nhập ngay',
+          cancelButtonText: 'Đóng'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/login');
+          }
+        });
+        return;
+      }
+
       if (!this.userInput.trim()) return;
       
       // Thêm tin nhắn người dùng
@@ -69,11 +95,21 @@ export default {
       this.scrollToBottom();
       
       try {
-        // Gửi câu hỏi đến API
-        const response = await axios.post('http://127.0.0.1:8000/api/chatbot/query', {
-          message: this.userInput,
-          userId: this.userId
-        });
+        let response;
+        
+        // Kiểm tra nếu là yêu cầu xem lịch sử đặt vé
+        if (this.userInput.toLowerCase().includes('lịch sử') && 
+            (this.userInput.toLowerCase().includes('đặt vé') || this.userInput.toLowerCase().includes('hóa đơn'))) {
+          response = await axios.post('http://127.0.0.1:8000/api/chatbot/view-bill-history', {
+            userId: this.userId
+          });
+        } else {
+          // Gửi câu hỏi đến API mặc định
+          response = await axios.post('http://127.0.0.1:8000/api/chatbot/query', {
+            message: this.userInput,
+            userId: this.userId
+          });
+        }
         
         // Hiển thị phản hồi
         this.isLoading = false;

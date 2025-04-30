@@ -8,7 +8,7 @@
                 style="z-index: 2; width: 100%; max-width: 1200px;">
                 <!-- Left Section -->
                 <div class="col-md-8 d-flex flex-column justify-content-between text-white bg-dark p-5" style="
-                background: url(https://media.lottecinemavn.com/Media/WebAdmin/14c5e422f2e84c06b04861f3a7c14cab.jpg) no-repeat;
+                background: url(https://res.cloudinary.com/dfff9gqxw/image/upload/v1745980830/vongtaynang_uhodf8.jpg) no-repeat;
                 background-size: cover;
                 background-position: center;">
                     <h2 class="mb-4"><i class="bx bxl-xing"></i> Cinema Movie</h2>
@@ -123,7 +123,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url(https://media.lottecinemavn.com/Media/WebAdmin/14c5e422f2e84c06b04861f3a7c14cab.jpg) no-repeat;
+        background: url(https://res.cloudinary.com/dfff9gqxw/image/upload/v1745980830/vongtaynang_uhodf8.jpg) no-repeat;
         background-size: cover;
         background-position: center;
         filter: blur(10px);

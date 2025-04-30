@@ -24,20 +24,16 @@
         </div>
         
         <!-- Quick actions - Hiển thị khi chưa có tin nhắn người dùng -->
-        <div v-if="!messages.some(m => m.sender === 'user')" class="quick-actions">
+        <div v-if="!messages.some(m => m.sender === 'user') && isLoggedIn" class="quick-actions">
           <div class="quick-title">Câu hỏi phổ biến:</div>
           <div class="quick-buttons">
             <button @click="handleQuickAction('Phim đang chiếu')" class="quick-btn">
               <i class="bx bx-movie-play"></i>
               <span>Phim đang chiếu</span>
             </button>
-            <button @click="handleQuickAction('Lịch chiếu cuối tuần')" class="quick-btn">
-              <i class="bx bx-calendar"></i>
-              <span>Lịch chiếu cuối tuần</span>
-            </button>
-            <button @click="handleQuickAction('Cách đặt vé')" class="quick-btn">
-              <i class="bx bx-purchase-tag"></i>
-              <span>Cách đặt vé</span>
+            <button @click="handleQuickAction('Xem lịch sử đặt vé')" class="quick-btn">
+              <i class="bx bx-history"></i>
+              <span>Lịch sử đặt vé</span>
             </button>
           </div>
         </div>
@@ -76,23 +72,47 @@ export default {
       ],
       userInput: '',
       isLoading: false,
-      userId: null
+      userId: null,
+      isLoggedIn: false
     };
   },
 
   mounted() {
-    this.userId = localStorage.getItem('id_khach_hang') || 'guest';
-    // Tự động đề xuất phim sau một lúc
-    setTimeout(() => {
-      this.getMovieSuggestions();
-      this.hasNewMessage = true;
-    }, 2000);
+    // Kiểm tra đăng nhập khi component được tạo
+    const userId = localStorage.getItem('id_khach_hang');
+    this.userId = userId || 'guest';
+    this.isLoggedIn = !!userId;
+
+    // Chỉ tự động đề xuất phim nếu đã đăng nhập
+    if (this.isLoggedIn) {
+      setTimeout(() => {
+        this.getMovieSuggestions();
+        this.hasNewMessage = true;
+      }, 2000);
+    }
   },
 
   methods: {
     toggleChat() {
-      this.isOpen = !this.isOpen;
+      if (!this.isLoggedIn) {
+        // Hiển thị thông báo yêu cầu đăng nhập
+        this.$swal({
+          title: 'Yêu cầu đăng nhập',
+          text: 'Vui lòng đăng nhập để sử dụng tính năng chat',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Đăng nhập ngay',
+          cancelButtonText: 'Đóng'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Chuyển hướng đến trang đăng nhập
+            this.$router.push('/login');
+          }
+        });
+        return;
+      }
 
+      this.isOpen = !this.isOpen;
       if (this.isOpen) {
         this.hasNewMessage = false;
         this.$nextTick(() => {
@@ -102,6 +122,22 @@ export default {
     },
 
     async sendMessage() {
+      if (!this.isLoggedIn) {
+        this.$swal({
+          title: 'Yêu cầu đăng nhập',
+          text: 'Vui lòng đăng nhập để sử dụng tính năng chat',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Đăng nhập ngay',
+          cancelButtonText: 'Đóng'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/login');
+          }
+        });
+        return;
+      }
+
       if (!this.userInput.trim()) return;
 
       // Thêm tin nhắn người dùng
@@ -115,11 +151,21 @@ export default {
       this.scrollToBottom();
 
       try {
-        // Gửi câu hỏi đến API
-        const response = await axios.post('http://127.0.0.1:8000/api/chatbot/query', {
-          message: this.userInput,
-          userId: this.userId
-        });
+        let response;
+        
+        // Kiểm tra nếu là yêu cầu xem lịch sử đặt vé
+        if (this.userInput.toLowerCase().includes('lịch sử') && 
+            (this.userInput.toLowerCase().includes('đặt vé') || this.userInput.toLowerCase().includes('hóa đơn'))) {
+          response = await axios.post('http://127.0.0.1:8000/api/chatbot/bill-history', {
+            userId: this.userId
+          });
+        } else {
+          // Gửi câu hỏi đến API mặc định
+          response = await axios.post('http://127.0.0.1:8000/api/chatbot/query', {
+            message: this.userInput,
+            userId: this.userId
+          });
+        }
 
         // Hiển thị phản hồi
         this.isLoading = false;
@@ -144,11 +190,19 @@ export default {
     },
 
     handleQuickAction(question) {
+      if (!this.isLoggedIn) {
+        return;
+      }
+      
       this.userInput = question;
       this.sendMessage();
     },
 
     async getMovieSuggestions() {
+      if (!this.isLoggedIn) {
+        return;
+      }
+
       this.isLoading = true;
 
       try {
