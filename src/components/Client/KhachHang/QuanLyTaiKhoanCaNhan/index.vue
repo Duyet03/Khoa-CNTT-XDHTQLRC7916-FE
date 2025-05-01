@@ -2,16 +2,14 @@
     <div class="container mt-4">
         <div class="row">
             <!-- Left panel -->
-            <div class="col-lg-4 mb-4">
-                <div class="card shadow-sm">
+            <div class="col-lg-4 d-flex justify-content-center">
+                <div class="card shadow-sm w-100">
                     <div class="card-body text-center">
                         <img src="https://i.pinimg.com/236x/03/19/e7/0319e75748160709ceefa7398a4a7070.jpg"
                             class="rounded-circle mb-3" style="width: 100px;" alt="avatar" />
                         <h5 class="fw-bold">{{ khach_hang.ten_khach_hang }}</h5>
-                        <p class="text-muted mb-1"><i class="bi bi-gift"></i> 0 Stars</p>
                         <hr />
-                        <h6 class="mb-1">Tổng chi tiêu 2025 <i class="bi bi-info-circle"></i></h6>
-                        <p class="text-danger fw-bold">{{ tong_tien }}</p>
+                        <h6 class="mb-1">Tổng chi tiêu 2025 : <span class="text-danger fw-bold">{{ tong_tien_da_thanh_toan }}</span></h6>
                         <hr />
                         <div class="text-start">
                             <p><strong>HOTLINE:</strong> <a href="tel:19002224">0332162386</a> (9:00 - 22:00)</p>
@@ -23,8 +21,8 @@
             </div>
 
             <!-- Right panel -->
-            <div class="col-lg-8">
-                <div class="card">
+            <div class="col-lg-8 d-flex justify-content-center">
+                <div class="card w-100">
                     <div class="card-body">
                         <ul class="nav nav-tabs nav-primary mb-0" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -220,7 +218,7 @@ export default {
                 re_password: ''
             },
             list_hd: [],
-            tong_tien: '',
+            tong_tien_da_thanh_toan: '',
         }
     },
     mounted() {
@@ -285,9 +283,10 @@ export default {
                 })
                 .then((res) => {
                     this.list_hd = res.data.data
-                    var tong_tiena = this.list_hd.reduce((sum, list_hdct) => sum + list_hdct.tong_tien, 0) * 1
+                    this.tong_tien_da_thanh_toan = res.data.tong_tien_da_thanh_toan
 
-                    this.tong_tien = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tong_tiena);
+
+                    this.tong_tien_da_thanh_toan = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(this.tong_tien_da_thanh_toan);
 
                 })
         },

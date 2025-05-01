@@ -58,8 +58,7 @@
         },
         menuKey: 0,
         menuItems: [
-          { to: '/admin/dich-vu', icon: 'fa-brands fa-servicestack', title: 'Dịch Vụ' },
-          { to: '/admin/doanh-thu', icon: 'fa-solid fa-money-bill', title: 'Doanh thu' },
+          { to: '/admin/thong-ke', icon: 'fa-solid fa-money-bill', title: 'Thống Kê' },
           { to: '/admin/ghe-xem-phim', icon: 'fa-solid fa-couch', title: 'Ghế' },
           { submenu: 'system', icon: 'fa-brands fa-ubuntu', title: 'Hệ thống' },
           { to: '/admin/khuyen-mai', icon: 'fa-solid fa-gift', title: 'Khuyến Mãi' },
@@ -71,7 +70,8 @@
           { to: '/admin/suat-chieu', icon: 'fa-solid fa-film', title: 'Suất Chiếu' },
           { to: '/admin/chi-tiet-ve', icon: 'fa-solid fa-ticket', title: 'Chi tiết vé' },
           { to: '/admin/hoa-don', icon: 'fa-solid fa-barcode', title: 'Bill' },
-          { to: '/admin/the-loai', icon: 'fa-solid fa-video', title: 'Thể Loại' }
+          { to: '/admin/the-loai', icon: 'fa-solid fa-video', title: 'Thể Loại' },
+          { to: '/admin/goc-dien-anh', icon: 'fa-solid fa-image', title: 'Góc Điện Ảnh' }
         ]
       }
     },

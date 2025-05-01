@@ -1,5 +1,6 @@
 <template>
     <div class="goc-dien-anh">
+        
         <div class="container">
             <div class="page-header">
                 <h1 class="page-title">Góc Điện Ảnh</h1>
@@ -10,7 +11,9 @@
                 <div class="col-md-8">
                     <div class="news-list">
                         <div v-for="(news, index) in paginatedNews" :key="index" class="news-item">
-                            <div class="news-image">
+                            <!-- chuyển sang trang chi tiết -->
+                            <router-link :to="`/goc-dien-anh/${news.id}`">
+                                <div class="news-image">
                                 <img :src="news.hinh_anh" :alt="news.tieu_de" class="img-fluid">
                             </div>
                             <div class="news-content">
@@ -22,6 +25,7 @@
                                 </div>
                                 <p class="news-excerpt">{{ news.noi_dung }}</p>
                             </div>
+                            </router-link>
                         </div>
                     </div>
                     
@@ -51,15 +55,19 @@
                         <div class="sidebar-widget">
                             <h3 class="widget-title">Tin Mới Nhất</h3>
                             <div class="recent-news">
-                                <div v-for="(news, index) in ds_tin_tuc.slice(0, 9)" :key="index" class="recent-news-item">
-                                    <div class="recent-news-image">
-                                        <img :src="news.hinh_anh" :alt="news.tieu_de">
+                                <template v-for="(news, index) in ds_tin_tuc.slice(0, 9)" :key="index">
+                                    <router-link :to="`/goc-dien-anh/${news.id}`">
+                                    <div class="recent-news-item">
+                                        <div class="recent-news-image">
+                                            <img :src="news.hinh_anh" :alt="news.tieu_de">
+                                        </div>
+                                        <div class="recent-news-content">
+                                            <h4>{{ news.tieu_de }}</h4>
+                                            <span class="date">{{ formatDate(news.ngay_dang) }}</span>
+                                        </div>
                                     </div>
-                                    <div class="recent-news-content">
-                                        <h4>{{ news.tieu_de }}</h4>
-                                        <span class="date">{{ formatDate(news.ngay_dang) }}</span>
-                                    </div>
-                                </div>
+                                    </router-link>
+                                </template>
                             </div>
                         </div>
                     </div>

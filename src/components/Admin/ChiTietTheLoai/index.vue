@@ -114,7 +114,6 @@
 </template>
 <script>
 import { createToaster } from "@meforma/vue-toaster";
-import axios from "axios";
 const toaster = createToaster({ position: "top-right" });
 import baseRequest from '../../../core/baseRequest';
 export default {

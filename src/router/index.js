@@ -96,6 +96,11 @@ const routes = [
     component: () => import("../components/Client/GocDienAnh/index.vue"),
     meta: { layout: "client" },
   },
+  {
+    path: "/goc-dien-anh/:id",
+    component: () => import("../components/Client/GocDienAnh/chitiet.vue"),
+    meta: { layout: "client" },
+  },
 
   {
     path: "/auth/callback",
@@ -108,6 +113,12 @@ const routes = [
   {
     path: "/admin/dich-vu",
     component: () => import("../components/admin/QuanLyDichVu/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/thong-ke",
+    component: () => import("../components/Admin/ThongKe/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },
