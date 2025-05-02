@@ -185,7 +185,6 @@
 
 <script>
 import { createToaster } from "@meforma/vue-toaster";
-import "bootstrap-icons/font/bootstrap-icons.css";
 const toaster = createToaster({ position: "top-right" });
 import axios from "axios";
 

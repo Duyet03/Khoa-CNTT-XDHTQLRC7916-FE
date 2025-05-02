@@ -56,6 +56,14 @@
                                             <input v-model="suat_create.gia_ve" type="number" class="form-control mt-2">
                                         </div>
                                         <div class="mb-2">
+                                            <label>Giá Vé Vip</label>
+                                            <input v-model="suat_create.gia_ve_vip"  type="number" class="form-control mt-2">
+                                        </div>
+                                        <div class="mb-2">
+                                            <label>Giá Vé Đôi</label>
+                                            <input v-model="suat_create.gia_ve_doi"  type="number" class="form-control mt-2">
+                                        </div>
+                                        <div class="mb-2">
                                             <label>Định Dạng</label>
                                             <select v-model="suat_create.dinh_dang" class="form-control mt-2">
                                                 <option value="2D">2D</option>
@@ -399,6 +407,8 @@ export default {
                 ngay_chieu: '',
                 gio_bat_dau: '',
                 gia_ve: 50000,
+                gia_ve_vip: 70000,
+                gia_ve_doi: 100000,
                 dinh_dang: '2D',
                 ngon_ngu: 'Phụ đề',
                 trang_thai: 'Sắp chiếu'

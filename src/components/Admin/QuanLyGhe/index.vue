@@ -40,6 +40,7 @@
                             <select v-model="create_ghe.loai_ghe" class="form-select">
                                 <option value="0">Ghế thường</option>
                                 <option value="1">Ghế VIP</option>
+                                <option value="2">Ghế Đôi</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -124,9 +125,13 @@
                                                 style="cursor: pointer">
                                                 VIP
                                             </span>
-                                            <span v-else class="badge bg-secondary" @click="doiLoaiGhe(v)"
+                                            <span v-else-if="v.loai_ghe == 0" class="badge bg-secondary" @click="doiLoaiGhe(v)"
                                                 style="cursor: pointer">
                                                 Thường
+                                            </span>
+                                            <span v-else class="badge bg-info" @click="doiLoaiGhe(v)"
+                                                style="cursor: pointer">
+                                                Đôi
                                             </span>
                                         </td>
                                         <td class="align-middle text-center">

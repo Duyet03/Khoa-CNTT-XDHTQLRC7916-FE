@@ -38,7 +38,8 @@
                                                 <button v-if="v.tinh_trang == 0" v-on:click="datVe(v.id_suat, v.id_ghe)"
                                                     :class="[
                                                         'btn btn-sm',
-                                                        v.loai_ghe == 1 ? 'btn-warning' : 'btn-primary'
+                                                        v.loai_ghe == 1 ? 'btn-warning' : v.loai_ghe == 2 ? 'btn-info' : 'btn-primary'
+
                                                     ]">
                                                     {{ v.ten_ghe }}
                                                 </button>
@@ -61,8 +62,12 @@
                                 <span>Ghế thường chưa đặt</span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
-                                <div class="btn-sm btn-warning me-2" style="width: 30px; height: 30px; "></div>
-                                <span>Ghế VIP chưa đặt</span>
+                                <div class="btn-sm btn-warning me-2" style="width: 30px; height: 30px; background-color: #ffc107;"></div>
+                                <span>Ghế VIP </span>
+                            </div>
+                            <div class="d-flex align-items-center me-4 mb-2">
+                                <div class="btn-sm me-2" style="width: 30px; height: 30px; background-color: #0dcaf0 ; "></div>
+                                <span>Ghế Đôi</span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
                                 <div class="btn-sm btn-success me-2" style="width: 30px; height: 30px;"></div>
