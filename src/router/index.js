@@ -101,6 +101,16 @@ const routes = [
     component: () => import("../components/Client/GocDienAnh/chitiet.vue"),
     meta: { layout: "client" },
   },
+  {
+    path: "/su-kien",
+    component: () => import("../components/Client/SuKien/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/su-kien/:id",
+    component: () => import("../components/Client/SuKien/chitiet.vue"),
+    meta: { layout: "client" },
+  },
 
   {
     path: "/auth/callback",
@@ -113,6 +123,12 @@ const routes = [
   {
     path: "/admin/dich-vu",
     component: () => import("../components/admin/QuanLyDichVu/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/khuyen-mai",
+    component: () => import("../components/Admin/SuKien/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },

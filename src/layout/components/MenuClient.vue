@@ -34,11 +34,6 @@
                                 Sự Kiện
                             </router-link>
                         </li>
-                        <li class="nav-item mx-2">
-                            <router-link to="/rap-gia-ve" class="nav-link" :class="{'btn btn-warning text-white px-3 me-3': $route.path === '/rap-gia-ve'}">
-                                Rạp/Giá Vé
-                            </router-link>
-                        </li>
                     </ul>
                 </div>
 
