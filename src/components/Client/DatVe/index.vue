@@ -165,7 +165,7 @@ export default {
             listGheChon: [],
             tong_tien: 0,
             id_hoa_don: '',
-            countdown: 60, // Đổi từ 900 (15 phút) thành 10 giây
+            countdown: 10, // Đổi từ 900 (15 phút) thành 10 giây
             showCountdown: false,
             countdownTimer: null // Lưu interval của đồng hồ đếm ngược
         }

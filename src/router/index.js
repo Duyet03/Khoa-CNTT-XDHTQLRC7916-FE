@@ -146,7 +146,7 @@ const routes = [
   },
   {
     path: "/admin/ghe-xem-phim",
-    component: () => import("../components/admin/QuanLyGhe/index.vue"),
+    component: () => import("../components/Admin/QuanLyGhe/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },
