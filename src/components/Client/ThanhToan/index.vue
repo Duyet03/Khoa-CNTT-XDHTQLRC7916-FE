@@ -349,7 +349,8 @@ export default {
                         // Hiển thị hướng dẫn trước khi chuyển hướng
                         setTimeout(() => {
                             // Chuyển hướng đến trang thanh toán VNPay
-                            window.location.href = res.data.payment_url;
+                            window.open(res.data.payment_url, '_blank');
+
                         }, 1500);
                     } else {
                         processingModal.hide();

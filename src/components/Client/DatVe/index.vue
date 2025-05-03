@@ -62,11 +62,13 @@
                                 <span>Ghế thường chưa đặt</span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
-                                <div class="btn-sm btn-warning me-2" style="width: 30px; height: 30px; background-color: #ffc107;"></div>
+                                <div class="btn-sm btn-warning me-2"
+                                    style="width: 30px; height: 30px; background-color: #ffc107;"></div>
                                 <span>Ghế VIP </span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
-                                <div class="btn-sm me-2" style="width: 30px; height: 30px; background-color: #0dcaf0 ; "></div>
+                                <div class="btn-sm me-2"
+                                    style="width: 30px; height: 30px; background-color: #0dcaf0 ; "></div>
                                 <span>Ghế Đôi</span>
                             </div>
                             <div class="d-flex align-items-center me-4 mb-2">
@@ -94,7 +96,8 @@
                                                     <th class="w-25">Ghế đã chọn: </th>
                                                     <td class="text-center">
                                                         <template v-for="(v, k) in listGheChon" :key="k">
-                                                            <span class="badge bg-success me-2" style="font-size: 16px;">
+                                                            <span class="badge bg-success me-2"
+                                                                style="font-size: 16px;">
                                                                 {{ v.ten_ghe }}
                                                             </span>
                                                         </template>
@@ -104,10 +107,11 @@
                                                         </span>
                                                     </td>
                                                 </tr>
-                                                <tr v-if="showCountdown">
+                                                <tr v-if="showCountdown && listGheChon.length != 0">
                                                     <th>Thời gian để thanh toán:</th>
                                                     <td class="text-center">
-                                                        <div class="badge bg-warning text-dark p-2" style="font-size: 18px;">
+                                                        <div class="badge bg-warning text-dark p-2"
+                                                            style="font-size: 18px;">
                                                             <i class="fas fa-clock me-2"></i>
                                                             {{ formatTime(countdown) }}
                                                         </div>
@@ -147,6 +151,8 @@ import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 import { error } from "jquery";
 const toaster = createToaster({ position: "top-right" });
+import { timeouts } from "../../../router/timeouts";
+import { kiemTraTrangThaiGheAPI } from "../../../router/veHelpers";
 export default {
     props: ['id_suat'],
     data() {
@@ -159,9 +165,8 @@ export default {
             listGheChon: [],
             tong_tien: 0,
             id_hoa_don: '',
-            countdown: 900, // Đổi từ 900 (15 phút) thành 10 giây
+            countdown: 10, // Đổi từ 900 (15 phút) thành 10 giây
             showCountdown: false,
-            timeouts: {}, // Lưu timeout cho từng ghế
             countdownTimer: null // Lưu interval của đồng hồ đếm ngược
         }
     },
@@ -185,9 +190,6 @@ export default {
     },
     beforeUnmount() {
         // Xóa tất cả các timeout khi component bị hủy
-        Object.values(this.timeouts).forEach(timeout => {
-            clearTimeout(timeout);
-        });
         // Xóa interval đếm ngược
         if (this.countdownTimer) {
             clearInterval(this.countdownTimer);
@@ -235,14 +237,14 @@ export default {
             return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
         },
         startCountdown() {
-            this.countdown = 900; // Đổi từ 900 thành 10 giây
+            this.countdown = 10; // Đổi từ 900 thành 10 giây
             this.showCountdown = true;
-            
+
             // Xóa interval cũ nếu có
             if (this.countdownTimer) {
                 clearInterval(this.countdownTimer);
             }
-            
+
             this.countdownTimer = setInterval(() => {
                 if (this.countdown > 0) {
                     this.countdown--;
@@ -254,8 +256,8 @@ export default {
         },
         datVe(id_suat, id_ghe) {
             // Xóa timeout cũ của ghế này nếu có
-            if (this.timeouts[id_ghe]) {
-                clearTimeout(this.timeouts[id_ghe]);
+            if (timeouts[id_ghe]) {
+                clearTimeout(timeouts[id_ghe]);
             }
 
             axios
@@ -273,45 +275,32 @@ export default {
                         toaster.success(res.data.message);
                         this.layVe();
                         this.layVeChon();
-                        
+
                         // Bắt đầu đếm ngược
                         this.startCountdown();
-                        
+
                         // Lưu timeout mới cho ghế này (10 giây)
-                        this.timeouts[id_ghe] = setTimeout(() => {
-                            this.kiemTraTrangThaiGhe(id_suat, id_ghe);
-                        }, 900000); // Đổi từ 900000 thành 10000 (10 giây)
+                        timeouts[id_ghe] = setTimeout(() => {
+                            kiemTraTrangThaiGheAPI(
+                                id_suat,
+                                id_ghe,
+                                localStorage.getItem('id_khach_hang'),
+                                () => {
+                                    // callback để load lại vé nếu cần
+                                    this.layVe();
+                                    this.layVeChon();
+                                    delete timeouts[id_ghe]; // clear luôn key
+                                }
+                            );
+                            console.log("10s");
+                        }, 10000); // Đổi từ 900000 thành 10000 (10 giây)
                     } else {
                         toaster.error(res.data.message);
                     }
                     this.layVe();
                 });
         },
-        kiemTraTrangThaiGhe(id_suat, id_ghe) {
-            console.log("Kiểm tra trạng thái ghế:", id_suat, id_ghe); // Thêm log để debug
-            axios
-                .post("http://127.0.0.1:8000/api/lay-ve/kiem-tra-trang-thai", {
-                    id_suat: id_suat,
-                    id_ghe: id_ghe,
-                    id_khach_hang: localStorage.getItem('id_khach_hang')
-                }, {
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token_khachhang")
-                    }
-                })
-                .then((res) => {
-                    if (res.data.status) {
-                        toaster.error(res.data.message);
-                        this.layVe();
-                        this.layVeChon();
-                        // Xóa timeout của ghế này
-                        delete this.timeouts[id_ghe];
-                    }
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi kiểm tra trạng thái ghế:", error);
-                });
-        },
+
         huy(id_suat, id_ghe) {
             axios
                 .post("http://127.0.0.1:8000/api/lay-ve/doi-trang-thai-huy", {
@@ -449,9 +438,17 @@ export default {
 
 /* Thêm animation cho countdown */
 @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.7; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 .countdown-badge {
