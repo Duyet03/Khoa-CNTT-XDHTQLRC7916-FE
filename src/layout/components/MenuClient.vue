@@ -4,8 +4,10 @@
             <div class="container">
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
-                    <img src="https://i.pinimg.com/originals/84/10/0f/84100f5bcc9d55b504010cdf2fb37e46.jpg" alt="Cinema"
+                    <router-link to="/home-page">
+                        <img src="https://i.pinimg.com/originals/84/10/0f/84100f5bcc9d55b504010cdf2fb37e46.jpg" alt="Cinema"
                         height="60">
+                    </router-link>
                 </a>
 
                 <!-- Nút Toggle trên Mobile -->
@@ -68,7 +70,7 @@
                                 <li>
                                     <router-link class="dropdown-item" to="/khach-hang/hoa-don">
                                         <i class="fa-solid fa-file-invoice me-2"></i>
-                                        <span>Hóa đơn</span>
+                                        <span>Lịch sử hóa đơn</span>
                                     </router-link>
                                 </li>
                                 <li>
@@ -178,14 +180,84 @@ export default {
 <style>
 .hover-text {
     color: rgb(129, 129, 129);
-    /* Màu chữ ban đầu */
     transition: color 0.3s ease;
-    /* Hiệu ứng mượt mà */
 }
 
-/* Khi rê chuột vào */
 .hover-text:hover {
     color: red;
-    /* Màu chữ khi rê chuột */
+}
+
+/* New menu styling */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.navbar-nav .nav-item {
+    position: relative;
+    margin: 0 5px;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding: 8px 15px;
+    color: #333;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ff9800;
+    background-color: rgba(255, 152, 0, 0.1);
+}
+
+.navbar-nav .nav-link.btn-warning {
+    background-color: #ff9800 !important;
+    border: none;
+    font-weight: 600;
+}
+
+.navbar-nav .nav-link.btn-warning:hover {
+    background-color: #f57c00 !important;
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+/* Dropdown styling */
+.custom-dropdown {
+    border: none;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 8px 0;
+}
+
+.custom-dropdown .dropdown-item {
+    padding: 8px 20px;
+    transition: all 0.2s ease;
+}
+
+.custom-dropdown .dropdown-item:hover {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: #ff9800;
+}
+
+.custom-dropdown .dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
+
+/* User info styling */
+.user-info {
+    padding: 5px 10px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.user-info:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.user-name1 {
+    margin-left: 5px;
+    color: #333;
 }
 </style>

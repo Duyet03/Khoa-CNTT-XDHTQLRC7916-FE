@@ -449,7 +449,7 @@ export default {
                 const res = await axios.post("http://127.0.0.1:8000/api/dat-dich-vu",
                     {
                         id_dich_vu: id_dich_vu,
-                        id_suat: localStorage.getItem('pending_id_suat'),
+                        id_suat: this.id_suat,
                     },
                     {
                         headers: {
@@ -472,8 +472,7 @@ export default {
 
         async layDichVuDaDat() {
             try {
-                const id_suat = localStorage.getItem('pending_id_suat');
-                const res = await axios.get(`http://127.0.0.1:8000/api/danh-sach-dich-vu/${id_suat}`, {
+                const res = await axios.get(`http://127.0.0.1:8000/api/danh-sach-dich-vu/${this.id_suat}`, {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token_khachhang")
                     }
@@ -493,7 +492,7 @@ export default {
                 const res = await axios.post("http://127.0.0.1:8000/api/huy-dich-vu", 
                     {
                         id_dich_vu: id_dich_vu,
-                        id_suat: localStorage.getItem('pending_id_suat')
+                        id_suat: this.id_suat
                     },
                     {
                         headers: {
@@ -518,7 +517,7 @@ export default {
                 const res = await axios.post("http://127.0.0.1:8000/api/tang-dich-vu", 
                     {
                         id_dich_vu: id_dich_vu,
-                        id_suat: localStorage.getItem('pending_id_suat')
+                        id_suat: this.id_suat
                     },
                     {
                         headers: {
@@ -543,7 +542,7 @@ export default {
                 const res = await axios.post("http://127.0.0.1:8000/api/giam-dich-vu", 
                     {
                         id_dich_vu: id_dich_vu,
-                        id_suat: localStorage.getItem('pending_id_suat')
+                        id_suat: this.id_suat
                     },
                     {
                         headers: {
