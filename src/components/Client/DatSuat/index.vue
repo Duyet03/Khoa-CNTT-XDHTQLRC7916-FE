@@ -1,4 +1,5 @@
 <template>
+    
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-12">
@@ -6,21 +7,11 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="mb-3 mb-md-0">
-                                <h4 class="card-title text-primary mb-3">Chọn ngày xem phim</h4>
-                                <div class="d-flex flex-wrap" v-if="danhSachNgayChieu.length > 0">
-                                    <button v-for="(ngay, index) in danhSachNgayChieu" :key="index"
-                                        @click="chonNgay(ngay)"
-                                        :class="['btn me-2 mb-2', ngayDaChon === ngay ? 'btn-primary' : 'btn-outline-primary']">
-                                        {{ formatDate(ngay) }}
-                                    </button>
-                                </div>
-                                <div v-else class="alert alert-info">
-                                    Không có suất chiếu sắp tới cho phim này
-                                </div>
+                                <h4 class="card-title text-primary mb-3 mt-3">Chọn ngày xem phim</h4>
                             </div>
                             <div class="d-flex align-items-center">
-                                <input v-model="ngayTuyChon" class="form-control" type="date" :min="layNgayHienTai()">
-                                <button @click="layDuLieuSuatChieuTheoNgay()" class="btn btn-primary ms-2">
+                                <input v-model="ngayTuyChon" class="form-control" type="date" :min="layNgayHienTai()" />
+                                <button @click="layDuLieuSuatChieuTheoNgay()" class="btn btn-primary ms-2 text-nowrap">
                                     <i class="fa-solid fa-magnifying-glass me-1"></i>Tìm suất
                                 </button>
                             </div>
@@ -44,29 +35,39 @@
                             <div class="row">
                                 <div v-for="suat in suatList" :key="suat.id"
                                     class="col-6 col-md-4 col-lg-3 col-xl-2 mb-3">
-                                    <router-link 
-                                        :to="isSuatDaQua(suat) ? '#' : '/dat-ve/' + suat.id" 
-                                        :class="['text-decoration-none', { 'disabled-link': isSuatDaQua(suat) }]"
-                                        @click.prevent="isSuatDaQua(suat) && $event.preventDefault()"
-                                    >
-                                        <div 
-                                            :class="['card h-100 shadow-sm border-0 hover-card', { 'disabled-card': isSuatDaQua(suat) }]"
-                                            :title="isSuatDaQua(suat) ? 'Không thể chọn suất chiếu đã chiếu' : ''"
-                                        >
+                                    <router-link :to="isSuatDaQua(suat) ? '#' : '/dat-ve/' + suat.id" :class="[
+                                        'text-decoration-none',
+                                        { 'disabled-link': isSuatDaQua(suat) },
+                                    ]" @click.prevent="
+                                        isSuatDaQua(suat) && $event.preventDefault()
+                                        ">
+                                        <div :class="[
+                                            'card h-100 shadow-sm border-0 hover-card',
+                                            { 'disabled-card': isSuatDaQua(suat) },
+                                        ]" :title="isSuatDaQua(suat)
+                                            ? 'Không thể chọn suất chiếu đã chiếu'
+                                            : ''
+                                            ">
                                             <div class="card-header bg-light text-center py-2">
                                                 {{ suat.gio_bat_dau.substring(0, 5) }}
                                             </div>
                                             <div class="card-body text-center">
-                                                <div class="mb-2 text-primary fw-bold">Phòng: {{ suat.phong.ten_phong }}
+                                                <div class="mb-2 text-primary fw-bold">
+                                                    {{ suat.phong.ten_phong }}
                                                 </div>
                                                 <div class="text-muted small">
                                                     {{ formatCurrency(suat.gia_ve) }}
                                                 </div>
                                             </div>
                                             <div class="card-footer text-center bg-white py-2">
-                                                <span
-                                                    :class="['badge', suat.so_ghe_trong > 10 ? 'bg-success' : 'bg-warning']">
-                                                    {{ suat.so_ghe_trong }}/{{ suat.tong_so_ghe }} ghế trống
+                                                <span :class="[
+                                                    'badge',
+                                                    suat.so_ghe_trong > 10
+                                                        ? 'bg-success'
+                                                        : 'bg-warning',
+                                                ]">
+                                                    {{ suat.so_ghe_trong }}/{{ suat.tong_so_ghe }} ghế
+                                                    trống
                                                 </span>
                                             </div>
                                         </div>
@@ -83,7 +84,9 @@
                 <div class="alert alert-warning text-center py-4">
                     <i class="fa-solid fa-calendar-xmark fa-2x mb-3"></i>
                     <h5>Không có suất chiếu nào cho ngày đã chọn</h5>
-                    <p class="mb-0">Vui lòng chọn ngày khác hoặc kiểm tra lại lịch chiếu.</p>
+                    <p class="mb-0">
+                        Vui lòng chọn ngày khác hoặc kiểm tra lại lịch chiếu.
+                    </p>
                 </div>
             </div>
         </div>
@@ -91,7 +94,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right" });
 
@@ -102,10 +105,10 @@ export default {
             ds_suat: [],
             suatTheoFormat: {},
             danhSachNgayChieu: [],
-            ngayDaChon: '',
-            ngayTuyChon: '',
-            daTimKiem: false
-        }
+            ngayDaChon: "",
+            ngayTuyChon: "",
+            daTimKiem: false,
+        };
     },
     mounted() {
         this.phim_id = this.$route.params.phim_id;
@@ -116,20 +119,23 @@ export default {
         layNgayHienTai() {
             const today = new Date();
             const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, "0");
+            const day = String(today.getDate()).padStart(2, "0");
             return `${year}-${month}-${day}`;
         },
 
         formatDate(dateString) {
-            if (!dateString) return '';
+            if (!dateString) return "";
             const date = new Date(dateString);
-            const options = { weekday: 'long', day: 'numeric', month: 'long' };
-            return date.toLocaleDateString('vi-VN', options);
+            const options = { weekday: "long", day: "numeric", month: "long" };
+            return date.toLocaleDateString("vi-VN", options);
         },
 
         formatCurrency(value) {
-            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+            return new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+            }).format(value);
         },
 
         tongSoGhe(suat) {
@@ -146,9 +152,13 @@ export default {
 
         layDuLieuSuatChieu() {
             axios
-                .get('http://127.0.0.1:8000/api/lay-suat-chieu/data/' + this.phim_id)
+                .get("http://127.0.0.1:8000/api/lay-suat-chieu/data/" + this.phim_id)
                 .then((res) => {
-                    if (res.data && res.data.ngay_chieu && res.data.ngay_chieu.length > 0) {
+                    if (
+                        res.data &&
+                        res.data.ngay_chieu &&
+                        res.data.ngay_chieu.length > 0
+                    ) {
                         this.danhSachNgayChieu = res.data.ngay_chieu;
                         this.ds_suat = res.data.suat;
 
@@ -159,27 +169,30 @@ export default {
                             this.layDuLieuSuatChieuTheoNgay();
                         }
                     } else {
-                        toaster.info('Không tìm thấy lịch chiếu cho phim này');
+                        toaster.info("Không tìm thấy lịch chiếu cho phim này");
                     }
                 })
-                .catch(error => {
-                    console.error('Lỗi khi lấy dữ liệu suất chiếu:', error);
-                    toaster.error('Đã xảy ra lỗi khi tải lịch chiếu');
+                .catch((error) => {
+                    console.error("Lỗi khi lấy dữ liệu suất chiếu:", error);
+                    toaster.error("Đã xảy ra lỗi khi tải lịch chiếu");
                 });
         },
 
         layDuLieuSuatChieuTheoNgay() {
             if (!this.ngayTuyChon) {
-                toaster.error('Vui lòng chọn ngày');
+                toaster.error("Vui lòng chọn ngày");
                 return;
             }
 
             this.daTimKiem = true;
 
             axios
-                .post('http://127.0.0.1:8000/api/lay-suat-chieu/open-data/' + this.phim_id, {
-                    ngay: this.ngayTuyChon
-                })
+                .post(
+                    "http://127.0.0.1:8000/api/lay-suat-chieu/open-data/" + this.phim_id,
+                    {
+                        ngay: this.ngayTuyChon,
+                    }
+                )
                 .then((res) => {
                     if (res.data) {
                         this.ds_suat = res.data.suat || [];
@@ -192,20 +205,18 @@ export default {
                             this.suatTheoFormat = this.nhomSuatTheoDinhDang(this.ds_suat);
                         }
 
-                        if (this.ds_suat.length === 0) {
-                            toaster.info('Không có suất chiếu nào cho ngày đã chọn');
-                        }
+
                     }
                 })
-                .catch(error => {
-                    console.error('Lỗi khi lấy dữ liệu suất chiếu theo ngày:', error);
-                    toaster.error('Đã xảy ra lỗi khi tải lịch chiếu');
+                .catch((error) => {
+                    console.error("Lỗi khi lấy dữ liệu suất chiếu theo ngày:", error);
+                    toaster.error("Đã xảy ra lỗi khi tải lịch chiếu");
                 });
         },
 
         nhomSuatTheoDinhDang(danhSachSuat) {
             const result = {};
-            danhSachSuat.forEach(suat => {
+            danhSachSuat.forEach((suat) => {
                 if (!result[suat.dinh_dang]) {
                     result[suat.dinh_dang] = [];
                 }
@@ -216,12 +227,14 @@ export default {
 
         isSuatDaQua(suat) {
             const now = new Date();
-            const showingTime = new Date(this.ngayTuyChon + ' ' + suat.gio_bat_dau);
-            const oneHourAfterShowing = new Date(showingTime.getTime() + 30 * 60 * 1000);
+            const showingTime = new Date(this.ngayTuyChon + " " + suat.gio_bat_dau);
+            const oneHourAfterShowing = new Date(
+                showingTime.getTime() + 30 * 60 * 1000
+            );
             return now > oneHourAfterShowing;
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <style scoped>
@@ -266,7 +279,7 @@ export default {
 }
 
 .disabled-card::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -10px;
     left: 50%;

@@ -1,7 +1,5 @@
 <template>
     <div>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
         <!-- Video Trailer -->
         <div style="margin: 10px">
             <iframe class="d-block w-100" style="height: 650px" v-if="phim_chi_tiet.trailer_ytb"
@@ -25,21 +23,19 @@
                         <div class="movie-header mb-4">
                             <h4 class="card-title mb-2 movie-font d-flex align-items-center">
                                 <b>{{ phim_chi_tiet.ten_phim }}</b>
-                                <span class="badge bg-warning text-dark ms-2">T18</span>
                             </h4>
                             <div class="movie-meta d-flex align-items-center gap-4 mb-3">
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-clock me-2"></i>
-                                    <span>{{ phim_chi_tiet.thoi_gian || "122" }} Phút</span>
+                                    <span>Thời lượng: {{ phim_chi_tiet.thoi_gian || "122" }} Phút</span>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-calendar-event me-2"></i>
-                                    <span>{{ phim_chi_tiet.ngay_chieu }}</span>
+                                    <span>Ngày chiếu: {{ phim_chi_tiet.ngay_chieu }}</span>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-star-fill text-warning me-2"></i>
-                                    <span><b>{{ phim_chi_tiet.danh_gia || "8.3" }}</b> (261
-                                        votes)</span>
+                                    <span><b>Điểm đánh giá: {{ phim_chi_tiet.danh_gia || "8.3" }}</b> </span>
                                 </div>
                             </div>
                         </div>

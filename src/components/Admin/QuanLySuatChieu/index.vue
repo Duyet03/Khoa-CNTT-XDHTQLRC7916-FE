@@ -40,16 +40,34 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <!-- ... -->
                                         <div class="mb-2">
                                             <label>Ngày Chiếu</label>
-                                            <input type="date" v-model="suat_create.ngay_chieu"
-                                                class="form-control mt-2" :min="getCurrentDate()">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="small">Từ ngày</label>
+                                                    <input type="date" v-model="suat_create.ngay_bat_dau"
+                                                        class="form-control mt-2" :min="getCurrentDate()">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="small">Đến ngày</label>
+                                                    <input type="date" v-model="suat_create.ngay_ket_thuc"
+                                                        class="form-control mt-2" :min="suat_create.ngay_bat_dau">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="mb-2">
-                                            <label>Giờ Bắt Đầu</label>
-                                            <input v-model="suat_create.gio_bat_dau" type="time"
-                                                class="form-control mt-2">
+                                            <label>Cài đặt suất chiếu</label>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" v-model="suat_create.tu_dong_chia_suat" id="autoTimeSlots">
+                                                <label class="form-check-label" for="autoTimeSlots">
+                                                    Tự động chia suất (mỗi 2.5 tiếng/suất, bắt đầu từ 00:00)
+                                                </label>
+                                            </div>
+                                            <div v-if="!suat_create.tu_dong_chia_suat" class="mt-2">
+                                                <label>Giờ Bắt Đầu</label>
+                                                <input v-model="suat_create.gio_bat_dau" type="time"
+                                                    class="form-control mt-2">
+                                            </div>
                                         </div>
                                         <div class="mb-2">
                                             <label>Giá Vé</label>
@@ -404,13 +422,15 @@ export default {
             suat_create: {
                 phim_id: '',
                 phong_id: '',
-                ngay_chieu: '',
+                ngay_bat_dau: '',
+                ngay_ket_thuc: '',
                 gio_bat_dau: '',
                 gia_ve: 50000,
                 gia_ve_vip: 70000,
                 gia_ve_doi: 100000,
                 dinh_dang: '2D',
                 ngon_ngu: 'Phụ đề',
+                tu_dong_chia_suat: false,
                 trang_thai: 'Sắp chiếu'
             },
             suat_update: {
@@ -551,22 +571,50 @@ export default {
 
         themMoiSuat() {
             const today = new Date().setHours(0, 0, 0, 0);
-            const ngayChieu = new Date(this.suat_create.ngay_chieu).setHours(0, 0, 0, 0);
+            const ngayBatDau = new Date(this.suat_create.ngay_bat_dau).setHours(0, 0, 0, 0);
 
-            if (ngayChieu < today) {
+            if (ngayBatDau < today) {
                 toaster.error("Không thể tạo suất chiếu cho ngày trong quá khứ!");
                 return;
             }
+
             // Kiểm tra dữ liệu đầu vào
             if (!this.suat_create.phim_id || !this.suat_create.phong_id ||
-                !this.suat_create.ngay_chieu || !this.suat_create.gio_bat_dau ||
+                !this.suat_create.ngay_bat_dau || !this.suat_create.ngay_ket_thuc ||
+                (!this.suat_create.tu_dong_chia_suat && !this.suat_create.gio_bat_dau) ||
                 !this.suat_create.gia_ve) {
                 toaster.error("Vui lòng điền đầy đủ thông tin!");
                 return;
             }
 
+            // Kiểm tra ngày kết thúc phải sau ngày bắt đầu
+            if (new Date(this.suat_create.ngay_ket_thuc) < new Date(this.suat_create.ngay_bat_dau)) {
+                toaster.error("Ngày kết thúc phải sau ngày bắt đầu!");
+                return;
+            }
+
+            let danhSachSuat = [];
+            const ngayBatDauObj = new Date(this.suat_create.ngay_bat_dau);
+            const ngayKetThucObj = new Date(this.suat_create.ngay_ket_thuc);
+
+            // Lặp qua từng ngày
+            for (let d = new Date(ngayBatDauObj); d <= ngayKetThucObj; d.setDate(d.getDate() + 1)) {
+                if (this.suat_create.tu_dong_chia_suat) {
+                    // Tạo các suất tự động, mỗi suất cách nhau 2.5 tiếng
+                    const suatTrongNgay = this.taoSuatTuDong(new Date(d));
+                    danhSachSuat = [...danhSachSuat, ...suatTrongNgay];
+                } else {
+                    // Tạo một suất với giờ được chọn
+                    danhSachSuat.push({
+                        ...this.suat_create,
+                        ngay_chieu: new Date(d).toISOString().split('T')[0],
+                    });
+                }
+            }
+
+            // Gửi request tạo nhiều suất
             baseRequest
-                .post("suat-chieu/create", this.suat_create)
+                .post("suat-chieu/create-multiple", { danh_sach_suat: danhSachSuat })
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success(res.data.message);
@@ -575,11 +623,15 @@ export default {
                         this.suat_create = {
                             phim_id: '',
                             phong_id: '',
-                            ngay_chieu: '',
+                            ngay_bat_dau: '',
+                            ngay_ket_thuc: '',
                             gio_bat_dau: '',
                             gia_ve: 50000,
+                            gia_ve_vip: 70000,
+                            gia_ve_doi: 100000,
                             dinh_dang: '2D',
                             ngon_ngu: 'Phụ đề',
+                            tu_dong_chia_suat: false,
                             trang_thai: 'Sắp chiếu'
                         };
                         // Đóng modal
@@ -592,6 +644,26 @@ export default {
                 .catch((error) => {
                     toaster.error("Đã xảy ra lỗi: " + (error.response?.data?.message || error.message));
                 });
+        },
+
+        taoSuatTuDong(ngay) {
+            const danhSachSuat = [];
+            const khoangThoiGian = 3 * 60; // 2.5 tiếng = 150 phút
+            const soSuatTrongNgay = Math.floor(24 * 60 / khoangThoiGian); // Số suất có thể có trong 1 ngày
+
+            for (let i = 0; i < soSuatTrongNgay; i++) {
+                const phutBatDau = i * khoangThoiGian;
+                const gio = Math.floor(phutBatDau / 60).toString().padStart(2, '0');
+                const phut = (phutBatDau % 60).toString().padStart(2, '0');
+
+                danhSachSuat.push({
+                    ...this.suat_create,
+                    ngay_chieu: ngay.toISOString().split('T')[0],
+                    gio_bat_dau: `${gio}:${phut}`,
+                });
+            }
+
+            return danhSachSuat;
         },
 
         suaSuatChieu(suat) {
