@@ -1,46 +1,57 @@
 <template>
-    <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
-        <div class="col mx-auto">
-            <div class="card mt-5">
-                <div class="card-body">
-                    <div class="border p-4 rounded">
-                        <div class="text-center">
-                            <h3 class="">Sign in</h3>
-                            <!-- <p>Don't have an account yet? <a href="authentication-signup.html">Sign up here</a>
-                            </p> -->
-                        </div>
-                        <div class="form-body">
-                            <form class="row g-3">
-                                <div class="col-12">
-                                    <label class="form-label">Email Address</label>
-                                    <input v-model="login.email" type="email" class="form-control"
-                                        id="inputEmailAddress" placeholder="Email Address">
-                                </div>
-                                <div class="col-12">
-                                    <label for="inputChoosePassword" class="form-label">Enter Password</label>
-                                    <input v-model="login.password" type="password" class="form-control border-end-0"
-                                        placeholder="Enter Password">
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                                            checked>
-                                        <label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>
-                                    </div>
-                                </div>
-                                <!-- <div class="col-md-6 text-end"> <a href="authentication-forgot-password.html">Forgot
-                                        Password ?</a>
-                                </div> -->
-                                <div class="col-12">
-                                    <div class="d-grid">
-                                        <button v-on:click="dangNhap()" type="button" class="btn btn-primary"><i
-                                                class="bx bxs-lock-open"></i>Sign in</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+    <div class="position-relative vh-100">
+        <!-- Background Blur Layer -->
+        <div class="bg-blur-layer"></div>
+
+        <!-- Foreground Content -->
+        <div class="container row bg-light rounded shadow overflow-hidden position-absolute top-50 start-50 translate-middle"
+            style="z-index: 2; width: 100%; max-width: 1200px;">
+            <!-- Left Section -->
+            <div class="col-md-8 d-flex flex-column justify-content-between text-white bg-dark p-5" style="
+            background: url(https://res.cloudinary.com/dfff9gqxw/image/upload/v1745980830/vongtaynang_uhodf8.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;">
+                <h2 class="mb-4"
+                    style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;color: aliceblue;">
+                    <i class="bx bxl-xing"></i> Cinema Movie - Admin Portal
+                </h2>
+                <div>
+                    <h2>Welcome Admin! <br /><span>To Management Portal</span></h2>
+                    <p>Quản lý rạp chiếu phim - Nơi điều hành mọi hoạt động!</p>
+                    <div class="d-flex mt-3">
+                        <a href="#" class="text-white me-3"><i class="bx bxl-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bx bxl-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bx bxl-youtube"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bx bxl-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="bx bxl-linkedin"></i></a>
                     </div>
                 </div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="col-md-4 p-5">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold">Admin Đăng nhập</h3>
+                </div>
+                <form>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input v-model="login.email" type="email" id="email" class="form-control"
+                            placeholder="Email Address" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Enter Password</label>
+                        <input v-model="login.password" type="password" id="password" class="form-control"
+                            placeholder="Enter Password" />
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember Me</label>
+                    </div>
+                    <button @click="dangNhap" type="button" class="btn btn-primary w-100">
+                        <i class="bx bxs-lock-open"></i> Sign in
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -60,17 +71,22 @@ export default {
     },
     methods: {
         checkLogin() {
+            const token = localStorage.getItem("token_admin");
+            if (!token) return;
+
             axios
                 .post('http://127.0.0.1:8000/api/kiem-tra-token-admin', {}, {
                     headers: {
-                        // lấy ra
-                        Authorization: 'Bearer ' + localStorage.getItem("token_admin")
+                        Authorization: 'Bearer ' + token
                     }
                 })
                 .then((res) => {
                     if (res.data.status) {
                         this.$router.push('/admin/phan-quyen');
                     }
+                })
+                .catch(() => {
+                    localStorage.removeItem("token_admin");
                 }); 
         },
         dangNhap() {
@@ -87,12 +103,29 @@ export default {
                     else {
                         toaster.error(res.data.message)
                     }
+                })
+                .catch(() => {
+                    toaster.error("Đăng nhập thất bại");
                 });
         },
     },
-
 }
 </script>
-<style></style>
-<!-- v-model="login.email"
-v-model="login.password" -->
+<style>
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+.bg-blur-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(https://res.cloudinary.com/dfff9gqxw/image/upload/v1745980830/vongtaynang_uhodf8.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px);
+    z-index: 1;
+}
+</style>

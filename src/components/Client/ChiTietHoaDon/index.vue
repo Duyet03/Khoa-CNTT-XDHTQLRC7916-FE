@@ -192,8 +192,42 @@
                             </div>
                             <div class="card-body pb-4">
                                 <p class="mb-3">Vui lòng trình mã QR tại rạp khi xem phim</p>
-                                <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(hoaDon.ma_hoa_don)}`"
-                                    class="img-fluid" alt="QR Code">
+                                <img v-if="hoaDon.qr_code_url" :src="hoaDon.qr_code_url" class="img-fluid" alt="QR Code">
+                                <div v-else class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    QR code chưa được tạo hoặc hóa đơn chưa thanh toán
+                                </div>
+                                
+                                <!-- Hiển thị thông tin QR khi hover -->
+                                <div v-if="hoaDon.qr_data" class="mt-3 text-start small">
+                                    <div class="accordion" id="qrDataAccordion">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#qrDataContent">
+                                                    Xem thông tin mã QR
+                                                </button>
+                                            </h2>
+                                            <div id="qrDataContent" class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                    <div class="mb-2">
+                                                        <strong>Mã giao dịch:</strong> {{ hoaDon.qr_data.ma_giao_dich }}
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <strong>Ngân hàng:</strong> {{ hoaDon.qr_data.ngan_hang }}
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <strong>Thông tin khách hàng:</strong>
+                                                        <ul class="list-unstyled ms-3">
+                                                            <li>Họ tên: {{ hoaDon.qr_data.thong_tin_khach_hang?.ho_ten }}</li>
+                                                            <li>Email: {{ hoaDon.qr_data.thong_tin_khach_hang?.email }}</li>
+                                                            <li>SĐT: {{ hoaDon.qr_data.thong_tin_khach_hang?.so_dien_thoai }}</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -222,7 +256,10 @@ const toaster = createToaster({ position: 'top-right' });
 export default {
     data() {
         return {
-            hoaDon: {},
+            hoaDon: {
+                qr_code_url: null,
+                qr_data: null
+            },
             chiTietVes: [],
             chi_tiet_ve_dich_vus: [],
             suatChieu: null,
@@ -273,7 +310,11 @@ export default {
 
                 if (res.data.status) {
                     const { hoa_don, chi_tiet_ves, suat_chieu, chi_tiet_ve_dich_vus } = res.data.data;
-                    this.hoaDon = hoa_don;
+                    this.hoaDon = {
+                        ...hoa_don,
+                        qr_code_url: res.data.data.qr_code_url,
+                        qr_data: res.data.data.qr_data
+                    };
                     this.chiTietVes = chi_tiet_ves || [];
                     this.suatChieu = suat_chieu || null;
                     this.chi_tiet_ve_dich_vus = chi_tiet_ve_dich_vus || [];
