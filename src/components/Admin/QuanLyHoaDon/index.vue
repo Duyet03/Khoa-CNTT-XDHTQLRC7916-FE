@@ -3,8 +3,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between">
                         <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Quản lý hóa đơn</h5>
+                        <router-link to="/admin/dat-ve">
+                            <button class="btn btn-info">Thêm mới hoá đơn</button>
+                        </router-link>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -23,6 +26,7 @@
                                         <th class="text-center">#</th>
                                         <th class="text-center">Mã hóa đơn</th>
                                         <th>Tên khách hàng</th>
+                                        <th>Tên nhân viên</th>
                                         <th>Phim</th>
                                         <th>Ngày chiếu</th>
                                         <th>Giờ bắt đầu</th>
@@ -36,6 +40,7 @@
                                         <th class="text-center align-middle">{{ k + 1 }}</th>
                                         <td class="text-center align-middle">{{ v.ma_hoa_don }}</td>
                                         <td class="align-middle">{{ v.ten_khach_hang }}</td>
+                                        <td class="align-middle">{{ v.ten_nhan_vien }}</td>
                                         <td class="align-middle">{{ v.ten_phim }}</td>
                                         <td class="align-middle">{{ formatDate(v.ngay_chieu) }}</td>
                                         <td class="align-middle">{{ v.gio_bat_dau }}</td>
@@ -95,7 +100,7 @@
                                     <div class="col-md-6">
                                         <p class="mb-1"><strong>Phim:</strong> {{ chi_tiet_thue[0].ten_phim }}</p>
                                         <p class="mb-1"><strong>Khách hàng:</strong> {{ chi_tiet_thue[0].ten_khach_hang
-                                        }}</p>
+                                            }}</p>
                                     </div>
                                     <div class="col-md-6">
                                         <p class="mb-1"><strong>Ngày chiếu:</strong> {{

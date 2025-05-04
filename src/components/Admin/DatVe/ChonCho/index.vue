@@ -151,8 +151,8 @@ import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 import { error } from "jquery";
 const toaster = createToaster({ position: "top-right" });
-import { timeouts } from "../../../router/timeouts";
-import { kiemTraTrangThaiGheAPI } from "../../../router/veHelpers";
+import { timeouts } from "../../../../router/timeouts";
+import { kiemTraTrangThaiGheAPI } from "../../../../router/veHelpers";
 export default {
     props: ['id_suat'],
     data() {
@@ -223,7 +223,7 @@ export default {
             axios
                 .get("http://127.0.0.1:8000/api/lay-ve/data-1/" + this.id_suat, {
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token_khachhang")
+                        Authorization: "Bearer " + localStorage.getItem("token_admin")
                     }
                 })
                 .then((res) => {
@@ -264,10 +264,10 @@ export default {
                 .post("http://127.0.0.1:8000/api/lay-ve/doi-trang-thai-dat", {
                     id_suat,
                     id_ghe,
-                    id_khach_hang: localStorage.getItem('id_khach_hang')
+                    
                 }, {
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token_khachhang")
+                        Authorization: "Bearer " + localStorage.getItem("token_admin")
                     }
                 })
                 .then((res) => {
@@ -306,10 +306,10 @@ export default {
                 .post("http://127.0.0.1:8000/api/lay-ve/doi-trang-thai-huy", {
                     id_suat,
                     id_ghe,
-                    id_khach_hang: localStorage.getItem('id_khach_hang')
+                    
                 }, {
                     headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token_khachhang")
+                        Authorization: "Bearer " + localStorage.getItem("token_admin")
                     }
                 })
                 .then((res) => {

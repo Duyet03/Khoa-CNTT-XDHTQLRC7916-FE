@@ -30,7 +30,8 @@
                                             <td>{{ item.tieu_de }}</td>
                                             <td>{{ item.noi_dung }}</td>
                                             <td>
-                                                <img :src="item.hinh_anh" :alt="item.tieu_de" class="img-thumbnail" style="max-width: 100px;">
+                                                <img :src="item.hinh_anh" :alt="item.tieu_de" class="img-thumbnail"
+                                                    style="max-width: 100px;">
                                             </td>
                                             <td>{{ formatDate(item.ngay_dang) }}</td>
                                             <td>
@@ -76,9 +77,11 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Hình Ảnh</label>
-                                <input type="text" class="form-control" v-model="formData.hinh_anh" placeholder="Nhập link hình ảnh" required>
+                                <input type="text" class="form-control" v-model="formData.hinh_anh"
+                                    placeholder="Nhập link hình ảnh" required>
                                 <div class="mt-2">
-                                    <img v-if="formData.hinh_anh" :src="formData.hinh_anh" class="img-thumbnail" style="max-width: 200px;">
+                                    <img v-if="formData.hinh_anh" :src="formData.hinh_anh" class="img-thumbnail"
+                                        style="max-width: 200px;">
                                     <div v-else class="text-muted">Chưa có hình ảnh</div>
                                 </div>
                             </div>
@@ -128,7 +131,11 @@ export default {
     methods: {
         layDuLieuGocDienAnh() {
             axios
-                .get('http://127.0.0.1:8000/api/goc-dien-anh/data')
+                .get('http://127.0.0.1:8000/api/goc-dien-anh/data', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token_admin")
+                    }
+                })
                 .then((res) => {
                     this.ds_goc_dien_anh = res.data.data;
                 })
@@ -147,7 +154,11 @@ export default {
         deleteItem(id) {
             if (confirm('Bạn có chắc chắn muốn xóa?')) {
                 axios
-                    .delete(`http://127.0.0.1:8000/api/goc-dien-anh/delete/${id}`)
+                    .delete(`http://127.0.0.1:8000/api/goc-dien-anh/delete/${id}`, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token_admin")
+                        }
+                    })
                     .then((res) => {
                         toaster.success(res.data.message);
                         this.layDuLieuGocDienAnh();
@@ -159,7 +170,11 @@ export default {
         },
         doiTrangThai(id) {
             axios
-                .post('http://127.0.0.1:8000/api/goc-dien-anh/doi-trang-thai', { id: id })
+                .post('http://127.0.0.1:8000/api/goc-dien-anh/doi-trang-thai', { id: id }, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token_admin")
+                    }
+                })
                 .then((res) => {
                     toaster.success(res.data.message);
                     this.layDuLieuGocDienAnh();
@@ -169,10 +184,10 @@ export default {
                 });
         },
         saveItem() {
-            const url = this.isEdit 
+            const url = this.isEdit
                 ? 'http://127.0.0.1:8000/api/goc-dien-anh/update'
                 : 'http://127.0.0.1:8000/api/goc-dien-anh/create';
-            
+
             const method = 'post';
 
             axios[method](url, this.formData)
@@ -257,7 +272,7 @@ export default {
         margin: 0;
         max-width: 100%;
     }
-    
+
     .table-responsive {
         overflow-x: auto;
     }
