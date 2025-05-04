@@ -92,9 +92,6 @@
                                     </td>
                                     <td class="text-center align-middle">
                                         <div class="btn-group">
-                                            <button class="btn btn-sm btn-info" @click="printTicket(v)" title="In vé">
-                                                <i class="fas fa-print"></i>
-                                            </button>
                                             <button class="btn btn-sm btn-primary" @click="showUpdateModal(v)"
                                                 title="Cập nhật">
                                                 <i class="fas fa-edit"></i>
@@ -126,8 +123,8 @@
                             <label class="form-label">Trạng Thái</label>
                             <select v-model="chi_tiet_ve_update.tinh_trang" class="form-select">
                                 <option value="0">Ghế trống</option>
-                                <option value="1">Đã đặt</option>
-                                <option value="2">Đang giữ</option>
+                                <option value="2">Đã đặt</option>
+                                <option value="1">Đang giữ</option>
                                 <option value="3">Đã hủy</option>
                             </select>
                         </div>
@@ -228,8 +225,8 @@ export default {
         getStatusText(status) {
             const texts = {
                 0: 'Ghế trống',
-                1: 'Đã đặt',
-                2: 'Đang giữ',
+                2: 'Đã đặt',
+                1: 'Đang giữ',
                 3: 'Đã hủy'
             };
             return texts[status] || 'Không xác định';
@@ -300,10 +297,6 @@ export default {
                 });
         },
 
-        printTicket(ve) {
-            // Implement print functionality
-            window.print();
-        },
 
         loadPhim() {
             baseRequest.get("admin/quan-ly-phim/lay-du-lieu")
