@@ -30,10 +30,15 @@
                                             <div v-if="v.id_suat == id_suat && v.ten_ghe.startsWith(hangGhe)"
                                                 class="seat-item mx-1">
                                                 <!-- Ghế đã chọn bởi user hiện tại -->
-                                                <button v-if="v.tinh_trang == 1" v-on:click="huy(v.id_suat, v.id_ghe)"
+                                                <button v-if="v.id_nhan_vien!=null && v.tinh_trang == 1 && v.id_nhan_vien==id_nhan_vien" v-on:click="huy(v.id_suat, v.id_ghe)"
                                                     class="btn btn-sm btn-success">
                                                     {{ v.ten_ghe }}
                                                 </button>
+                                                <button v-else-if=" v.tinh_trang == 1"
+                                                    class="btn btn-sm btn-danger disabled opacity-50">
+                                                    {{ v.ten_ghe }}
+                                                </button>
+                                                
                                                 <!-- Ghế chưa đặt -->
                                                 <button v-if="v.tinh_trang == 0" v-on:click="datVe(v.id_suat, v.id_ghe)"
                                                     :class="[
@@ -129,7 +134,7 @@
                                         </table>
                                     </div>
                                     <div class="card-footer text-end">
-                                        <router-link :to="'/thanh-toan/' + id_suat">
+                                        <router-link :to="'/admin/thanh-toan/' + id_suat">
                                             <button v-on:click="taoHoaDon()" class="btn btn-danger"
                                                 :disabled="listGheChon.length === 0">
                                                 <i class="fa-solid fa-credit-card me-2"></i>Thanh toán
@@ -167,7 +172,8 @@ export default {
             id_hoa_don: '',
             countdown: 900, // Đổi từ 900 (15 phút) thành 10 giây
             showCountdown: false,
-            countdownTimer: null // Lưu interval của đồng hồ đếm ngược
+            countdownTimer: null, // Lưu interval của đồng hồ đếm ngược
+            id_nhan_vien: localStorage.getItem('id_nhan_vien')
         }
     },
     computed: {

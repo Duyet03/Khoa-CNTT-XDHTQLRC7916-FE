@@ -30,8 +30,12 @@
                                             <div v-if="v.id_suat == id_suat && v.ten_ghe.startsWith(hangGhe)"
                                                 class="seat-item mx-1">
                                                 <!-- Ghế đã chọn bởi user hiện tại -->
-                                                <button v-if="v.tinh_trang == 1" v-on:click="huy(v.id_suat, v.id_ghe)"
+                                                <button v-if="v.id_khach_hang!=null && v.tinh_trang == 1 && v.id_khach_hang==id_khach_hang" v-on:click="huy(v.id_suat, v.id_ghe)"
                                                     class="btn btn-sm btn-success">
+                                                    {{ v.ten_ghe }}
+                                                </button>
+                                                <button v-else-if="v.tinh_trang == 1"
+                                                    class="btn btn-sm btn-danger disabled opacity-50">
                                                     {{ v.ten_ghe }}
                                                 </button>
                                                 <!-- Ghế chưa đặt -->
@@ -167,7 +171,8 @@ export default {
             id_hoa_don: '',
             countdown: 900, // Đổi từ 900 (15 phút) thành 10 giây
             showCountdown: false,
-            countdownTimer: null // Lưu interval của đồng hồ đếm ngược
+            countdownTimer: null, // Lưu interval của đồng hồ đếm ngược
+            id_khach_hang: localStorage.getItem('id_khach_hang')
         }
     },
     computed: {

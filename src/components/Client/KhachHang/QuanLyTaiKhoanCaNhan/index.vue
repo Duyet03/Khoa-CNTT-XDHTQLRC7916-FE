@@ -205,7 +205,6 @@
 <script>
 import axios from 'axios';
 import { createToaster } from "@meforma/vue-toaster";
-import Toaster from '@meforma/vue-toaster/src/Toaster.vue';
 const toaster = createToaster({ position: "top-right" });
 
 export default {

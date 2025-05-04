@@ -272,6 +272,24 @@ const routes = [
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },
+  {
+    path: "/admin/thanh-toan/:id_suat",
+    component: () => import("../components/Admin/DatVe/ThanhToan/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/thanh-toan/ket-qua",
+    component: () => import("../components/Admin/DatVe/ThanhToan/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/chi-tiet-hoa-don/:ma_hoa_don",
+    component: () => import("../components/Admin/DatVe/ChiTietHoaDon/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
 ];
 
 const router = createRouter({

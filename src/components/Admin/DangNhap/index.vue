@@ -98,6 +98,7 @@ export default {
                         localStorage.setItem('token_admin', res.data.token);
                         localStorage.setItem('ho_ten_admin', res.data.ho_ten_admin);
                         localStorage.setItem('avatar_admin', res.data.avatar_admin);
+                        localStorage.setItem("id_nhan_vien", res.data.id_nhan_vien);
                         this.$router.push('/admin/phan-quyen');
                     }
                     else {
