@@ -3,13 +3,11 @@
         <MenuClient></MenuClient>
         <router-view></router-view>
         <FooterClient></FooterClient>
-        <ChatbotManager />
     </div>
 </template>
 <script>
 import MenuClient from "../components/MenuClient.vue";
 import FooterClient from "../components/FooterClient.vue";
-import ChatbotManager from "../../components/Client/ChatBot/ChatbotManager.vue";
 import "../../assets/js/bootstrap.bundle.min.js";
 import "../../assets/js/jquery.min.js";
 import "../../assets/plugins/simplebar/js/simplebar.min.js";
@@ -20,7 +18,7 @@ import "../../assets/js/app.js";
 export default {
     name: "app",
     components: {
-        MenuClient, FooterClient, ChatbotManager
+        MenuClient, FooterClient
     }
 }
 </script>
@@ -38,4 +36,5 @@ export default {
 @import "../../assets/css/header-colors.css";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 </style>

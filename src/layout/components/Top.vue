@@ -15,10 +15,10 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/admin/thong-ke">
-              <a class="nav-link" href="/admin/thong-ke">
+            <router-link to="/admin/doanh-thu">
+              <a class="nav-link" href="/admin/doanh-thu">
                 <div class="parent-icon"><i class="fa-solid fa-money-bill"></i></div>
-                <div class="menu-title">Thống Kê</div>
+                <div class="menu-title">Doanh thu</div>
               </a>
             </router-link>
           </li>

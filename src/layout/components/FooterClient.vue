@@ -22,7 +22,7 @@
                                 <i class="fas fa-file-alt"></i> Giấy CNĐKDN: 0302575928
                             </p>
                             <p class="company-details">
-                                <i class="fas fa-calendar-alt"></i> Đăng ký lần đầu: 02/05/2025
+                                <i class="fas fa-calendar-alt"></i> Đăng ký lần đầu: 02/05/2008
                             </p>
                         </div>
                     </div>
@@ -31,13 +31,13 @@
                         <h5 class="footer-title">Liên Hệ</h5>
                         <div class="contact-info">
                             <p class="address">
-                                <i class="fas fa-map-marker-alt"></i> Tầng 5, Đại học Duy Tân, số 03 đường Quang Trung, Thành phố Đà Nẵng
+                                <i class="fas fa-map-marker-alt"></i> Tầng 3, TTTM Lotte, số 469 đường Nguyễn Hữu Thọ, Phường Tân Hưng, Quận 7, TPHCM
                             </p>
                             <p class="hotline">
-                                <i class="fas fa-phone"></i> <a href="tel:0357287014">(028) 3775 2524</a>
+                                <i class="fas fa-phone"></i> <a href="tel:02837752524">(028) 3775 2524</a>
                             </p>
                             <p class="email">
-                                <i class="fas fa-envelope"></i> <a href="mailto:dovandai2905@gmail.com">dovandai2905@gmail.com</a>
+                                <i class="fas fa-envelope"></i> <a href="mailto:info@cinemavn.com">info@cinemavn.com</a>
                             </p>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="footer-copyright">
-                    <p>COPYRIGHT @CINEMA VIỆT NAM - ALL RIGHTS RESERVED.</p>
+                    <p>COPYRIGHT @ LOTTECINEMAVN.COM - ALL RIGHTS RESERVED.</p>
                 </div>
             </div>
         </div>
