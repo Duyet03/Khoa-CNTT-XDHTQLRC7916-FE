@@ -165,7 +165,7 @@ export default {
             listGheChon: [],
             tong_tien: 0,
             id_hoa_don: '',
-            countdown: 10, // Đổi từ 900 (15 phút) thành 10 giây
+            countdown: 900, // Đổi từ 900 (15 phút) thành 10 giây
             showCountdown: false,
             countdownTimer: null // Lưu interval của đồng hồ đếm ngược
         }
@@ -237,7 +237,7 @@ export default {
             return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
         },
         startCountdown() {
-            this.countdown = 10; // Đổi từ 900 thành 10 giây
+            this.countdown = 900; // Đổi từ 900 thành 10 giây
             this.showCountdown = true;
 
             // Xóa interval cũ nếu có
@@ -279,7 +279,7 @@ export default {
                         // Bắt đầu đếm ngược
                         this.startCountdown();
 
-                        // Lưu timeout mới cho ghế này (10 giây)
+                        // Lưu timeout mới cho ghế này (900 giây)
                         timeouts[id_ghe] = setTimeout(() => {
                             kiemTraTrangThaiGheAPI(
                                 id_suat,
@@ -292,8 +292,8 @@ export default {
                                     delete timeouts[id_ghe]; // clear luôn key
                                 }
                             );
-                            console.log("10s");
-                        }, 10000); // Đổi từ 900000 thành 10000 (10 giây)
+                            console.log("900s");
+                        }, 900000); // Đổi từ 900000 thành 10000 (10 giây)
                     } else {
                         toaster.error(res.data.message);
                     }

@@ -44,8 +44,15 @@
                             <div class="row">
                                 <div v-for="suat in suatList" :key="suat.id"
                                     class="col-6 col-md-4 col-lg-3 col-xl-2 mb-3">
-                                    <router-link :to="'/dat-ve/' + suat.id" class="text-decoration-none">
-                                        <div class="card h-100 shadow-sm border-0 hover-card">
+                                    <router-link 
+                                        :to="isSuatDaQua(suat) ? '#' : '/dat-ve/' + suat.id" 
+                                        :class="['text-decoration-none', { 'disabled-link': isSuatDaQua(suat) }]"
+                                        @click.prevent="isSuatDaQua(suat) && $event.preventDefault()"
+                                    >
+                                        <div 
+                                            :class="['card h-100 shadow-sm border-0 hover-card', { 'disabled-card': isSuatDaQua(suat) }]"
+                                            :title="isSuatDaQua(suat) ? 'Không thể chọn suất chiếu đã chiếu' : ''"
+                                        >
                                             <div class="card-header bg-light text-center py-2">
                                                 {{ suat.gio_bat_dau.substring(0, 5) }}
                                             </div>
@@ -59,7 +66,7 @@
                                             <div class="card-footer text-center bg-white py-2">
                                                 <span
                                                     :class="['badge', suat.so_ghe_trong > 10 ? 'bg-success' : 'bg-warning']">
-                                                    {{ suat.so_ghe_trong }}/{{ tongSoGhe(suat) }} ghế trống
+                                                    {{ suat.so_ghe_trong }}/{{ suat.tong_so_ghe }} ghế trống
                                                 </span>
                                             </div>
                                         </div>
@@ -205,6 +212,13 @@ export default {
                 result[suat.dinh_dang].push(suat);
             });
             return result;
+        },
+
+        isSuatDaQua(suat) {
+            const now = new Date();
+            const showingTime = new Date(this.ngayTuyChon + ' ' + suat.gio_bat_dau);
+            const oneHourAfterShowing = new Date(showingTime.getTime() + 30 * 60 * 1000);
+            return now > oneHourAfterShowing;
         }
     }
 }
@@ -218,5 +232,61 @@ export default {
 .hover-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.disabled-card {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    position: relative;
+}
+
+.disabled-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.disabled-card::before {
+    content: attr(title);
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 10;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.disabled-card::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.disabled-card:hover::before,
+.disabled-card:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.disabled-link {
+    pointer-events: auto !important;
+    cursor: not-allowed;
 }
 </style>

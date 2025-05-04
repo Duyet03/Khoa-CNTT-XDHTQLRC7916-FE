@@ -15,11 +15,8 @@
             <div class="row g-0 movie-details mb-3 mt-3">
                 <!-- Poster -->
                 <div class="col-md-3">
-                    <img :src="phim_chi_tiet.hinh_anh" class="img-fluid rounded-start movie-poster" alt="..." style="
-              width: 100%;
-              height: auto;
-              object-fit: cover;
-            " />
+                    <img :src="phim_chi_tiet.hinh_anh" class="img-fluid rounded-start movie-poster" alt="..."
+                        style="width: 100%; height: auto; object-fit: cover" />
                 </div>
 
                 <!-- Movie Info -->
@@ -41,7 +38,8 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-star-fill text-warning me-2"></i>
-                                    <span><b>{{ phim_chi_tiet.danh_gia || "8.3" }}</b> (261 votes)</span>
+                                    <span><b>{{ phim_chi_tiet.danh_gia || "8.3" }}</b> (261
+                                        votes)</span>
                                 </div>
                             </div>
                         </div>
@@ -49,23 +47,33 @@
                         <div class="movie-details-grid">
                             <div class="detail-item">
                                 <div class="detail-label">Quốc gia</div>
-                                <div class="detail-value">{{ phim_chi_tiet.quoc_gia || "Việt Nam" }}</div>
+                                <div class="detail-value">
+                                    {{ phim_chi_tiet.quoc_gia || "Việt Nam" }}
+                                </div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Nhà sản xuất</div>
-                                <div class="detail-value">{{ phim_chi_tiet.nha_san_xuat || "Đang cập nhật" }}</div>
+                                <div class="detail-value">
+                                    {{ phim_chi_tiet.nha_san_xuat || "Đang cập nhật" }}
+                                </div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Thể loại</div>
-                                <div class="detail-value">{{ phim_chi_tiet.ten_the_loai || "Kinh Dị" }}</div>
+                                <div class="detail-value">
+                                    {{ phim_chi_tiet.ten_the_loai || "Kinh Dị" }}
+                                </div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Đạo diễn</div>
-                                <div class="detail-value">{{ phim_chi_tiet.dao_dien || "Pom Nguyên" }}</div>
+                                <div class="detail-value">
+                                    {{ phim_chi_tiet.dao_dien || "Pom Nguyên" }}
+                                </div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Diễn viên</div>
-                                <div class="detail-value">{{ phim_chi_tiet.dien_vien || "Quang Tuấn, Khả Như" }}</div>
+                                <div class="detail-value">
+                                    {{ phim_chi_tiet.dien_vien || "Quang Tuấn, Khả Như" }}
+                                </div>
                             </div>
                         </div>
 
@@ -111,7 +119,8 @@
                             <template v-for="(value, index) in paginatedDanhGia" :key="index">
                                 <div class="review-item position-relative">
                                     <div class="action-icons" v-if="isOwner(value.id_khach_hang)">
-                                        <i class="fas fa-edit edit-icon" @click="toggleEdit(getOriginalIndex(index))"></i>
+                                        <i class="fas fa-edit edit-icon"
+                                            @click="toggleEdit(getOriginalIndex(index))"></i>
                                         <i class="fas fa-trash-alt delete-icon" data-bs-toggle="modal"
                                             data-bs-target="#xacnhanModal" v-on:click="id_can_xoa = value.id"></i>
                                     </div>
@@ -124,7 +133,8 @@
                                         <textarea v-model="value.noi_dung_edit" class="form-control mb-2"
                                             rows="3"></textarea>
                                         <div class="text-end">
-                                            <button class="btn btn-sm btn-secondary me-2" @click="huyChinhSua(getOriginalIndex(index))">
+                                            <button class="btn btn-sm btn-secondary me-2"
+                                                @click="huyChinhSua(getOriginalIndex(index))">
                                                 Hủy
                                             </button>
                                             <button class="btn btn-sm btn-primary" @click="luuChinhSua(value)">
@@ -146,7 +156,8 @@
                                         </li>
                                         <li class="page-item" v-for="page in totalPages" :key="page"
                                             :class="{ active: currentPage === page }">
-                                            <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                                            <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page
+                                                }}</a>
                                         </li>
                                         <li class="page-item" :class="{ disabled: currentPage === totalPages }">
                                             <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">
@@ -160,19 +171,26 @@
                     </div>
 
                     <!-- Modal xác nhận xóa -->
-                    <div class="modal fade" id="xacnhanModal" tabindex="-1" aria-labelledby="xacnhanModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="xacnhanModal" tabindex="-1" aria-labelledby="xacnhanModalLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Xác nhận xóa</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     Bạn có chắc chắn muốn xóa đánh giá này?
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                    <button type="button" class="btn btn-danger" @click="xoaDanhGia(id_can_xoa)" data-bs-dismiss="modal">Xóa</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Hủy
+                                    </button>
+                                    <button type="button" class="btn btn-danger" @click="xoaDanhGia(id_can_xoa)"
+                                        data-bs-dismiss="modal">
+                                        Xóa
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -216,9 +234,9 @@ export default {
             danh_sach_danh_gia: [],
             noi_dung: "",
             id_can_xoa: null,
-            current_user_id: localStorage.getItem('id_khach_hang'),
+            current_user_id: localStorage.getItem("id_khach_hang"),
             currentPage: 1,
-            itemsPerPage: 5
+            itemsPerPage: 5,
         };
     },
     computed: {
@@ -229,7 +247,7 @@ export default {
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
             return this.danh_sach_danh_gia.slice(start, end);
-        }
+        },
     },
     mounted() {
         this.phim_id = this.$route.params.phim_id;
@@ -249,11 +267,11 @@ export default {
             axios
                 .get("http://127.0.0.1:8000/api/lay-danh-gia/data/" + this.phim_id)
                 .then((res) => {
-                    if(res.data.data) {
-                        this.danh_sach_danh_gia = res.data.data.map(item => ({
+                    if (res.data.data) {
+                        this.danh_sach_danh_gia = res.data.data.map((item) => ({
                             ...item,
                             isEditing: false,
-                            noi_dung_edit: item.noi_dung
+                            noi_dung_edit: item.noi_dung,
                         }));
                         console.log("Danh sách đánh giá:", this.danh_sach_danh_gia);
                     }
@@ -294,23 +312,27 @@ export default {
                 });
         },
         toggleEdit(index) {
-            this.danh_sach_danh_gia[index].isEditing = !this.danh_sach_danh_gia[index].isEditing;
-            this.danh_sach_danh_gia[index].noi_dung_edit = this.danh_sach_danh_gia[index].noi_dung;
+            this.danh_sach_danh_gia[index].isEditing =
+                !this.danh_sach_danh_gia[index].isEditing;
+            this.danh_sach_danh_gia[index].noi_dung_edit =
+                this.danh_sach_danh_gia[index].noi_dung;
         },
         huyChinhSua(index) {
             this.danh_sach_danh_gia[index].isEditing = false;
         },
         async luuChinhSua(danhGia) {
             try {
-                const res = await axios.put("http://127.0.0.1:8000/api/khach-hang/danh-gia/update",
+                const res = await axios.put(
+                    "http://127.0.0.1:8000/api/khach-hang/danh-gia/update",
                     {
                         id: danhGia.id,
-                        noi_dung: danhGia.noi_dung_edit
+                        noi_dung: danhGia.noi_dung_edit,
                     },
                     {
                         headers: {
-                            Authorization: "Bearer " + localStorage.getItem("token_khachhang")
-                        }
+                            Authorization:
+                                "Bearer " + localStorage.getItem("token_khachhang"),
+                        },
                     }
                 );
                 if (res.data.status) {
@@ -327,8 +349,9 @@ export default {
                     `http://127.0.0.1:8000/api/khach-hang/danh-gia/delete/${id}`,
                     {
                         headers: {
-                            Authorization: "Bearer " + localStorage.getItem("token_khachhang")
-                        }
+                            Authorization:
+                                "Bearer " + localStorage.getItem("token_khachhang"),
+                        },
                     }
                 );
                 if (res.data.status) {
@@ -349,7 +372,7 @@ export default {
         },
         isOwner(id_khach_hang) {
             return id_khach_hang == this.current_user_id;
-        }
+        },
     },
 };
 </script>
