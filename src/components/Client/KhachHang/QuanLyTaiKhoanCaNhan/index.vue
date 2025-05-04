@@ -9,7 +9,7 @@
                             class="rounded-circle mb-3" style="width: 100px;" alt="avatar" />
                         <h5 class="fw-bold">{{ khach_hang.ten_khach_hang }}</h5>
                         <hr />
-                        <h6 class="mb-1">Tổng chi tiêu 2025 : <span class="text-danger fw-bold">{{ tong_tien_da_thanh_toan }}</span></h6>
+                        <h6 class="mb-1">Tổng chi tiêu 2025 <br> <span class="text-danger fw-bold">{{ tong_tien_da_thanh_toan }}</span></h6>
                         <hr />
                         <div class="text-start">
                             <p><strong>HOTLINE:</strong> <a href="tel:19002224">0332162386</a> (9:00 - 22:00)</p>
@@ -45,7 +45,7 @@
                                     </div>
                                 </a>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <!-- <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" href="#primarycontact" role="tab"
                                     aria-selected="false" tabindex="-1">
                                     <div class="d-flex align-items-center">
@@ -54,7 +54,7 @@
                                         <div class="tab-title">Lịch sử thanh toán</div>
                                     </div>
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                         <div class="tab-content pt-3">
                             <div class="tab-pane fade active show" id="primaryhome" role="tabpanel">
@@ -85,7 +85,7 @@
                                             disabled />
                                     </div>
                                 </div>
-                                <div class="text-center">
+                                <div class="text-center mt-5">
                                     <button style="width: 200px;" class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#capnhat">Cập
                                         nhật</button>
@@ -105,7 +105,7 @@
                                         data-bs-target="#doi">Xác nhận</button>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="primarycontact" role="tabpanel">
+                            <!-- <div class="tab-pane fade" id="primarycontact" role="tabpanel">
                                 <b>lịch sử thanh toán</b>
                                 <table class="table table-bordered">
                                     <thead>
@@ -133,7 +133,7 @@
                                         </template>
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

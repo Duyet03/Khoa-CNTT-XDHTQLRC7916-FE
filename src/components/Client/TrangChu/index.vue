@@ -61,7 +61,8 @@
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <li v-for="page in totalPages" :key="page" :class="['page-item', { active: currentPage === page }]">
+                                <li v-for="page in totalPages" :key="page"
+                                    :class="['page-item', { active: currentPage === page }]">
                                     <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
                                 </li>
                                 <li :class="['page-item', { disabled: currentPage === totalPages }]">
@@ -71,6 +72,35 @@
                                 </li>
                             </ul>
                         </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Main content - Movies -->
+                <div class="col-12">
+                    <h3 class="section-title mb-4">Phim Sắp Chiếu</h3>
+                    <div class="row product-grid">
+                        <template v-for="(value, index) in list_phim_sap_chieu" :key="index">
+                            <div class="col-6 col-md-4 col-lg-3 d-flex mb-4">
+                                <router-link :to="'/chi-tiet-phim/' + value.id + '-' + value.slug_phim" class="w-100">
+                                    <div class="card h-100">
+                                        <img class="img-fluid card-img" :src="value.hinh_anh" alt="">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="text-center flex-grow-1">
+                                                <h6 class="card-title">{{ value.ten_phim }}</h6>
+                                                <hr>
+                                                <div class="release-info">
+                                                    <span>{{ value.ngay_chieu }} | {{ value.ten_the_loai }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </router-link>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4 mb-5">
+                        <button class="btn btn-primary">Xem thêm</button>
                     </div>
                 </div>
             </div>
@@ -91,6 +121,7 @@ export default {
             ds_slide: [],
             currentPage: 1,
             itemsPerPage: 8,
+            list_phim_sap_chieu: [],
         }
     },
     computed: {
@@ -106,6 +137,7 @@ export default {
     mounted() {
         this.getDataHomePage();
         this.layDuLieuSlide();
+        this.getDataPhimSapChieu();
     },
     methods: {
         changePage(page) {
@@ -114,8 +146,15 @@ export default {
             }
         },
         getDataHomePage() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            var payload = {
+                date : `${yyyy}-${mm}-${dd}`
+            }
             axios
-                .get('http://127.0.0.1:8000/api/trang-chu/data')
+                .post('http://127.0.0.1:8000/api/trang-chu/data',payload)
                 .then((res) => {
                     this.list_phim = res.data.listPhim;
                 })
@@ -126,6 +165,20 @@ export default {
                 .then((res) => {
                     console.log("Dữ liệu từ API:", res.data.slide);
                     this.ds_slide = res.data.slide;
+                })
+        },
+        getDataPhimSapChieu() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            var payload = {
+                date : `${yyyy}-${mm}-${dd}`
+            }
+            axios
+                .post('http://127.0.0.1:8000/api/trang-chu/phim-sap-chieu/data',payload)
+                .then((res) => {
+                    this.list_phim_sap_chieu = res.data.data;
                 })
         },
     },
