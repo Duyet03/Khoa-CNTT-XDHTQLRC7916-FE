@@ -58,15 +58,50 @@
                                         <div class="mb-2">
                                             <label>Cài đặt suất chiếu</label>
                                             <div class="form-check mt-2">
-                                                <input class="form-check-input" type="checkbox" v-model="suat_create.tu_dong_chia_suat" id="autoTimeSlots">
-                                                <label class="form-check-label" for="autoTimeSlots">
-                                                    Tự động chia suất (mỗi 2.5 tiếng/suất, bắt đầu từ 00:00)
+                                                <input class="form-check-input" type="checkbox" v-model="suat_create.tao_nhieu_suat" id="multipleTimeSlots">
+                                                <label class="form-check-label" for="multipleTimeSlots">
+                                                    Tạo nhiều suất chiếu
                                                 </label>
                                             </div>
-                                            <div v-if="!suat_create.tu_dong_chia_suat" class="mt-2">
+                                            <div v-if="suat_create.tao_nhieu_suat" class="mt-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Thời gian dọn dẹp (phút)</label>
+                                                        <input v-model="suat_create.thoi_gian_don_dep" type="number" class="form-control mt-2" min="0" value="10">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Thời gian quảng cáo (phút)</label>
+                                                        <input v-model="suat_create.thoi_gian_quang_cao" type="number" class="form-control mt-2" min="0" value="10">
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <label class="d-block mb-2">Chọn suất chiếu đầu tiên</label>
+                                                    <div class="input-group">
+                                                        <input type="time" class="form-control" v-model="suat_create.gio_bat_dau">
+                                                        <button @click="tinhToanSuatChieu" class="btn btn-primary">
+                                                            <i class="fas fa-calculator me-1"></i>Tính toán suất chiếu
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div v-if="suat_create.danh_sach_suat.length > 0" class="mt-3">
+                                                    <label class="d-block mb-2">Danh sách suất chiếu trong ngày</label>
+                                                    <div class="list-group">
+                                                        <div v-for="(suat, index) in suat_create.danh_sach_suat" :key="index" 
+                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <span class="badge bg-primary me-2">Suất {{ index + 1 }}</span>
+                                                                <span>{{ suat }}</span>
+                                                            </div>
+                                                            <button @click="xoaSuat(index)" class="btn btn-danger btn-sm">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-else class="mt-2">
                                                 <label>Giờ Bắt Đầu</label>
-                                                <input v-model="suat_create.gio_bat_dau" type="time"
-                                                    class="form-control mt-2">
+                                                <input v-model="suat_create.gio_bat_dau" type="time" class="form-control mt-2">
                                             </div>
                                         </div>
                                         <div class="mb-2">
@@ -152,9 +187,22 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mt-2">Danh Sách Suất Chiếu</h5>
-                                        <button class="btn btn-outline-primary" v-on:click="capNhatTrangThaiTuDong()">
-                                            <i class="bx bx-refresh me-1"></i>Cập nhật trạng thái tự động
-                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <div class="btn-group me-3">
+                                                <button class="btn btn-outline-primary" @click="chuyenNgay(-1)" :disabled="!coNgayTruoc">
+                                                    <i class="fas fa-chevron-left"></i>
+                                                </button>
+                                                <button class="btn btn-outline-primary" style="min-width: 200px">
+                                                    {{ formatDate(ngayHienTai) || 'Chọn ngày' }}
+                                                </button>
+                                                <button class="btn btn-outline-primary" @click="chuyenNgay(1)" :disabled="!coNgaySau">
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-outline-primary" v-on:click="capNhatTrangThaiTuDong()">
+                                                <i class="bx bx-refresh me-1"></i>Cập nhật trạng thái tự động
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -164,7 +212,6 @@
                                                         <th class="text-center">#</th>
                                                         <th class="text-center">Phim</th>
                                                         <th class="text-center">Phòng</th>
-                                                        <th class="text-center">Ngày Chiếu</th>
                                                         <th class="text-center">Giờ Bắt Đầu</th>
                                                         <th class="text-center">Giờ Kết Thúc</th>
                                                         <th class="text-center">Định Dạng</th>
@@ -175,47 +222,50 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="(v, k) in ds_suat" :key="k">
-                                                        <th class="text-center align-middle">{{ k + 1 }}</th>
-                                                        <td class="align-middle">{{ getTenPhim(v.phim_id) }}</td>
-                                                        <td class="align-middle">{{ getTenPhong(v.phong_id) }}</td>
-                                                        <td class="align-middle">{{ formatDate(v.ngay_chieu) }}</td>
-                                                        <td class="align-middle">{{ v.gio_bat_dau }}</td>
-                                                        <td class="align-middle">{{ v.gio_ket_thuc }}</td>
-                                                        <td class="align-middle">{{ v.dinh_dang }}</td>
-                                                        <td class="align-middle">{{ formatCurrency(v.gia_ve) }}</td>
-                                                        <td class="align-middle text-center">
-                                                            <button class="btn btn-sm btn-outline-info"
-                                                                v-on:click="kiemTraGheTrong(v.id)">
-                                                                Kiểm tra
-                                                            </button>
-                                                        </td>
-                                                        <td class="text-center align-middle">
-                                                            <span v-if="v.trang_thai === 'Sắp chiếu'"
-                                                                class="badge bg-info">Sắp chiếu</span>
-                                                            <span v-else-if="v.trang_thai === 'Đang chiếu'"
-                                                                class="badge bg-success">Đang
-                                                                chiếu</span>
-                                                            <span v-else-if="v.trang_thai === 'Đã chiếu'"
-                                                                class="badge bg-secondary">Đã
-                                                                chiếu</span>
-                                                            <span v-else-if="v.trang_thai === 'Hết vé'"
-                                                                class="badge bg-warning">Hết
-                                                                vé</span>
-                                                            <span v-else-if="v.trang_thai === 'Hủy'"
-                                                                class="badge bg-danger">Hủy</span>
-                                                            <span v-else class="badge bg-primary">{{ v.trang_thai
-                                                                }}</span>
-                                                        </td>
-                                                        <td class="text-center text-nowrap align-middle">
-                                                            <button v-on:click="suaSuatChieu(v)" data-bs-toggle="modal"
-                                                                data-bs-target="#updateModal"
-                                                                class="btn btn-info me-1">Cập
-                                                                Nhật</button>
-                                                            <button data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                                v-on:click="id_can_xoa = v.id"
-                                                                class="btn btn-danger">Xoá
-                                                                Bỏ</button>
+                                                    <template v-if="suatTheoNgayHienTai.length > 0">
+                                                        <tr v-for="(v, k) in suatTheoNgayHienTai" :key="v.id">
+                                                            <th class="text-center align-middle">{{ k + 1 }}</th>
+                                                            <td class="align-middle">{{ getTenPhim(v.phim_id) }}</td>
+                                                            <td class="align-middle">{{ getTenPhong(v.phong_id) }}</td>
+                                                            <td class="align-middle">{{ v.gio_bat_dau }}</td>
+                                                            <td class="align-middle">{{ v.gio_ket_thuc }}</td>
+                                                            <td class="align-middle">{{ v.dinh_dang }}</td>
+                                                            <td class="align-middle">{{ formatCurrency(v.gia_ve) }}</td>
+                                                            <td class="align-middle text-center">
+                                                                <button class="btn btn-sm btn-outline-info"
+                                                                    v-on:click="kiemTraGheTrong(v.id)">
+                                                                    Kiểm tra
+                                                                </button>
+                                                            </td>
+                                                            <td class="text-center align-middle">
+                                                                <span v-if="v.trang_thai === 'Sắp chiếu'"
+                                                                    class="badge bg-info">Sắp chiếu</span>
+                                                                <span v-else-if="v.trang_thai === 'Đang chiếu'"
+                                                                    class="badge bg-success">Đang chiếu</span>
+                                                                <span v-else-if="v.trang_thai === 'Đã chiếu'"
+                                                                    class="badge bg-secondary">Đã chiếu</span>
+                                                                <span v-else-if="v.trang_thai === 'Hết vé'"
+                                                                    class="badge bg-warning">Hết vé</span>
+                                                                <span v-else-if="v.trang_thai === 'Hủy'"
+                                                                    class="badge bg-danger">Hủy</span>
+                                                                <span v-else class="badge bg-primary">{{ v.trang_thai }}</span>
+                                                            </td>
+                                                            <td class="text-center text-nowrap align-middle">
+                                                                <button v-on:click="suaSuatChieu(v)" data-bs-toggle="modal"
+                                                                    data-bs-target="#updateModal"
+                                                                    class="btn btn-info me-1">Cập Nhật</button>
+                                                                <button data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                                    v-on:click="id_can_xoa = v.id"
+                                                                    class="btn btn-danger">Xoá Bỏ</button>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                    <tr v-else>
+                                                        <td colspan="10" class="text-center py-4">
+                                                            <div class="text-muted">
+                                                                <i class="fas fa-calendar-times fa-2x mb-3"></i>
+                                                                <h5>Không có suất chiếu nào trong ngày này</h5>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -430,7 +480,10 @@ export default {
                 gia_ve_doi: 100000,
                 dinh_dang: '2D',
                 ngon_ngu: 'Phụ đề',
-                tu_dong_chia_suat: false,
+                tao_nhieu_suat: false,
+                thoi_gian_don_dep: 10,
+                thoi_gian_quang_cao: 10,
+                danh_sach_suat: [],
                 trang_thai: 'Sắp chiếu'
             },
             suat_update: {
@@ -446,7 +499,15 @@ export default {
                 tong_so_ghe: 0,
                 so_ghe_trong: 0,
                 so_ghe_da_dat: 0
-            }
+            },
+            timeSlotGroups: [
+                ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00'],
+                ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00'],
+                ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+                ['18:00', '19:00', '20:00', '21:00', '22:00', '23:00']
+            ],
+            customTime: '',
+            ngayHienTai: '',
         }
     },
     mounted() {
@@ -505,6 +566,10 @@ export default {
                 .get('suat-chieu/data')
                 .then((res) => {
                     this.ds_suat = res.data.suat;
+                    // Nếu chưa có ngày được chọn, chọn ngày đầu tiên
+                    if (!this.ngayHienTai && this.danhSachNgay.length > 0) {
+                        this.ngayHienTai = this.danhSachNgay[0];
+                    }
                 })
                 .catch(error => {
                     toaster.error("Lỗi khi lấy dữ liệu suất chiếu: " + error.message);
@@ -569,6 +634,36 @@ export default {
                 });
         },
 
+        themSuatTuyChon() {
+            if (this.customTime && !this.suat_create.danh_sach_suat.includes(this.customTime)) {
+                this.suat_create.danh_sach_suat.push(this.customTime);
+                this.customTime = '';
+            } else if (this.suat_create.danh_sach_suat.includes(this.customTime)) {
+                toaster.warning('Suất chiếu này đã được chọn!');
+            }
+        },
+
+        resetForm() {
+            this.suat_create = {
+                phim_id: '',
+                phong_id: '',
+                ngay_bat_dau: '',
+                ngay_ket_thuc: '',
+                gio_bat_dau: '',
+                gia_ve: 50000,
+                gia_ve_vip: 70000,
+                gia_ve_doi: 100000,
+                dinh_dang: '2D',
+                ngon_ngu: 'Phụ đề',
+                tao_nhieu_suat: false,
+                thoi_gian_don_dep: 10,
+                thoi_gian_quang_cao: 10,
+                danh_sach_suat: [],
+                trang_thai: 'Sắp chiếu'
+            };
+            this.customTime = '';
+        },
+
         themMoiSuat() {
             const today = new Date().setHours(0, 0, 0, 0);
             const ngayBatDau = new Date(this.suat_create.ngay_bat_dau).setHours(0, 0, 0, 0);
@@ -581,7 +676,8 @@ export default {
             // Kiểm tra dữ liệu đầu vào
             if (!this.suat_create.phim_id || !this.suat_create.phong_id ||
                 !this.suat_create.ngay_bat_dau || !this.suat_create.ngay_ket_thuc ||
-                (!this.suat_create.tu_dong_chia_suat && !this.suat_create.gio_bat_dau) ||
+                (!this.suat_create.tao_nhieu_suat && !this.suat_create.gio_bat_dau) ||
+                (this.suat_create.tao_nhieu_suat && this.suat_create.danh_sach_suat.length === 0) ||
                 !this.suat_create.gia_ve) {
                 toaster.error("Vui lòng điền đầy đủ thông tin!");
                 return;
@@ -597,12 +693,20 @@ export default {
             const ngayBatDauObj = new Date(this.suat_create.ngay_bat_dau);
             const ngayKetThucObj = new Date(this.suat_create.ngay_ket_thuc);
 
+            // Sắp xếp danh sách suất theo thời gian
+            const sortedSuatList = [...this.suat_create.danh_sach_suat].sort();
+
             // Lặp qua từng ngày
             for (let d = new Date(ngayBatDauObj); d <= ngayKetThucObj; d.setDate(d.getDate() + 1)) {
-                if (this.suat_create.tu_dong_chia_suat) {
-                    // Tạo các suất tự động, mỗi suất cách nhau 2.5 tiếng
-                    const suatTrongNgay = this.taoSuatTuDong(new Date(d));
-                    danhSachSuat = [...danhSachSuat, ...suatTrongNgay];
+                if (this.suat_create.tao_nhieu_suat) {
+                    // Tạo các suất theo danh sách đã chọn
+                    sortedSuatList.forEach(gio => {
+                        danhSachSuat.push({
+                            ...this.suat_create,
+                            ngay_chieu: new Date(d).toISOString().split('T')[0],
+                            gio_bat_dau: gio,
+                        });
+                    });
                 } else {
                     // Tạo một suất với giờ được chọn
                     danhSachSuat.push({
@@ -614,26 +718,17 @@ export default {
 
             // Gửi request tạo nhiều suất
             baseRequest
-                .post("suat-chieu/create-multiple", { danh_sach_suat: danhSachSuat })
+                .post("suat-chieu/create-multiple", { 
+                    danh_sach_suat: danhSachSuat,
+                    thoi_gian_don_dep: this.suat_create.thoi_gian_don_dep,
+                    thoi_gian_quang_cao: this.suat_create.thoi_gian_quang_cao
+                })
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success(res.data.message);
                         this.loadSuat();
                         // Reset form
-                        this.suat_create = {
-                            phim_id: '',
-                            phong_id: '',
-                            ngay_bat_dau: '',
-                            ngay_ket_thuc: '',
-                            gio_bat_dau: '',
-                            gia_ve: 50000,
-                            gia_ve_vip: 70000,
-                            gia_ve_doi: 100000,
-                            dinh_dang: '2D',
-                            ngon_ngu: 'Phụ đề',
-                            tu_dong_chia_suat: false,
-                            trang_thai: 'Sắp chiếu'
-                        };
+                        this.resetForm();
                         // Đóng modal
                         const modal = bootstrap.Modal.getInstance(document.getElementById('taoSuatModal'));
                         modal.hide();
@@ -644,26 +739,6 @@ export default {
                 .catch((error) => {
                     toaster.error("Đã xảy ra lỗi: " + (error.response?.data?.message || error.message));
                 });
-        },
-
-        taoSuatTuDong(ngay) {
-            const danhSachSuat = [];
-            const khoangThoiGian = 3 * 60; // 2.5 tiếng = 150 phút
-            const soSuatTrongNgay = Math.floor(24 * 60 / khoangThoiGian); // Số suất có thể có trong 1 ngày
-
-            for (let i = 0; i < soSuatTrongNgay; i++) {
-                const phutBatDau = i * khoangThoiGian;
-                const gio = Math.floor(phutBatDau / 60).toString().padStart(2, '0');
-                const phut = (phutBatDau % 60).toString().padStart(2, '0');
-
-                danhSachSuat.push({
-                    ...this.suat_create,
-                    ngay_chieu: ngay.toISOString().split('T')[0],
-                    gio_bat_dau: `${gio}:${phut}`,
-                });
-            }
-
-            return danhSachSuat;
         },
 
         suaSuatChieu(suat) {
@@ -732,8 +807,151 @@ export default {
                     toaster.error("Đã xảy ra lỗi: " + (error.response?.data?.message || error.message));
                 });
         },
+
+        tinhToanSuatChieu() {
+            if (!this.suat_create.phim_id || !this.suat_create.gio_bat_dau) {
+                toaster.error("Vui lòng chọn phim và giờ bắt đầu!");
+                return;
+            }
+
+            const phim = this.ds_phim.find(p => p.id == this.suat_create.phim_id);
+            if (!phim || !phim.thoi_luong) {
+                toaster.error("Không tìm thấy thông tin thời lượng phim!");
+                return;
+            }
+
+            // Reset danh sách suất
+            this.suat_create.danh_sach_suat = [];
+
+            // Thời lượng một suất = thời lượng phim + thời gian dọn dẹp + thời gian quảng cáo
+            const tongThoiLuong = parseInt(phim.thoi_luong) + 
+                                parseInt(this.suat_create.thoi_gian_don_dep) + 
+                                parseInt(this.suat_create.thoi_gian_quang_cao);
+
+            // Tính toán các suất chiếu trong ngày
+            let gioHienTai = this.parseTime(this.suat_create.gio_bat_dau);
+            // Làm tròn giờ bắt đầu lên 10 phút
+            gioHienTai = this.lamTronThoiGian(gioHienTai);
+            
+            const gioKetThuc = new Date(gioHienTai);
+            gioKetThuc.setHours(23, 59, 59);
+
+            while (gioHienTai <= gioKetThuc) {
+                // Thêm suất hiện tại vào danh sách
+                this.suat_create.danh_sach_suat.push(this.formatTime(gioHienTai));
+
+                // Tính giờ bắt đầu suất tiếp theo và làm tròn
+                gioHienTai = new Date(gioHienTai.getTime() + tongThoiLuong * 60000);
+                gioHienTai = this.lamTronThoiGian(gioHienTai);
+            }
+
+            if (this.suat_create.danh_sach_suat.length === 0) {
+                toaster.warning("Không thể tạo thêm suất chiếu nào trong ngày với thời lượng này!");
+            }
+        },
+
+        lamTronThoiGian(date) {
+            const minutes = date.getMinutes();
+            const roundedMinutes = Math.ceil(minutes / 10) * 10;
+            const newDate = new Date(date);
+            
+            if (roundedMinutes === 60) {
+                // Nếu làm tròn lên 60 phút, tăng giờ lên 1 và đặt phút về 0
+                newDate.setHours(date.getHours() + 1, 0, 0, 0);
+            } else {
+                newDate.setMinutes(roundedMinutes, 0, 0);
+            }
+            
+            return newDate;
+        },
+
+        parseTime(timeString) {
+            const [hours, minutes] = timeString.split(':').map(Number);
+            const date = new Date();
+            date.setHours(hours, minutes, 0, 0);
+            return date;
+        },
+
+        formatTime(date) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        },
+
+        xoaSuat(index) {
+            this.suat_create.danh_sach_suat.splice(index, 1);
+        },
+
+        chuyenNgay(buoc) {
+            const viTriHienTai = this.danhSachNgay.indexOf(this.ngayHienTai);
+            const viTriMoi = viTriHienTai + buoc;
+            if (viTriMoi >= 0 && viTriMoi < this.danhSachNgay.length) {
+                this.ngayHienTai = this.danhSachNgay[viTriMoi];
+            }
+        },
+    },
+    computed: {
+        danhSachNgay() {
+            const ngayChieu = [...new Set(this.ds_suat.map(suat => suat.ngay_chieu))];
+            return ngayChieu.sort();
+        },
+
+        suatTheoNgayHienTai() {
+            if (!this.ngayHienTai) return [];
+            return this.ds_suat
+                .filter(suat => suat.ngay_chieu === this.ngayHienTai)
+                .sort((a, b) => a.gio_bat_dau.localeCompare(b.gio_bat_dau));
+        },
+
+        coNgayTruoc() {
+            const viTriHienTai = this.danhSachNgay.indexOf(this.ngayHienTai);
+            return viTriHienTai > 0;
+        },
+
+        coNgaySau() {
+            const viTriHienTai = this.danhSachNgay.indexOf(this.ngayHienTai);
+            return viTriHienTai < this.danhSachNgay.length - 1;
+        }
     },
 }
 </script>
 
-<style></style>
+<style scoped>
+.time-slots .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 100%;
+}
+
+.time-slots .btn {
+    flex: 1;
+    min-width: 90px;
+    margin: 0;
+    border-radius: 4px !important;
+}
+
+.time-slots .btn-check:checked + .btn {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.btn-group-vertical {
+    align-items: flex-start;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.badge {
+    font-size: 0.875rem;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+}
+</style>

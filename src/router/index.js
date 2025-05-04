@@ -19,6 +19,11 @@ const routes = [
     meta: { layout: "Login" },
   },
   {
+    path: "/check-qr",
+    component: () => import("../components/CheckQR/index.vue"),
+    meta: { layout: "Login" },
+  },
+  {
     path: "/khach-hang/dang-ky",
     component: () => import("../components/Client/DangKy/index.vue"),
     meta: { layout: "index" },

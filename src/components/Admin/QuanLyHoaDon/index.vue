@@ -95,7 +95,9 @@
                                     <div class="col-md-6">
                                         <p class="mb-1"><strong>Phim:</strong> {{ chi_tiet_thue[0].ten_phim }}</p>
                                         <p class="mb-1"><strong>Khách hàng:</strong> {{ chi_tiet_thue[0].ten_khach_hang
-                                        }}</p>
+                                            }}</p>
+                                        <p class="mb-1"><strong>Định dạng:</strong> {{ chi_tiet_thue[0].dinh_dang }}</p>
+
                                     </div>
                                     <div class="col-md-6">
                                         <p class="mb-1"><strong>Ngày chiếu:</strong> {{
@@ -104,12 +106,6 @@
                                         </p>
                                         <p class="mb-1"><strong>Phòng chiếu:</strong> {{ chi_tiet_thue[0].ten_phong }}
                                         </p>
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col-12">
-                                        <p class="mb-1"><strong>Định dạng:</strong> {{ chi_tiet_thue[0].dinh_dang }}</p>
-                                        <p class="mb-0"><strong>Ngôn ngữ:</strong> {{ chi_tiet_thue[0].ngon_ngu }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -130,6 +126,33 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <!-- Hiển thị mã QR -->
+                            <div class="row mb-4" v-if="chi_tiet_thue.length > 0">
+                                <div class="col-md-6 mx-auto">
+                                    <div class="card border-0 shadow-sm text-center">
+                                        <div class="card-header bg-light">
+                                            <h5 class="mb-0"><i class="fas fa-qrcode me-2"></i>Mã QR vé</h5>
+                                        </div>
+                                        <div class="card-body pb-4">
+                                            <p class="mb-3">Mã QR dùng để check-in tại rạp</p>
+                                            <div class="d-flex justify-content-center">
+                                                <template v-if="chi_tiet_thue[0].ma_qr_checkin">
+                                                    <div class="qr-code-container position-relative">
+                                                        <img :src="chi_tiet_thue[0].ma_qr_checkin" 
+                                                             class="img-fluid" 
+                                                             style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+                                                             alt="QR Code" />
+                                                    </div>
+                                                </template>
+                                                <div v-else class="alert alert-warning">
+                                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                                    QR code chưa được tạo
+                                                </div>
+                                            </div>                               
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div v-else class="text-center py-4">
                             <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>

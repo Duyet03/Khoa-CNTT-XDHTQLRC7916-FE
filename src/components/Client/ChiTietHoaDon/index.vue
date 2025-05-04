@@ -214,9 +214,7 @@
                                         <i class="fas fa-exclamation-triangle me-2"></i>
                                         QR code chưa được tạo hoặc hóa đơn chưa thanh toán
                                     </div>
-                                </div>
-                                
-                               
+                                </div>                               
                             </div>
                         </div>
                     </div>
