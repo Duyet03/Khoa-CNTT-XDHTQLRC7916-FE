@@ -107,7 +107,7 @@
                                         <td>{{ v.ten_khach_hang }}</td>
                                         <td>{{ v.email }}</td>
                                         <td class="text-center">
-                                            <button v-on:click="doiTrangThai(v)" v-if="v.tinh_trang == 1"
+                                            <button v-on:click="doiTrangThai(v)" v-if="v.is_active == 1"
                                                 class="btn btn-success">Hoạt động</button>
                                             <button v-on:click="doiTrangThai(v)" v-else class="btn btn-primary">Tạm
                                                 dừng</button>
