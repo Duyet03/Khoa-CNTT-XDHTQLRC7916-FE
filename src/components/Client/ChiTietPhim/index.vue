@@ -74,12 +74,16 @@
                         </div>
 
                         <div class="text-end mt-4">
-                            <router-link :to="'/dat-suat/' + phim_id">
+                            <router-link :to="'/dat-suat/' + phim_id" v-if="isBookingAvailable">
                                 <button class="btn btn-danger btn-lg">
                                     <i class="bi bi-ticket-perforated me-2"></i>
                                     Đặt vé ngay
                                 </button>
                             </router-link>
+                            <button v-else class="btn btn-secondary btn-lg" disabled>
+                                <i class="bi bi-ticket-perforated me-2"></i>
+                                Đã hết hạn đặt vé
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -244,6 +248,12 @@ export default {
             const end = start + this.itemsPerPage;
             return this.danh_sach_danh_gia.slice(start, end);
         },
+        isBookingAvailable() {
+            if (!this.phim_chi_tiet.ngay_chieu) return false;
+            const showDate = new Date(this.phim_chi_tiet.ngay_chieu);
+            const now = new Date();
+            return showDate < now;
+        }
     },
     mounted() {
         this.phim_id = this.$route.params.phim_id;

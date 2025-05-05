@@ -103,8 +103,7 @@ export default {
 
         async loginGoogle() {
             try {
-                const res = await axios.get("http://127.0.0.1:8000/api/auth/google");
-                window.location.href = res.data.url;
+                window.location.href = "http://127.0.0.1:8000/auth/google";
             } catch (error) {
                 toaster.error("Lỗi đăng nhập Google");
             }
