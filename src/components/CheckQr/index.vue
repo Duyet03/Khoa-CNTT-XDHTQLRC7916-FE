@@ -17,11 +17,11 @@
                 </div>
 
                 <div v-if="maHoaDon" class="button-group">
-                    <button class="btn btn-primary" @click="checkInVe" :disabled="!token || !isAdmin">
+                    <button class="btn btn-primary" @click="checkInVe">
                         <i class="fas fa-check-circle"></i>
                         Check-in Vé
                     </button>
-                    <button class="btn btn-secondary" @click="checkInDichVu" :disabled="!token || !isAdmin">
+                    <button class="btn btn-secondary" @click="checkInDichVu">
                         <i class="fas fa-concierge-bell"></i>
                         Check-in Dịch Vụ
                     </button>
@@ -46,15 +46,13 @@ export default {
         return {
             maHoaDon: '',
             message: '',
-            token: null,
-            isAdmin: false
+            token: null
         };
     },
     mounted() {
         const params = new URLSearchParams(window.location.search);
         this.maHoaDon = params.get('ma_hoa_don') || '';
         this.token = localStorage.getItem("token_admin");
-        this.checkAdminStatus();
         
         if (!this.token) {
             this.message = "❌ Bạn cần đăng nhập để thực hiện chức năng này";
@@ -74,6 +72,7 @@ export default {
         verifyToken() {
             if (!this.token) {
                 this.message = "❌ Bạn cần đăng nhập để thực hiện chức năng này";
+                toaster.error(this.message);
                 return false;
             }
             return true;
@@ -82,7 +81,8 @@ export default {
         async checkInVe() {
             if (!this.verifyToken()) return;
             if (!this.maHoaDon) {
-                this.message = "❌ Mã hóa đơn không hợp lệ"; 
+                this.message = "❌ Mã hóa đơn không hợp lệ";
+                toaster.error(this.message);
                 return;
             }
 
@@ -95,8 +95,10 @@ export default {
 
                 if (response.data.status) {
                     this.message = response.data.message;
+                    toaster.success(this.message);
                 } else {
                     this.message = response.data.message;
+                    toaster.error(this.message);
                 }
             } catch (err) {
                 if (err.response?.status === 401) {
@@ -106,6 +108,8 @@ export default {
                 } else {
                     this.message = err.response?.data?.message || "❌ Có lỗi xảy ra";
                 }
+                toaster.error(this.message);
+                console.error('Lỗi:', err);
             }
         },
 
@@ -113,6 +117,7 @@ export default {
             if (!this.verifyToken()) return;
             if (!this.maHoaDon) {
                 this.message = "❌ Mã hóa đơn không hợp lệ";
+                toaster.error(this.message);
                 return;
             }
 
@@ -125,8 +130,10 @@ export default {
 
                 if (response.data.status) {
                     this.message = response.data.message;
+                    toaster.success(this.message);
                 } else {
                     this.message = response.data.message;
+                    toaster.error(this.message);
                 }
             } catch (err) {
                 if (err.response?.status === 401) {
@@ -135,38 +142,15 @@ export default {
                     this.token = null;
                 } else {
                     this.message = err.response?.data?.message || "❌ Có lỗi xảy ra";
-                    }
+                }
+                toaster.error(this.message);
                 console.error('Lỗi:', err);
-            }
-        },
-
-        async checkAdminStatus() {
-            if (!this.token) {
-                this.isAdmin = false;
-                return;
-            }
-            try {
-                const response = await axios.get(
-                    'http://127.0.0.1:8000/api/admin/check',
-                    this.getHeaders()
-                );
-                this.isAdmin = response.data.status === true;
-                if (!this.isAdmin) {
-                    this.message = "❌ Bạn không có quyền thực hiện chức năng này";
-                    toaster.error(this.message);
-                }
-            } catch (err) {
-                this.isAdmin = false;
-                if (err.response?.status === 401) {
-                    localStorage.removeItem("token_admin");
-                    this.token = null;
-                }
-                this.message = "❌ Không thể xác thực quyền admin";
             }
         }
     }
 }
 </script>
+
 
 <style scoped>
 .check-qr {

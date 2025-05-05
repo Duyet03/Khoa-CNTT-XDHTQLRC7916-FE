@@ -14,6 +14,11 @@ const routes = [
     meta: { layout: "client" },
   },
   {
+    path: "/phim-sap-chieu",
+    component: () => import("../components/Client/TrangChu/PhimSapChieu/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
     path: "/login",
     component: () => import("../components/Client/DangNhap/index.vue"),
     meta: { layout: "Login" },
