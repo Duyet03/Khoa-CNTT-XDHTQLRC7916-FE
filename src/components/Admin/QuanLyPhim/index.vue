@@ -289,8 +289,7 @@
                                     <td class="text-center align-middle text-nowrap">{{ v.dien_vien }}</td>
                                     <td class="text-center align-middle text-nowrap">{{ v.nha_san_xuat }}</td>
                                     <td class="text-center align-middle text-nowrap">
-                                        {{list_the_loai.find(tl => tl.id === v.id_the_loai)?.ten_the_loai ||
-                                        v.id_the_loai }}
+                                        {{ v.the_loais ? v.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}
                                     </td>
                                     <td class="text-center align-middle text-nowrap">{{ v.gioi_han_do_tuoi }}</td>
                                     <td class="text-center align-middle text-nowrap">

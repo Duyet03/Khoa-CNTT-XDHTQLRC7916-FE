@@ -56,7 +56,7 @@
                             <div class="detail-item">
                                 <div class="detail-label">Thể loại</div>
                                 <div class="detail-value">
-                                    {{ phim_chi_tiet.ten_the_loai || "Kinh Dị" }}
+                                    {{ phim_chi_tiet.the_loais ? phim_chi_tiet.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}
                                 </div>
                             </div>
                             <div class="detail-item">
