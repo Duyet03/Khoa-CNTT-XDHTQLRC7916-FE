@@ -36,4 +36,5 @@ export default {
 @import "../../assets/css/header-colors.css";
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 </style>

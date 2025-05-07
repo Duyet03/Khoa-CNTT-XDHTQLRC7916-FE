@@ -50,7 +50,6 @@
               <div class="menu-title">Ghế</div>
             </a>
           </router-link>
-
         </li>
         <li class="nav-item dropdown">
           <a href="javascript:;" class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-bs-toggle="dropdown">

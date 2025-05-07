@@ -10,23 +10,29 @@ const routes = [
   },
   {
     path: "/home-page",
-    component: () => import("../components/Client/home.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/shop-qua-tang",
-    component: () => import("../components/HomePage/ShopQuaTang/index.vue"),
+    component: () => import("../components/Client/TrangChu/index.vue"),
     meta: { layout: "client" },
   },
   {
     path: "/login",
-    component: () => import("../components/Client/login.vue"),
+    component: () => import("../components/Client/DangNhap/index.vue"),
+    meta: { layout: "Login" },
+  },
+  {
+    path: "/check-qr",
+    component: () => import("../components/CheckQR/index.vue"),
     meta: { layout: "Login" },
   },
   {
     path: "/khach-hang/dang-ky",
     component: () => import("../components/Client/DangKy/index.vue"),
     meta: { layout: "index" },
+  },
+  {
+    path: "/khach-hang/tai-khoan-ca-nhan",
+    component: () => import("../components/Client/KhachHang/QuanLyTaiKhoanCaNhan/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: kiemTraKhachHangDangNhap,
   },
 
   {
@@ -37,34 +43,40 @@ const routes = [
   },
   {
     path: "/dat-suat/:phim_id",
-    component: () => import("../components/Client/datSuat.vue"),
+    component: () => import("../components/Client/DatSuat/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/dat-ve/:id_suat",
-    component: () => import("../components/Client/datVe.vue"),
+    component: () => import("../components/Client/DatVe/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/thanh-toan/:id_suat",
     name: "thanh-toan",
-    component: () => import("../components/Client/thanhToan.vue"),
+    component: () => import("../components/Client/ThanhToan/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/thanh-toan/ket-qua",
     name: "thanh-toan-ket-qua",
-    component: () => import("../components/Client/thanhToan.vue"),
+    component: () => import("../components/Client/ThanhToan/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
   {
     path: "/chi-tiet-hoa-don/:ma_hoa_don",
     name: "chi-tiet-hoa-don",
-    component: () => import("../components/Client/ChiTietHoaDon.vue"),
+    component: () => import("../components/Client/ChiTietHoaDon/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: kiemTraKhachHangDangNhap,
+  },
+  {
+    path: "/khach-hang/hoa-don",
+    component: () => import("../components/Client/LichSuDatVe/index.vue"),
     meta: { layout: "client" },
     beforeEnter: kiemTraKhachHangDangNhap,
   },
@@ -84,11 +96,31 @@ const routes = [
     component: () => import("../components/Client/KichHoat/index.vue"),
     meta: { layout: "index" },
   },
+  {
+    path: "/goc-dien-anh",
+    component: () => import("../components/Client/GocDienAnh/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/goc-dien-anh/:id",
+    component: () => import("../components/Client/GocDienAnh/chitiet.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/su-kien",
+    component: () => import("../components/Client/SuKien/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/su-kien/:id",
+    component: () => import("../components/Client/SuKien/chitiet.vue"),
+    meta: { layout: "client" },
+  },
 
   {
     path: "/auth/callback",
     name: "AuthCallback",
-    component: () => import("../components/Client/AuthCallback.vue"),
+    component: () => import("../components/Client/DangNhapGoogle/AuthCallback.vue"),
   },
 
   //ADMIN
@@ -100,6 +132,18 @@ const routes = [
     beforeEnter: kiemTraAdmin,
   },
   {
+    path: "/admin/khuyen-mai",
+    component: () => import("../components/Admin/SuKien/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/thong-ke",
+    component: () => import("../components/Admin/ThongKe/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
     path: "/admin/doanh-thu",
     component: () => import("../components/admin/QuanLyDoanhThu/index.vue"),
     meta: { layout: "admin" },
@@ -107,7 +151,7 @@ const routes = [
   },
   {
     path: "/admin/ghe-xem-phim",
-    component: () => import("../components/admin/QuanLyGhe/index.vue"),
+    component: () => import("../components/Admin/QuanLyGhe/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },
@@ -139,7 +183,7 @@ const routes = [
   {
     path: "/admin/nguoi-dung/khach-hang",
     component: () =>
-      import("../components/Admin/QuanLyNguoiDung/KhachHang/index.vue"),
+      import("../components/admin/QuanLyNguoiDung/KhachHang/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: kiemTraAdmin,
   },
@@ -210,13 +254,48 @@ const routes = [
     beforeEnter: kiemTraAdmin,
   },
   {
-    path: "/khach-hang/tai-khoan-ca-nhan",
-    component: () => import("../components/Client/KhachHang/QuanLyTaiKhoanCaNhan/index.vue"),
-    meta: { layout: "client" },
-    beforeEnter: kiemTraKhachHangDangNhap,
+    path: "/admin/goc-dien-anh",
+    component: () => import("../components/Admin/GocDienAnh/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/dat-ve",
+    component: () => import("../components/Admin/DatVe/phim/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/chon-suat/:phim_id",
+    component: () => import("../components/Admin/DatVe/ChonSuat/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/dat-ve/:id_suat",
+    component: () => import("../components/Admin/DatVe/ChonCho/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/thanh-toan/:id_suat",
+    component: () => import("../components/Admin/DatVe/ThanhToan/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/thanh-toan/ket-qua",
+    component: () => import("../components/Admin/DatVe/ThanhToan/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
+  },
+  {
+    path: "/admin/chi-tiet-hoa-don/:ma_hoa_don",
+    component: () => import("../components/Admin/DatVe/ChiTietHoaDon/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: kiemTraAdmin,
   },
 ];
-
 
 const router = createRouter({
   history: createWebHistory(),

@@ -8,6 +8,42 @@
                 </button>
             </div>
         </div>
+        
+        <!-- Filter Section -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Chọn Phim</label>
+                        <select v-model="selectedPhim" class="form-select" @change="onPhimChange">
+                            <option value="">Tất cả phim</option>
+                            <option v-for="phim in listPhim" :key="phim.id" :value="phim.id">
+                                {{ phim.ten_phim }} ({{ formatDate(phim.ngay_chieu) }})
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Chọn Phòng</label>
+                        <select v-model="selectedPhong" class="form-select" @change="onPhongChange" :disabled="!selectedPhim">
+                            <option value="">Tất cả phòng</option>
+                            <option v-for="phong in listPhong" :key="phong.id" :value="phong.id">
+                                {{ phong.ten_phong }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Chọn Suất Chiếu</label>
+                        <select v-model="selectedSuat" class="form-select" @change="onSuatChange" :disabled="!selectedPhong">
+                            <option value="">Tất cả suất</option>
+                            <option v-for="suat in listSuat" :key="suat.id" :value="suat.id">
+                                {{ formatDate(suat.ngay_chieu) }} | {{ formatTime(suat.gio_bat_dau) }} - {{ formatTime(suat.gio_ket_thuc) }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
@@ -15,11 +51,11 @@
                         <thead>
                             <tr>
                                 <th class="text-center align-middle">#</th>
-                                <th class="text-center align-middle">Thông Tin Phim</th>
-                                <th class="text-center align-middle">Thời Gian Chiếu</th>
-                                <th class="text-center align-middle">Vị Trí</th>
+                                <th class="text-center align-middle">Mã Vé</th>
+                                <th class="text-center align-middle">Vị Trí Ghế</th>
                                 <th class="text-center align-middle">Giá Vé</th>
                                 <th class="text-center align-middle">Khách Hàng</th>
+                                <th class="text-center align-middle">Mã Hóa Đơn</th>
                                 <th class="text-center align-middle">Trạng Thái</th>
                                 <th class="text-center align-middle">Thao Tác</th>
                             </tr>
@@ -28,50 +64,34 @@
                             <template v-for="(v, k) in list_chi_tiet_ve" :key="k">
                                 <tr>
                                     <th class="text-center align-middle">{{ k + 1 }}</th>
-                                    <td class="align-middle">
-                                        <div class="fw-bold">{{ v.ten_phim }}</div>
-                                        <div class="small text-muted">
-                                            {{ v.dinh_dang }} | {{ v.ngon_ngu }}
-                                        </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        <div>{{ formatDate(v.ngay_chieu) }}</div>
-                                        <div class="small text-muted">
-                                            {{ formatTime(v.gio_bat_dau) }} - {{ formatTime(v.gio_ket_thuc) }}
-                                        </div>
-                                        <div class="badge bg-info">{{ v.ten_phong }}</div>
-                                    </td>
+                                    <td class="text-center align-middle">{{ 'VE' + String(v.id).padStart(5, '0') }}</td>
                                     <td class="text-center align-middle">
                                         <span class="badge bg-secondary">
-                                            Ghế {{ v.ten_ghe }} | Hàng {{ v.hang }}
+                                            Ghế {{ v.id_ghe }}
                                         </span>
                                     </td>
                                     <td class="text-center align-middle">
                                         {{ formatCurrency(v.gia_tien) }}
                                     </td>
-                                    <td class="align-middle">
-                                        <template v-if="v.ten_khach_hang">
-                                            <div>{{ v.ten_khach_hang }}</div>
-                                            <div v-if="v.ma_hoa_don" class="small text-muted">
-                                                HD: {{ v.ma_hoa_don }}
-                                            </div>
+                                    <td class="text-center align-middle">
+                                        <template v-if="v.id_khach_hang">
+                                            <span class="badge bg-info">{{ v.ten_khach_hang }}</span>
                                         </template>
-                                        <div v-else class="text-muted">Chưa có người đặt</div>
+                                        <span v-else class="text-muted">Chưa có người đặt</span>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <template v-if="v.id_hoa_don">
+                                            <span class="badge bg-success">{{ v.ma_hoa_don }}</span>
+                                        </template>
+                                        <span v-else class="text-muted">Chưa có hóa đơn</span>
                                     </td>
                                     <td class="text-center align-middle">
                                         <span :class="getStatusClass(v.tinh_trang)">
                                             {{ getStatusText(v.tinh_trang) }}
                                         </span>
-                                        <div v-if="v.ghi_chu" class="small text-muted mt-1">
-                                            <i class="fas fa-info-circle"></i>
-                                            {{ v.ghi_chu }}
-                                        </div>
                                     </td>
                                     <td class="text-center align-middle">
                                         <div class="btn-group">
-                                            <button class="btn btn-sm btn-info" @click="printTicket(v)" title="In vé">
-                                                <i class="fas fa-print"></i>
-                                            </button>
                                             <button class="btn btn-sm btn-primary" @click="showUpdateModal(v)"
                                                 title="Cập nhật">
                                                 <i class="fas fa-edit"></i>
@@ -103,8 +123,8 @@
                             <label class="form-label">Trạng Thái</label>
                             <select v-model="chi_tiet_ve_update.tinh_trang" class="form-select">
                                 <option value="0">Ghế trống</option>
-                                <option value="1">Đã đặt</option>
-                                <option value="2">Đang giữ</option>
+                                <option value="2">Đã đặt</option>
+                                <option value="1">Đang giữ</option>
                                 <option value="3">Đã hủy</option>
                             </select>
                         </div>
@@ -157,12 +177,19 @@ export default {
             chi_tiet_ve_update: {},
             id_can_xoa: null,
             modalUpdate: null,
-            modalDelete: null
+            modalDelete: null,
+            selectedPhim: '',
+            selectedPhong: '',
+            selectedSuat: '',
+            listPhim: [],
+            listPhong: [],
+            listSuat: []
         }
     },
     mounted() {
         this.loadData();
         this.initModals();
+        this.loadPhim();
     },
     methods: {
         initModals() {
@@ -198,24 +225,33 @@ export default {
         getStatusText(status) {
             const texts = {
                 0: 'Ghế trống',
-                1: 'Đã đặt',
-                2: 'Đang giữ',
+                2: 'Đã đặt',
+                1: 'Đang giữ',
                 3: 'Đã hủy'
             };
             return texts[status] || 'Không xác định';
         },
 
         loadData() {
-            baseRequest.get("chi-tiet-ve/data")
+            if (!this.selectedSuat) {
+                this.list_chi_tiet_ve = [];
+                return;
+            }
+            
+            baseRequest.get(`chi-tiet-ve/lay-theo-suat/${this.selectedSuat}`)
                 .then((res) => {
                     if (res.data.status) {
                         this.list_chi_tiet_ve = res.data.data;
+                        console.log(this.list_chi_tiet_ve);
+                        
                     } else {
-                        toaster.error("Không thể tải dữ liệu!");
+                        toaster.error("Không thể tải dữ liệu vé!");
+                        this.list_chi_tiet_ve = [];
                     }
                 })
                 .catch((error) => {
                     toaster.error("Có lỗi xảy ra: " + error.message);
+                    this.list_chi_tiet_ve = [];
                 });
         },
 
@@ -261,10 +297,79 @@ export default {
                 });
         },
 
-        printTicket(ve) {
-            // Implement print functionality
-            window.print();
-        }
+
+        loadPhim() {
+            baseRequest.get("admin/quan-ly-phim/lay-du-lieu")
+                .then((res) => {
+                    if (res.data.quan_ly_phim) {
+                        this.listPhim = res.data.quan_ly_phim;
+                    } else {
+                        toaster.error("Không thể tải danh sách phim!");
+                    }
+                })
+                .catch((error) => {
+                    toaster.error("Có lỗi xảy ra: " + error.message);
+                });
+        },
+
+        loadPhong() {
+            if (!this.selectedPhim) {
+                this.listPhong = [];
+                return;
+            }
+
+            baseRequest.get(`suat-chieu/lay-phong/${this.selectedPhim}`)
+                .then((res) => {
+                    if (res.data.phong) {
+                        this.listPhong = res.data.phong;
+                    } else {
+                        toaster.error("Không thể tải danh sách phòng!");
+                    }
+                })
+                .catch((error) => {
+                    toaster.error("Có lỗi xảy ra: " + error.message);
+                });
+        },
+
+        loadSuat() {
+            if (!this.selectedPhim || !this.selectedPhong) {
+                this.listSuat = [];
+                return;
+            }
+
+            baseRequest.get(`suat-chieu/lay-suat/${this.selectedPhim}/${this.selectedPhong}`)
+                .then((res) => {
+                    if (res.data.suat) {
+                        this.listSuat = res.data.suat;
+                    } else {
+                        toaster.error("Không thể tải danh sách suất chiếu!");
+                    }
+                })
+                .catch((error) => {
+                    toaster.error("Có lỗi xảy ra: " + error.message);
+                });
+        },
+
+        onPhimChange() {
+            this.selectedPhong = '';
+            this.selectedSuat = '';
+            this.list_chi_tiet_ve = [];
+            this.loadPhong();
+        },
+
+        onPhongChange() {
+            this.selectedSuat = '';
+            this.list_chi_tiet_ve = [];
+            this.loadSuat();
+        },
+
+        onSuatChange() {
+            if (this.selectedSuat) {
+                this.loadData();
+            } else {
+                this.list_chi_tiet_ve = [];
+            }
+        },
     }
 }
 </script>
@@ -276,15 +381,15 @@ export default {
 }
 
 .badge {
-    padding: 0.5em 0.7em;
+    font-size: 0.875rem;
+    padding: 0.4em 0.8em;
 }
 
 .btn-group .btn {
     padding: 0.25rem 0.5rem;
-    margin: 0 0.1rem;
 }
 
-.btn-group .fas {
+.text-muted {
     font-size: 0.875rem;
 }
 
