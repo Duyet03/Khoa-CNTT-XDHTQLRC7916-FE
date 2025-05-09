@@ -44,7 +44,7 @@
                                                 <h6 class="card-title">{{ value.ten_phim }}</h6>
                                                 <hr>
                                                 <div class="release-info">
-                                                    <span>{{ value.ngay_chieu }} | {{ value.ten_the_loai }}</span>
+                                                    <span>{{ value.ngay_chieu }} | {{ value.the_loais ? value.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -105,16 +105,21 @@
                 </div>
             </div>
         </div>
+        <FloatingChatbot />
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import { createToaster } from "@meforma/vue-toaster";
+import FloatingChatbot from '../ChatBot/FloatingChatbot.vue';
 
 const toaster = createToaster({ position: "top-right" });
 
 export default {
+    components: {
+        FloatingChatbot
+    },
     data() {
         return {
             list_phim: [],
