@@ -105,16 +105,21 @@
                 </div>
             </div>
         </div>
+        <FloatingChatbot />
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import { createToaster } from "@meforma/vue-toaster";
+import FloatingChatbot from '../ChatBot/FloatingChatbot.vue';
 
 const toaster = createToaster({ position: "top-right" });
 
 export default {
+    components: {
+        FloatingChatbot
+    },
     data() {
         return {
             list_phim: [],
