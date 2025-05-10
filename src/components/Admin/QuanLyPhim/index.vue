@@ -334,7 +334,7 @@
                                 <div class="ms-3">
                                     <h6 class="mb-0 text-dark">Warning</h6>
                                     <div class="text-dark">
-                                        <p>Bạn có muốn xóa Phim này không?</p>
+                                        <p>Bạn có muốn xóa phim này không?</p>
                                         <p><b>Lưu ý:</b> Điều này không thể hoàn tác!</p>
                                     </div>
                                 </div>
