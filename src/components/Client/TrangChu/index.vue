@@ -44,7 +44,7 @@
                                                 <h6 class="card-title">{{ value.ten_phim }}</h6>
                                                 <hr>
                                                 <div class="release-info">
-                                                    <span>{{ value.ngay_chieu }} <br> {{ value.the_loais ? value.the_loais.map(tl => tl.ten_the_loai).slice(0, 2).join(', ') : "Đang cập nhật" }}</span>
+                                                    <span>{{ value.ngay_chieu }} | {{ value.ten_the_loai }}</span>
                                                 </div>
                                             </div>
                                         </div>
