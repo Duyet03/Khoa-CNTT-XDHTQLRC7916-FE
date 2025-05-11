@@ -69,16 +69,16 @@
                         <form @submit.prevent="saveItem">
                             <div class="mb-3">
                                 <label class="form-label">Tiêu Đề</label>
-                                <input type="text" class="form-control" v-model="formData.tieu_de" required>
+                                <input type="text" class="form-control" v-model="formData.tieu_de">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Nội Dung</label>
-                                <textarea class="form-control" v-model="formData.noi_dung" rows="5" required></textarea>
+                                <textarea class="form-control" v-model="formData.noi_dung" rows="5"></textarea>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Hình Ảnh</label>
                                 <input type="text" class="form-control" v-model="formData.hinh_anh"
-                                    placeholder="Nhập link hình ảnh" required>
+                                    placeholder="Nhập link hình ảnh">
                                 <div class="mt-2">
                                     <img v-if="formData.hinh_anh" :src="formData.hinh_anh" class="img-thumbnail"
                                         style="max-width: 200px;">
@@ -94,7 +94,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" @click="closeModal">Đóng</button>
-                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="submit" class="btn btn-primary">Cập Nhật</button>
                             </div>
                         </form>
                     </div>
@@ -197,7 +197,16 @@ export default {
                     this.layDuLieuGocDienAnh();
                 })
                 .catch((error) => {
-                    toaster.error("Lỗi khi lưu dữ liệu");
+                    if (error.response && error.response.data && error.response.data.errors) {
+                        const errors = error.response.data.errors;
+                        Object.values(errors).forEach(errorArray => {
+                            errorArray.forEach(errorMessage => {
+                                toaster.error(errorMessage);
+                            });
+                        });
+                    } else {
+                        toaster.error("Có lỗi xảy ra khi lưu dữ liệu");
+                    }
                 });
         },
         closeModal() {

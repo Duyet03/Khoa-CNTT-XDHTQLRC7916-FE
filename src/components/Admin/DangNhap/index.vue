@@ -44,10 +44,6 @@
                         <input v-model="login.password" type="password" id="password" class="form-control"
                             placeholder="Enter Password" />
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe">Remember Me</label>
-                    </div>
                     <button @click="dangNhap" type="button" class="btn btn-primary w-100">
                         <i class="bx bxs-lock-open"></i> Sign in
                     </button>

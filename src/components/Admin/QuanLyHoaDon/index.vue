@@ -10,15 +10,7 @@
                         </router-link>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control" v-model="searchTerm"
-                                    placeholder="Tìm kiếm theo mã hóa đơn, tên khách hàng...">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+    
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead class="table-light">

@@ -1,9 +1,6 @@
 <template>
   <div class="menu-wrapper">
-    <button class="menu-toggle" @click="toggleMenu">
-      <i class="bx" :class="isCollapsed ? 'bx-menu' : 'bx-x'"></i>
-    </button>
-    <div class="nav-container primary-menu" :class="{ 'menu-expanded': !isCollapsed }" :key="menuKey">
+    <div class="nav-container primary-menu">
       <nav class="navbar navbar-expand-xl w-100">
         <ul class="navbar-nav justify-content-start flex-grow-1 gap-1">
           <li class="nav-item">
@@ -15,20 +12,26 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/admin/doanh-thu">
-              <a class="nav-link" href="/admin/doanh-thu">
+            <router-link to="/admin/thong-ke">
+              <a class="nav-link" href="/admin/thong-ke">
                 <div class="parent-icon"><i class="fa-solid fa-money-bill"></i></div>
-                <div class="menu-title">Doanh thu</div>
+                <div class="menu-title">Thống Kê</div>
               </a>
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/admin/ghe-xem-phim">
-              <a class="nav-link" href="/admin/ghe-xem-phim">
-                <div class="parent-icon"><i class="fa-solid fa-couch"></i></div>
-                <div class="menu-title">Ghế</div>
-              </a>
-            </router-link>
+            <a href="javascript:;" class="nav-link" @click="toggleSubmenu('schedule', $event)">
+              <div class="parent-icon"><i class="fa-solid fa-calendar"></i></div>
+              <div class="menu-title">Lịch chiếu</div>
+              <i class="bx bx-chevron-right ms-auto"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:;" class="nav-link" @click="toggleSubmenu('movies', $event)">
+              <div class="parent-icon"><i class="fa-solid fa-film"></i></div>
+              <div class="menu-title">Quản lý phim</div>
+              <i class="bx bx-chevron-right ms-auto"></i>
+            </a>
           </li>
           <li class="nav-item">
             <a href="javascript:;" class="nav-link" @click="toggleSubmenu('system', $event)">
@@ -37,14 +40,14 @@
               <i class="bx bx-chevron-right ms-auto"></i>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/admin/khuyen-mai">
               <a class="nav-link" href="/admin/khuyen-mai">
                 <div class="parent-icon"><i class="fa-solid fa-gift"></i></div>
-                <div class="menu-title">Khuyến Mãi</div>
+                <div class="menu-title">Sự kiện</div>
               </a>
             </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="javascript:;" class="nav-link" @click="toggleSubmenu('user', $event)">
               <div class="parent-icon"><i class="fa-solid fa-user"></i></div>
@@ -53,45 +56,20 @@
             </a>
           </li>
           <li class="nav-item">
-            <router-link to="/admin/noi-dung">
-              <a class="nav-link" href="/admin/noi-dung">
-                <div class="parent-icon"><i class="fa-solid fa-book"></i></div>
-                <div class="menu-title">Nội Dung</div>
-              </a>
-            </router-link>
+            <a href="javascript:;" class="nav-link" @click="toggleSubmenu('content', $event)">
+              <div class="parent-icon"><i class="fa-solid fa-book"></i></div>
+              <div class="menu-title">Quản lý nội dung</div>
+              <i class="bx bx-chevron-right ms-auto"></i>
+            </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link to="/admin/phan-hoi">
               <a class="nav-link" href="/admin/phan-hoi">
                 <div class="parent-icon"><i class="fa-solid fa-comments"></i></div>
                 <div class="menu-title">Phản Hồi</div>
               </a>
             </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/admin/phim">
-              <a class="nav-link" href="/admin/phim">
-                <div class="parent-icon"><i class="fa-solid fa-video"></i></div>
-                <div class="menu-title">Phim</div>
-              </a>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/admin/phong">
-              <a class="nav-link" href="/admin/phong">
-                <div class="parent-icon"><i class="fa-solid fa-shop"></i></div>
-                <div class="menu-title">Phòng</div>
-              </a>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/admin/suat-chieu">
-              <a class="nav-link" href="/admin/suat-chieu">
-                <div class="parent-icon"><i class="fa-solid fa-film"></i></div>
-                <div class="menu-title">Suất Chiếu</div>
-              </a>
-            </router-link>
-          </li>
+          </li> -->
           <li class="nav-item">
             <router-link to="/admin/chi-tiet-ve">
               <a class="nav-link" href="/admin/chi-tiet-ve">
@@ -104,15 +82,7 @@
             <router-link to="/admin/hoa-don">
               <a class="nav-link" href="/admin/hoa-don">
                 <div class="parent-icon"><i class="fa-solid fa-barcode"></i></div>
-                <div class="menu-title">Bill</div>
-              </a>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/admin/the-loai">
-              <a class="nav-link" href="/admin/the-loai">
-                <div class="parent-icon"><i class="fa-solid fa-video"></i></div>
-                <div class="menu-title">Thể Loại</div>
+                <div class="menu-title">Hóa đơn</div>
               </a>
             </router-link>
           </li>
@@ -121,6 +91,36 @@
     </div>
 
     <!-- Submenu Panels -->
+    <div class="submenu-panel" v-show="activeSubmenu === 'schedule'" :style="panelStyle" @click="closeSubmenu">
+      <div class="submenu-content">
+        <router-link to="/admin/ghe-xem-phim" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Ghế</a>
+        </router-link>
+        <router-link to="/admin/phong" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Phòng</a>
+        </router-link>
+        <router-link to="/admin/suat-chieu" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Suất Chiếu</a>
+        </router-link>
+      </div>
+    </div>
+
+    <div class="submenu-panel" v-show="activeSubmenu === 'movies'" :style="panelStyle" @click="closeSubmenu">
+      <div class="submenu-content">
+        <router-link to="/admin/phim" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Phim</a>
+        </router-link>
+        <router-link to="/admin/the-loai" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Thể Loại</a>
+        </router-link>
+      </div>
+    </div>
+
     <div class="submenu-panel" v-show="activeSubmenu === 'system'" :style="panelStyle" @click="closeSubmenu">
       <div class="submenu-content">
         <router-link to="/admin/he-thong/chuc-vu" @click="handleSubmenuClick">
@@ -146,6 +146,27 @@
         </router-link>
       </div>
     </div>
+
+    <div class="submenu-panel" v-show="activeSubmenu === 'content'" :style="panelStyle" @click="closeSubmenu">
+      <div class="submenu-content">
+        <router-link to="/admin/noi-dung" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Nội Dung</a>
+        </router-link>
+        <router-link to="/admin/goc-dien-anh" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Góc Điện Ảnh</a>
+        </router-link>
+        <router-link to="/admin/khuyen-mai">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Sự kiện</a>
+        </router-link>
+        <router-link to="/admin/phan-hoi" @click="handleSubmenuClick">
+          <a class="submenu-item">
+            <i class="bx bx-right-arrow-alt"></i>Phản hồi</a>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -153,7 +174,6 @@
 export default {
   data() {
     return {
-      isCollapsed: true,
       activeSubmenu: null,
       panelStyle: {
         top: '0px',
@@ -169,19 +189,13 @@ export default {
     document.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
-    toggleMenu() {
-      this.isCollapsed = !this.isCollapsed;
-      if (!this.isCollapsed) {
-        this.menuKey++;
-      }
-    },
     toggleSubmenu(submenu, event) {
       event.stopPropagation();
       if (this.activeSubmenu === submenu) {
         this.activeSubmenu = null;
         return;
       }
-      
+
       const rect = event.currentTarget.getBoundingClientRect();
       this.panelStyle = {
         top: `${rect.bottom + 5}px`,
@@ -195,7 +209,7 @@ export default {
     handleClickOutside(event) {
       const isClickInsidePanel = event.target.closest('.submenu-panel');
       const isClickOnMenuButton = event.target.closest('.nav-link');
-      
+
       if (!isClickInsidePanel && !isClickOnMenuButton) {
         this.activeSubmenu = null;
       }
@@ -212,58 +226,21 @@ export default {
   position: relative;
 }
 
-.menu-toggle {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1001;
-  background: #ffffff;
-  color: #1a1a1a;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.menu-toggle:hover {
-  background: #f5f5f5;
-  transform: scale(1.1);
-}
-
-.menu-toggle i {
-  font-size: 1.5rem;
-}
-
 .nav-container {
   position: fixed;
   left: 0;
   width: 100%;
   background: #ffffff;
   color: #1a1a1a;
-  transition: all 1s ease;
+  transition: all 0.3s ease;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transform: translateX(-100%);
-  opacity: 0;
-  visibility: hidden;
   border-radius: 0;
-  overflow: hidden;
-}
-
-.menu-collapsed {
-  transform: translateX(-100%);
-}
-
-.menu-expanded {
-  transform: translateX(0);
+  overflow-x: auto;
+  overflow-y: hidden;
   opacity: 1;
   visibility: visible;
+  transform: none;
 }
 
 .mobile-topbar-header {
@@ -281,68 +258,33 @@ export default {
 
 .navbar {
   padding: 15px;
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
+  width: 100%;
 }
 
 .navbar-nav {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 10px;
   justify-content: flex-start;
+  width: max-content;
+  padding: 0 15px;
 }
 
 .nav-item {
-  margin: 0;
+  white-space: nowrap;
   animation: slideInRight 0.8s ease forwards;
-  opacity: 0;
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Add delay for each menu item with larger intervals */
-.menu-expanded .nav-item:nth-child(1) { animation-delay: 0.1s; }
-.menu-expanded .nav-item:nth-child(2) { animation-delay: 0.2s; }
-.menu-expanded .nav-item:nth-child(3) { animation-delay: 0.3s; }
-.menu-expanded .nav-item:nth-child(4) { animation-delay: 0.4s; }
-.menu-expanded .nav-item:nth-child(5) { animation-delay: 0.5s; }
-.menu-expanded .nav-item:nth-child(6) { animation-delay: 0.6s; }
-.menu-expanded .nav-item:nth-child(7) { animation-delay: 0.7s; }
-.menu-expanded .nav-item:nth-child(8) { animation-delay: 0.8s; }
-.menu-expanded .nav-item:nth-child(9) { animation-delay: 0.9s; }
-.menu-expanded .nav-item:nth-child(10) { animation-delay: 1.0s; }
-.menu-expanded .nav-item:nth-child(11) { animation-delay: 1.1s; }
-.menu-expanded .nav-item:nth-child(12) { animation-delay: 1.2s; }
-.menu-expanded .nav-item:nth-child(13) { animation-delay: 1.3s; }
-.menu-expanded .nav-item:nth-child(14) { animation-delay: 1.4s; }
-.menu-expanded .nav-item:nth-child(15) { animation-delay: 1.5s; }
-
-/* Reset animation when menu is collapsed */
-.menu-collapsed .nav-item {
-  animation: none;
   opacity: 0;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  padding: 5px 15px;
+  padding: 8px 15px;
   color: #1a1a1a;
   text-decoration: none;
   transition: all 0.3s ease;
   border-radius: 5px;
-  white-space: nowrap;
-  height: 30px;
+  height: 40px;
 }
 
 .nav-link:hover {
@@ -351,110 +293,141 @@ export default {
 }
 
 .parent-icon {
-  width: 20px;
+  width: 24px;
   text-align: center;
-  margin-right: 5px;
-  font-size: 1rem;
+  margin-right: 10px;
+  font-size: 1.1rem;
   color: #1a1a1a;
 }
 
 .menu-title {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
-.nav-item.dropdown {
-  position: relative;
-}
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .navbar {
+    padding: 10px;
+  }
 
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
+  .nav-link {
+    padding: 6px 12px;
+    height: 35px;
+  }
 
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  min-width: 200px;
-  z-index: 1001;
-  border-radius: 8px;
-  padding: 5px 0;
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
-}
-
-.dropdown-item {
-  color: #1e293b;
-  padding: 8px 20px;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.dropdown-item i {
-  color: #64748b;
-  transition: all 0.3s ease;
-}
-
-.dropdown-item:hover {
-  background: #4f46e5;
-  color: #ffffff;
-}
-
-.dropdown-item:hover i {
-  color: #ffffff;
+  .menu-title {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-container {
-    top: 60px;
-  }
-  
-  .menu-toggle {
-    top: 10px;
-    left: 10px;
-  }
-  
   .navbar-nav {
-    flex-direction: column;
+    padding: 0 10px;
+  }
+
+  .nav-link {
+    padding: 5px 10px;
+    height: 32px;
+  }
+
+  .parent-icon {
+    width: 20px;
+    margin-right: 8px;
+    font-size: 1rem;
+  }
+
+  .menu-title {
+    font-size: 0.85rem;
   }
 }
 
+/* Animation for nav items */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Add delay for each menu item */
+.nav-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.nav-item:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.nav-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.nav-item:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.nav-item:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.nav-item:nth-child(6) {
+  animation-delay: 0.35s;
+}
+
+.nav-item:nth-child(7) {
+  animation-delay: 0.4s;
+}
+
+.nav-item:nth-child(8) {
+  animation-delay: 0.45s;
+}
+
+.nav-item:nth-child(9) {
+  animation-delay: 0.5s;
+}
+
+.nav-item:nth-child(10) {
+  animation-delay: 0.55s;
+}
+
+.nav-item:nth-child(11) {
+  animation-delay: 0.6s;
+}
+
+.nav-item:nth-child(12) {
+  animation-delay: 0.65s;
+}
+
+.nav-item:nth-child(13) {
+  animation-delay: 0.7s;
+}
+
+.nav-item:nth-child(14) {
+  animation-delay: 0.75s;
+}
+
+.nav-item:nth-child(15) {
+  animation-delay: 0.8s;
+}
+
+/* Submenu styling */
 .submenu-panel {
   position: fixed;
   width: 250px;
   background: #ffffff;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   z-index: 1002;
   border-radius: 8px;
   overflow: hidden;
-  animation: slideDown 0.3s ease;
-  cursor: pointer;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .submenu-content {
   padding: 8px;
-  cursor: pointer;
 }
 
 .submenu-item {
@@ -468,18 +441,6 @@ export default {
   margin-bottom: 4px;
   font-weight: 500;
   font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.submenu-item:last-child {
-  margin-bottom: 0;
-}
-
-.submenu-item i {
-  margin-right: 10px;
-  color: #64748b;
-  transition: all 0.3s ease;
-  font-size: 1rem;
 }
 
 .submenu-item:hover {
@@ -488,18 +449,31 @@ export default {
   transform: translateX(3px);
 }
 
+.submenu-item i {
+  margin-right: 10px;
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
 .submenu-item:hover i {
   color: #ffffff;
 }
 
-@media (max-width: 768px) {
-  .submenu-panel {
-    position: fixed;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 300px;
-  }
+/* Custom scrollbar for nav-container */
+.nav-container::-webkit-scrollbar {
+  height: 6px;
 }
-</style> 
+
+.nav-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.nav-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.nav-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>
