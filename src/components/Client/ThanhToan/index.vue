@@ -14,14 +14,14 @@
                         <div class="card-body">
                             <div class="row product-grid">
                                 <div v-for="(v, k) in paginatedServices" :key="k" class="col-lg-3 col-md-6 d-flex">
-                                    <div class="card w-100">
+                                    <div class="card w-100" :class="{ 'booked-service': isDichVuDaDat(v.id) }">
                                         <div class="card-body" @click="datDichVu(v.id)">
                                             <img :src="v.hinh_anh" alt="" style="height: 240px;width: 100%;">
                                             <h5 class="text-center m-1">{{ v.ten_dich_vu }}</h5>
                                         </div>
                                         <div class="card-footer d-flex justify-content-between">
                                             <h5 class="mt-1">Giá: </h5>
-                                            <button class="btn btn-primary">{{ formatVND(v.gia_tien) }}</button>
+                                            <button class="btn btn-primary" @click="datDichVu(v.id)">{{ formatVND(v.gia_tien) }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -568,6 +568,10 @@ export default {
                 this.currentPageDichVuDaDat = page;
             }
         },
+
+        isDichVuDaDat(id_dich_vu) {
+            return this.ds_dich_vu_da_dat.some(dv => dv.id_dich_vu === id_dich_vu);
+        },
     }
 }
 </script>
@@ -639,5 +643,102 @@ export default {
     pointer-events: none;
     background-color: #fff;
     border-color: #dee2e6;
+}
+
+.text-primary {
+    color: #dc3545 !important;
+}
+
+.btn-primary {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-outline-primary:hover {
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.section-title {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.card-title {
+    color: #dc3545 !important;
+}
+
+.fw-bold {
+    color: #dc3545;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Payment method selection */
+.payment-method.selected {
+    border-color: #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.payment-method:hover {
+    border-color: #dc3545 !important;
+}
+
+/* Form focus states */
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Link colors */
+a {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #c82333;
+    text-decoration: underline;
+}
+
+.booked-service {
+    border: 2px solid #28a745 !important;
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.3) !important;
+    position: relative;
+}
+
+.booked-service::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #28a745;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 </style>

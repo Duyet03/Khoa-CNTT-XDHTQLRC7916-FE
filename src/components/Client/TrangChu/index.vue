@@ -42,7 +42,7 @@
                                         <div class="card-body d-flex flex-column">
                                             <div class="text-center flex-grow-1">
                                                 <h6 class="card-title">{{ value.ten_phim }}</h6>
-                                                <hr>
+                                            
                                                 <div class="release-info">
                                                     <span>{{ value.ngay_chieu }} | {{ value.the_loais ? value.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}</span>
                                                 </div>
@@ -204,14 +204,17 @@ export default {
     transition: transform 0.3s;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.1);
 }
 
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
 }
 
 .card-img {
     width: 100%;
+    height: 400%;
     object-fit: cover;
     border-radius: 15px 15px 0 0;
 }
@@ -235,12 +238,21 @@ export default {
     font-size: 0.85rem;
     color: #666;
     margin-top: auto;
+    border-top: 1px solid rgba(220, 53, 69, 0.1);
+    padding-top: 0.5rem;
 }
 
 /* Button Styles */
 .btn-primary {
     padding: 0.5rem 1.5rem;
     font-weight: bold;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-primary:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
 }
 
 /* Section Title */
@@ -258,7 +270,7 @@ export default {
     bottom: 0;
     width: 50px;
     height: 3px;
-    background-color: #1976d2;
+    background-color: #dc3545;
 }
 
 /* Responsive Design */
@@ -327,7 +339,7 @@ export default {
 }
 
 .page-link {
-    color: red;
+    color: #e75c68;
     border: 1px solid #dee2e6;
     padding: 0.5rem 0.75rem;
     margin: 0 3px;
@@ -337,13 +349,13 @@ export default {
 
 .page-link:hover {
     color: #fff;
-    background-color: #1976d2;
-    border-color: #1976d2;
+    background-color: #dc3545;
+    border-color: #dc3545;
 }
 
 .page-item.active .page-link {
-    background-color: #1976d2;
-    border-color: #1976d2;
+    background-color: #dc3545;
+    border-color: #dc3545;
 }
 
 .page-item.disabled .page-link {
@@ -351,5 +363,10 @@ export default {
     pointer-events: none;
     background-color: #fff;
     border-color: #dee2e6;
+}
+
+/* Card hover effect with red accent */
+.card:hover .card-title {
+    color: #dc3545;
 }
 </style>

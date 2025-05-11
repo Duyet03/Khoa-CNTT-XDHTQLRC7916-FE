@@ -61,13 +61,11 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Họ và tên</label>
-                                        <input type="text" class="form-control" :value="khach_hang.ten_khach_hang"
-                                            disabled />
+                                        <input type="text" class="form-control" v-model="cap_nhat.ten_khach_hang" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Ngày sinh</label>
-                                        <input type="date" class="form-control" :value="khach_hang.ngay_sinh"
-                                            disabled />
+                                        <input type="date" class="form-control" v-model="cap_nhat.ngay_sinh" />
                                     </div>
                                 </div>
 
@@ -75,14 +73,12 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
                                         <div class="d-flex align-items-center">
-                                            <input type="email" class="form-control" :value="khach_hang.email"
-                                                disabled />
+                                            <input type="email" class="form-control" v-model="cap_nhat.email" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" :value="khach_hang.so_dien_thoai"
-                                            disabled />
+                                        <input type="text" class="form-control" v-model="cap_nhat.so_dien_thoai" />
                                     </div>
                                 </div>
                                 <div class="text-center mt-5">
@@ -151,11 +147,11 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Họ và tên</label>
-                                    <input type="text" class="form-control" value="Trần Văn Duyệt" />
+                                    <input type="text" class="form-control" v-model="cap_nhat.ten_khach_hang" />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Ngày sinh</label>
-                                    <input type="date" class="form-control" value="2003-01-06" />
+                                    <input type="date" class="form-control" v-model="cap_nhat.ngay_sinh" />
                                 </div>
                             </div>
 
@@ -163,19 +159,19 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Email</label>
                                     <div class="d-flex align-items-center">
-                                        <input type="email" class="form-control" value="duyetvan03@gmail.com" />
+                                        <input type="email" class="form-control" v-model="cap_nhat.email" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Số điện thoại</label>
-                                    <input type="text" class="form-control" value="0332162386" />
+                                    <input type="text" class="form-control" v-model="cap_nhat.so_dien_thoai" />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cập nhật</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" @click="capNhatThongTin()">Cập nhật</button>
                     </div>
                 </div>
             </div>
@@ -211,6 +207,12 @@ export default {
     data() {
         return {
             khach_hang: {},
+            cap_nhat: {
+                ten_khach_hang: '',
+                ngay_sinh: '',
+                email: '',
+                so_dien_thoai: '',
+            },
             mat_khau: {
                 hien_tai: '',
                 moi: '',
@@ -235,7 +237,13 @@ export default {
                 })
                 .then((res) => {
                     this.khach_hang = res.data.data;
-
+                    // Cập nhật dữ liệu cho form cập nhật
+                    this.cap_nhat = {
+                        ten_khach_hang: this.khach_hang.ten_khach_hang,
+                        ngay_sinh: this.khach_hang.ngay_sinh,
+                        email: this.khach_hang.email,
+                        so_dien_thoai: this.khach_hang.so_dien_thoai,
+                    };
                 });
         },
         doiMatKhau() {
@@ -289,13 +297,119 @@ export default {
 
                 })
         },
+        capNhatThongTin() {
+            axios
+                .post('http://127.0.0.1:8000/api/khach-hang/cap-nhat-thong-tin', this.cap_nhat, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem("token_khachhang")
+                    }
+                })
+                .then((res) => {
+                    if (res.data.status) {
+                        toaster.success("Cập nhật thông tin thành công!");
+                        this.load(); // Reload thông tin sau khi cập nhật
+                        // Đóng modal
+                        const modal = document.getElementById('capnhat');
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        modalInstance.hide();
+                    } else {
+                        toaster.error(res.data.message || "Có lỗi xảy ra khi cập nhật thông tin!");
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 422) {
+                        const errors = error.response.data.errors;
+                        for (let field in errors) {
+                            if (errors.hasOwnProperty(field)) {
+                                errors[field].forEach(msg => toaster.error(msg));
+                            }
+                        }
+                    } else {
+                        toaster.error("Đã xảy ra lỗi, vui lòng thử lại.");
+                    }
+                });
+        },
     },
 }
 </script>
 
 <style scoped>
 .nav-tabs .nav-link.active {
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid #dc3545;
     font-weight: bold;
+    color: #dc3545;
+}
+
+.nav-tabs .nav-link {
+    color: #495057;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #dc3545;
+    border-bottom: 2px solid #dc3545;
+}
+
+.btn-primary {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-primary:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-warning {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.rounded-circle {
+    border: 3px solid #dc3545;
+    padding: 3px;
+}
+
+hr {
+    border-color: #dc3545;
+    opacity: 0.2;
+}
+
+a {
+    color: #dc3545;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #c82333;
+    text-decoration: underline;
 }
 </style>
