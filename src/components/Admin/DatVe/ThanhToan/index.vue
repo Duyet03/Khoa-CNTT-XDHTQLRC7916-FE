@@ -156,6 +156,26 @@
                                                     Thanh toán VNPay
                                                 </label>
                                             </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    v-model="phuong_thuc_thanh_toan" value="TIEN_MAT" id="cash">
+                                                <label class="form-check-label" for="cash">
+                                                    <i class="fas fa-money-bill-wave me-2"></i>
+                                                    Thanh toán tiền mặt
+                                                </label>
+                                            </div>
+                                            
+                                            <!-- Thông tin khách hàng khi thanh toán tiền mặt -->
+                                            <div v-if="phuong_thuc_thanh_toan === 'TIEN_MAT'" class="mt-3">
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Email khách hàng <span class="text-danger">*</span></label>
+                                                    <input type="email" class="form-control" id="email" 
+                                                        v-model="email_khach" placeholder="Nhập email khách hàng">
+                                                    <div class="form-text text-muted">
+                                                        Email sẽ được sử dụng để gửi thông tin vé và mã QR
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -249,6 +269,7 @@ export default {
             currentPageDichVuDaDat: 1,
             itemsPerPage: 4,
             itemsPerPageDichVuDaDat: 2,
+            email_khach: '',
         }
     },
 
@@ -323,17 +344,43 @@ export default {
 
         async thanhToan() {
             try {
+                // Kiểm tra thông tin khách hàng khi thanh toán tiền mặt
+                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                    if (!this.email_khach.trim()) {
+                        toaster.error("Vui lòng nhập email khách hàng!");
+                        return;
+                    }
+                    // Kiểm tra định dạng email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(this.email_khach)) {
+                        toaster.error("Email không hợp lệ!");
+                        return;
+                    }
+                }
+
                 // Hiển thị modal đang xử lý
                 this.processing = true;
                 const processingModal = new bootstrap.Modal(document.getElementById('processingModal'));
                 processingModal.show();
 
-                const res = await axios.post("http://127.0.0.1:8000/api/thanh-toan",
-                    {
-                        id_suat: this.id_suat,
-                        phuong_thuc_thanh_toan: this.phuong_thuc_thanh_toan,
-                        tong_tien: this.tong_tien + this.tong_tien_dich_vu
-                    },
+                const paymentData = {
+                    id_suat: this.id_suat,
+                    phuong_thuc_thanh_toan: this.phuong_thuc_thanh_toan,
+                    tong_tien: this.tong_tien + this.tong_tien_dich_vu
+                };
+
+                // Thêm email nếu thanh toán tiền mặt
+                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                    paymentData.email_khach = this.email_khach;
+                }
+
+                let endpoint = "http://127.0.0.1:8000/api/thanh-toan";
+                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                    endpoint = "http://127.0.0.1:8000/api/thanh-toan/tien-mat";
+                }
+
+                const res = await axios.post(endpoint,
+                    paymentData,
                     {
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("token_admin")
@@ -350,14 +397,16 @@ export default {
                         setTimeout(() => {
                             // Chuyển hướng đến trang thanh toán VNPay
                             window.open(res.data.payment_url, '_blank');
-
                         }, 1500);
                     } else {
                         processingModal.hide();
                         this.processing = false;
                         toaster.success("Thanh toán thành công!");
+                        if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                            toaster.success("Email xác nhận đã được gửi đến " + this.email_khach);
+                        }
                         // Chuyển đến trang chi tiết hóa đơn
-                        this.$router.push(`/admin/chi-tiet-hoa-don/${res.data.ma_hoa_don}`);
+                        this.$router.push(`/admin/chi-tiet-hoa-don/${res.data.data.ma_hoa_don}`);
                     }
                 } else {
                     processingModal.hide();
