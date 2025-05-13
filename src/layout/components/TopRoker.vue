@@ -94,7 +94,6 @@ body {
 /* Đảm bảo loại bỏ tất cả border trong topbar và đặt màu nền */
 .topbar {
 	background: #0d1a59 !important;
-	/* Màu xanh đậm */
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 	border: none !important;
 	padding: 0.5rem 1rem;
@@ -102,7 +101,7 @@ body {
 	top: 0;
 	left: 0;
 	right: 0;
-	z-index: 1030;
+	z-index: 1050 !important; /* Increased z-index */
 	height: 60px;
 }
 
@@ -111,6 +110,8 @@ body {
 	border: none !important;
 	background: transparent !important;
 	/* Đảm bảo navbar không ghi đè màu nền */
+	position: relative;
+	z-index: 1051 !important;
 }
 
 /* Loại bỏ border và padding không cần thiết cho logo */
@@ -168,6 +169,8 @@ body {
 
 /* Loại bỏ border và divider của user-box */
 .user-box {
+	position: relative;
+	z-index: 1051 !important; /* Higher than topbar */
 	margin-left: 10px;
 	border: none !important;
 	background: transparent !important;
@@ -287,5 +290,33 @@ body {
 .msg-footer:hover {
 	background-color: #6e45e2;
 	color: #fff;
+}
+
+/* Add styles for dropdown menu */
+.dropdown-menu {
+	position: absolute !important;
+	z-index: 1052 !important; /* Highest z-index */
+	min-width: 200px;
+	background: #ffffff;
+	border: none;
+	border-radius: 8px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	margin-top: 5px;
+}
+
+.dropdown-menu-end {
+	right: 0 !important;
+	left: auto !important;
+}
+
+.dropdown-item {
+	padding: 8px 16px;
+	color: #333;
+	transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+	background-color: #f8f9fa;
+	color: #0d1a59;
 }
 </style>

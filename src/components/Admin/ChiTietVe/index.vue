@@ -188,15 +188,9 @@ export default {
     },
     mounted() {
         this.loadData();
-        this.initModals();
         this.loadPhim();
     },
     methods: {
-        initModals() {
-            this.modalUpdate = new bootstrap.Modal(document.getElementById('updateModal'));
-            this.modalDelete = new bootstrap.Modal(document.getElementById('deleteModal'));
-        },
-
         formatDate(date) {
             return new Date(date).toLocaleDateString('vi-VN');
         },
@@ -242,14 +236,13 @@ export default {
                 .then((res) => {
                     if (res.data.status) {
                         this.list_chi_tiet_ve = res.data.data;
-                        console.log(this.list_chi_tiet_ve);
-                        
                     } else {
                         toaster.error("Không thể tải dữ liệu vé!");
                         this.list_chi_tiet_ve = [];
                     }
                 })
                 .catch((error) => {
+                    console.error("Lỗi khi tải dữ liệu vé:", error);
                     toaster.error("Có lỗi xảy ra: " + error.message);
                     this.list_chi_tiet_ve = [];
                 });
@@ -296,7 +289,6 @@ export default {
                     toaster.error("Có lỗi xảy ra: " + error.message);
                 });
         },
-
 
         loadPhim() {
             baseRequest.get("admin/quan-ly-phim/lay-du-lieu")

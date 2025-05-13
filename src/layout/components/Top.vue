@@ -4,20 +4,16 @@
       <nav class="navbar navbar-expand-xl w-100">
         <ul class="navbar-nav justify-content-start flex-grow-1 gap-1">
           <li class="nav-item">
-            <router-link to="/admin/dich-vu">
               <a class="nav-link" href="/admin/dich-vu">
                 <div class="parent-icon"><i class="fa-brands fa-servicestack"></i></div>
                 <div class="menu-title">Dịch Vụ</div>
               </a>
-            </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/admin/thong-ke">
               <a class="nav-link" href="/admin/thong-ke">
                 <div class="parent-icon"><i class="fa-solid fa-money-bill"></i></div>
                 <div class="menu-title">Thống Kê</div>
               </a>
-            </router-link>
           </li>
           <li class="nav-item">
             <a href="javascript:;" class="nav-link" @click="toggleSubmenu('schedule', $event)">
@@ -71,20 +67,16 @@
             </router-link>
           </li> -->
           <li class="nav-item">
-            <router-link to="/admin/chi-tiet-ve">
               <a class="nav-link" href="/admin/chi-tiet-ve">
                 <div class="parent-icon"><i class="fa-solid fa-ticket"></i></div>
                 <div class="menu-title">Chi tiết vé</div>
               </a>
-            </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/admin/hoa-don">
               <a class="nav-link" href="/admin/hoa-don">
                 <div class="parent-icon"><i class="fa-solid fa-barcode"></i></div>
                 <div class="menu-title">Hóa đơn</div>
               </a>
-            </router-link>
           </li>
         </ul>
       </nav>
@@ -94,15 +86,15 @@
     <div class="submenu-panel" v-show="activeSubmenu === 'schedule'" :style="panelStyle" @click="closeSubmenu">
       <div class="submenu-content">
         <router-link to="/admin/ghe-xem-phim" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/ghe-xem-phim" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Ghế</a>
         </router-link>
         <router-link to="/admin/phong" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/phong" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Phòng</a>
         </router-link>
         <router-link to="/admin/suat-chieu" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/suat-chieu" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Suất Chiếu</a>
         </router-link>
       </div>
@@ -111,11 +103,11 @@
     <div class="submenu-panel" v-show="activeSubmenu === 'movies'" :style="panelStyle" @click="closeSubmenu">
       <div class="submenu-content">
         <router-link to="/admin/phim" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/phim" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Phim</a>
         </router-link>
         <router-link to="/admin/the-loai" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/the-loai" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Thể Loại</a>
         </router-link>
       </div>
@@ -124,11 +116,11 @@
     <div class="submenu-panel" v-show="activeSubmenu === 'system'" :style="panelStyle" @click="closeSubmenu">
       <div class="submenu-content">
         <router-link to="/admin/he-thong/chuc-vu" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/he-thong/chuc-vu" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Chức vụ</a>
         </router-link>
         <router-link to="/admin/phan-quyen" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/phan-quyen" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Phân Quyền</a>
         </router-link>
       </div>
@@ -137,11 +129,11 @@
     <div class="submenu-panel" v-show="activeSubmenu === 'user'" :style="panelStyle" @click="closeSubmenu">
       <div class="submenu-content">
         <router-link to="/admin/nguoi-dung/khach-hang" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/nguoi-dung/khach-hang" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Khách hàng</a>
         </router-link>
         <router-link to="/admin/nguoi-dung/nhan-vien" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/nguoi-dung/nhan-vien" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Nhân viên</a>
         </router-link>
       </div>
@@ -150,19 +142,19 @@
     <div class="submenu-panel" v-show="activeSubmenu === 'content'" :style="panelStyle" @click="closeSubmenu">
       <div class="submenu-content">
         <router-link to="/admin/noi-dung" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/noi-dung" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Nội Dung</a>
         </router-link>
         <router-link to="/admin/goc-dien-anh" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/goc-dien-anh" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Góc Điện Ảnh</a>
         </router-link>
         <router-link to="/admin/khuyen-mai">
-          <a class="submenu-item">
+          <a href="/admin/khuyen-mai" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Sự kiện</a>
         </router-link>
         <router-link to="/admin/phan-hoi" @click="handleSubmenuClick">
-          <a class="submenu-item">
+          <a href="/admin/phan-hoi" class="submenu-item">
             <i class="bx bx-right-arrow-alt"></i>Phản hồi</a>
         </router-link>
       </div>
@@ -230,10 +222,11 @@ export default {
   position: fixed;
   left: 0;
   width: 100%;
+  top: 60px;
   background: #ffffff;
   color: #1a1a1a;
   transition: all 0.3s ease;
-  z-index: 1000;
+  z-index: 800;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 0;
   overflow-x: auto;
@@ -421,9 +414,10 @@ export default {
   width: 250px;
   background: #ffffff;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  z-index: 1002;
+  z-index: 801;
   border-radius: 8px;
   overflow: hidden;
+  margin-top: 60px;
 }
 
 .submenu-content {
