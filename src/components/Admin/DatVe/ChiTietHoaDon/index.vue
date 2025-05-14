@@ -221,16 +221,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Nút điều hướng -->
-                <div class="text-center">
-                    <router-link to="/" class="btn btn-outline-primary me-2">
-                        <i class="fas fa-home me-1"></i> Trang chủ
-                    </router-link>
-                    <router-link to="/lich-su-dat-ve" class="btn btn-primary">
-                        <i class="fas fa-history me-1"></i> Lịch sử đặt vé
-                    </router-link>
-                </div>
             </div>
         </div>
     </div>

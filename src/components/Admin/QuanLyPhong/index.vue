@@ -35,31 +35,13 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
+                                        data-bs-dismiss="modal">Đóng</button>
                                     <button v-on:click="themMoiPhong()" type="button" class="btn btn-primary">Thêm
                                         Mới</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Chi tiet suat chieu Modal -->
-    <div class="modal fade" id="chitietsuatchieuModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -79,7 +61,6 @@
                                     <th class="text-center">Tên Phòng</th>
                                     <th class="text-center">Tình Trạng</th>
                                     <th class="text-center">Action</th>
-                                    <th class="text-center">Chi tiết suất chiếu</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,11 +78,6 @@
                                             data-bs-target="#updateModal" class="btn btn-info me-1">Cập Nhật</button>
                                         <button data-bs-toggle="modal" data-bs-target="#deleteModal"
                                             v-on:click="id_can_xoa = v.id" class="btn btn-danger">Xoá Bỏ</button>
-                                    </td>
-                                    <td class="text-center text-nowrap align-middle">
-                                        <button data-bs-toggle="modal" data-bs-target="#chitietsuatchieuModal"
-                                            type="button" class="btn btn-danger">Chi tiết suất chiếu {{ v.ten_phong
-                                            }}</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -123,7 +99,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
+                                        data-bs-dismiss="modal">Đóng</button>
                                     <button v-on:click="xoaPhong()" type="button" class="btn btn-danger"
                                         data-bs-dismiss="modal">Xác Nhận Xoá</button>
                                 </div>
@@ -156,7 +132,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
+                                        data-bs-dismiss="modal">Đóng</button>
                                     <button v-on:click="capNhatPhong()" type="button" class="btn btn-info"
                                         data-bs-dismiss="modal">Xác Nhận Cập
                                         Nhật</button>

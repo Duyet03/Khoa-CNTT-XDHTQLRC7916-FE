@@ -12,11 +12,11 @@
                     </div>
                     <div class="mb-2">
                         <label>Ngày Bắt Đầu</label>
-                        <input v-model="su_kien_create.ngay_bat_dau" type="datetime-local" class="form-control mt-2">
+                        <input v-model="su_kien_create.ngay_bat_dau" type="date" class="form-control mt-2">
                     </div>
                     <div class="mb-2">
                         <label>Ngày Kết Thúc</label>
-                        <input v-model="su_kien_create.ngay_ket_thuc" type="datetime-local" class="form-control mt-2">
+                        <input v-model="su_kien_create.ngay_ket_thuc" type="date" class="form-control mt-2">
                     </div>
                     <div class="mb-2">
                         <label>Mô Tả</label>
@@ -126,11 +126,11 @@
                                         </div>
                                         <div class="mb-2">
                                             <label>Ngày Bắt Đầu</label>
-                                            <input v-model="su_kien_update.ngay_bat_dau" type="datetime-local" class="form-control mt-2">
+                                            <input v-model="su_kien_update.ngay_bat_dau" type="date" class="form-control mt-2">
                                         </div>
                                         <div class="mb-2">
                                             <label>Ngày Kết Thúc</label>
-                                            <input v-model="su_kien_update.ngay_ket_thuc" type="datetime-local" class="form-control mt-2">
+                                            <input v-model="su_kien_update.ngay_ket_thuc" type="date" class="form-control mt-2">
                                         </div>
                                         <div class="mb-2">
                                             <label>Mô Tả</label>

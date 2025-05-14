@@ -3,9 +3,9 @@
         <div class="card">
             <div class="card-body d-flex justify-content-between">
                 <h3>Quản Lý Vé</h3>
-                <button data-bs-toggle="modal" data-bs-target="#themmoi" class="btn btn-primary">
+                <!-- <button data-bs-toggle="modal" data-bs-target="#themmoi" class="btn btn-primary">
                     <i class="fa-solid fa-plus me-2"></i>Tạo Vé
-                </button>
+                </button> -->
             </div>
         </div>
         
@@ -57,7 +57,7 @@
                                 <th class="text-center align-middle">Khách Hàng</th>
                                 <th class="text-center align-middle">Mã Hóa Đơn</th>
                                 <th class="text-center align-middle">Trạng Thái</th>
-                                <th class="text-center align-middle">Thao Tác</th>
+                                <!-- //<th class="text-center align-middle">Thao Tác</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -90,7 +90,7 @@
                                             {{ getStatusText(v.tinh_trang) }}
                                         </span>
                                     </td>
-                                    <td class="text-center align-middle">
+                                    <!-- <td class="text-center align-middle">
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-primary" @click="showUpdateModal(v)"
                                                 title="Cập nhật">
@@ -101,7 +101,7 @@
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </template>
                         </tbody>
@@ -111,7 +111,7 @@
         </div>
 
         <!-- Modal Cập nhật -->
-        <div class="modal fade" id="updateModal" tabindex="-1">
+        <!-- <div class="modal fade" id="updateModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -139,10 +139,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Modal Xóa -->
-        <div class="modal fade" id="deleteModal" tabindex="-1">
+        <!-- <div class="modal fade" id="deleteModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -160,7 +160,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -188,15 +188,9 @@ export default {
     },
     mounted() {
         this.loadData();
-        this.initModals();
         this.loadPhim();
     },
     methods: {
-        initModals() {
-            this.modalUpdate = new bootstrap.Modal(document.getElementById('updateModal'));
-            this.modalDelete = new bootstrap.Modal(document.getElementById('deleteModal'));
-        },
-
         formatDate(date) {
             return new Date(date).toLocaleDateString('vi-VN');
         },
@@ -242,14 +236,13 @@ export default {
                 .then((res) => {
                     if (res.data.status) {
                         this.list_chi_tiet_ve = res.data.data;
-                        console.log(this.list_chi_tiet_ve);
-                        
                     } else {
                         toaster.error("Không thể tải dữ liệu vé!");
                         this.list_chi_tiet_ve = [];
                     }
                 })
                 .catch((error) => {
+                    console.error("Lỗi khi tải dữ liệu vé:", error);
                     toaster.error("Có lỗi xảy ra: " + error.message);
                     this.list_chi_tiet_ve = [];
                 });
@@ -296,7 +289,6 @@ export default {
                     toaster.error("Có lỗi xảy ra: " + error.message);
                 });
         },
-
 
         loadPhim() {
             baseRequest.get("admin/quan-ly-phim/lay-du-lieu")

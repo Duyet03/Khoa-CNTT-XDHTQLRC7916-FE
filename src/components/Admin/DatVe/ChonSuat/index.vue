@@ -6,9 +6,8 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="mb-3 mb-md-0">
-                                <h4 class="card-title text-primary mb-3">Chọn ngày xem phim <span class="text-warning"><b>{{ phim_chi_tiet.ten_phim }}</b></span></h4>
                                 <div class="d-flex flex-wrap" v-if="danhSachNgayChieu.length > 0">
-                                    <button v-for="(ngay, index) in danhSachNgayChieu" :key="index"
+                                    <button v-for="(ngay, index) in danhSachNgayChieu.slice(0, 3)" :key="index"
                                         @click="chonNgay(ngay)"
                                         :class="['btn me-2 mb-2', ngayDaChon === ngay ? 'btn-primary' : 'btn-outline-primary']">
                                         {{ formatDate(ngay) }}
@@ -20,7 +19,7 @@
                             </div>
                             <div class="d-flex align-items-center">
                                 <input v-model="ngayTuyChon" class="form-control" type="date" :min="layNgayHienTai()">
-                                <button @click="layDuLieuSuatChieuTheoNgay()" class="btn btn-primary ms-2">
+                                <button @click="layDuLieuSuatChieuTheoNgay()" class="btn btn-primary ms-2 text-nowrap">
                                     <i class="fa-solid fa-magnifying-glass me-1"></i>Tìm suất
                                 </button>
                             </div>
