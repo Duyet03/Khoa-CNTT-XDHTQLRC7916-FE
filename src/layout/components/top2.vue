@@ -58,6 +58,7 @@ export default {
       },
       menuKey: 0,
       menuItems: [
+        { to: '/admin/dich-vu', icon: 'fa-brands fa-servicestack', title: 'Dịch Vụ' },
         { to: '/admin/thong-ke', icon: 'fa-solid fa-money-bill', title: 'Thống Kê' },
         { to: '/admin/ghe-xem-phim', icon: 'fa-solid fa-couch', title: 'Ghế' },
         { submenu: 'system', icon: 'fa-brands fa-ubuntu', title: 'Hệ thống' },
@@ -94,7 +95,7 @@ export default {
         this.activeSubmenu = null;
         return;
       }
-      
+
       const rect = event.currentTarget.getBoundingClientRect();
       this.panelStyle = {
         top: `${rect.bottom + 5}px`,
@@ -108,7 +109,7 @@ export default {
     handleClickOutside(event) {
       const isClickInsidePanel = event.target.closest('.submenu-panel');
       const isClickOnMenuButton = event.target.closest('.nav-link');
-      
+
       if (!isClickInsidePanel && !isClickOnMenuButton) {
         this.activeSubmenu = null;
       }
@@ -227,6 +228,7 @@ export default {
     opacity: 0;
     transform: translateY(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -234,21 +236,65 @@ export default {
 }
 
 /* Add delay for each menu item with larger intervals */
-.menu-expanded .nav-item:nth-child(1) { animation-delay: 0.1s; }
-.menu-expanded .nav-item:nth-child(2) { animation-delay: 0.2s; }
-.menu-expanded .nav-item:nth-child(3) { animation-delay: 0.3s; }
-.menu-expanded .nav-item:nth-child(4) { animation-delay: 0.4s; }
-.menu-expanded .nav-item:nth-child(5) { animation-delay: 0.5s; }
-.menu-expanded .nav-item:nth-child(6) { animation-delay: 0.6s; }
-.menu-expanded .nav-item:nth-child(7) { animation-delay: 0.7s; }
-.menu-expanded .nav-item:nth-child(8) { animation-delay: 0.8s; }
-.menu-expanded .nav-item:nth-child(9) { animation-delay: 0.9s; }
-.menu-expanded .nav-item:nth-child(10) { animation-delay: 1.0s; }
-.menu-expanded .nav-item:nth-child(11) { animation-delay: 1.1s; }
-.menu-expanded .nav-item:nth-child(12) { animation-delay: 1.2s; }
-.menu-expanded .nav-item:nth-child(13) { animation-delay: 1.3s; }
-.menu-expanded .nav-item:nth-child(14) { animation-delay: 1.4s; }
-.menu-expanded .nav-item:nth-child(15) { animation-delay: 1.5s; }
+.menu-expanded .nav-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.menu-expanded .nav-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.menu-expanded .nav-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.menu-expanded .nav-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.menu-expanded .nav-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.menu-expanded .nav-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+.menu-expanded .nav-item:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+.menu-expanded .nav-item:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+.menu-expanded .nav-item:nth-child(9) {
+  animation-delay: 0.9s;
+}
+
+.menu-expanded .nav-item:nth-child(10) {
+  animation-delay: 1.0s;
+}
+
+.menu-expanded .nav-item:nth-child(11) {
+  animation-delay: 1.1s;
+}
+
+.menu-expanded .nav-item:nth-child(12) {
+  animation-delay: 1.2s;
+}
+
+.menu-expanded .nav-item:nth-child(13) {
+  animation-delay: 1.3s;
+}
+
+.menu-expanded .nav-item:nth-child(14) {
+  animation-delay: 1.4s;
+}
+
+.menu-expanded .nav-item:nth-child(15) {
+  animation-delay: 1.5s;
+}
 
 /* Reset animation when menu is collapsed */
 .menu-collapsed .nav-item {
@@ -345,16 +391,16 @@ export default {
     width: 100%;
     max-width: 300px;
   }
-  
+
   .menu-toggle {
     top: 10px;
     left: 10px;
   }
-  
+
   .navbar-nav {
     flex-direction: column;
   }
-  
+
   .nav-link {
     height: 45px;
   }
@@ -376,6 +422,7 @@ export default {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -430,4 +477,4 @@ export default {
     max-width: 300px;
   }
 }
-</style> 
+</style>

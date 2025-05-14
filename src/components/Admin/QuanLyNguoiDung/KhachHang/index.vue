@@ -24,7 +24,6 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-
                                         <div class="col-lg-6">
                                             <div class="mb-2 mt-2">
                                                 <label>Tên khách hàng</label>
@@ -41,27 +40,40 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-2 mt-2">
-                                                <label>Password</label>
+                                                <label>Số điện thoại</label>
+                                                <input v-model="khach_hang_create.so_dien_thoai" type="text"
+                                                    class="form-control mt-2" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-2 mt-2">
+                                                <label>Ngày sinh</label>
+                                                <input v-model="khach_hang_create.ngay_sinh" type="date"
+                                                    class="form-control mt-2" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-2 mt-2">
+                                                <label>Mật khẩu</label>
                                                 <input v-model="khach_hang_create.password" type="password"
                                                     class="form-control mt-2" />
                                             </div>
                                         </div>
-
                                         <div class="col-lg-6">
                                             <div class="mb-2 mt-2">
-                                                <label>Is block</label>
-                                                <input v-model="khach_hang_create.is_block" type="text"
-                                                    class="form-control mt-2" />
+                                                <label>Tình trạng</label>
+                                                <select v-model="khach_hang_create.is_block" class="form-control mt-2">
+                                                    <option :value="0">Hoạt động</option>
+                                                    <option :value="1">Khóa</option>
+                                                </select>
                                             </div>
                                         </div>
-
-
                                         <div class="col-lg-12">
                                             <div class="mb-2 mt-2">
-                                                <label>Tình Trạng</label>
+                                                <label>Tài khoản</label>
                                                 <select v-model="khach_hang_create.tinh_trang" class="form-control">
-                                                    <option value="1">Hoạt Động</option>
-                                                    <option value="0">Tạm Dừng</option>
+                                                    <option value="1">Đã kích hoạt</option>
+                                                    <option value="0">Chưa kích hoạt</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -69,7 +81,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Close</button>
+                                        Đóng</button>
                                     <button v-on:click="themKhachHang()" type="button" data-bs-dismiss="modal"
                                         class="btn btn-primary">
                                         Thêm Mới
@@ -96,8 +108,11 @@
                                     <th>#</th>
                                     <th>Họ và tên</th>
                                     <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Ngày sinh</th>
+                                    <th>Tài khoản</th>
                                     <th>Tình trạng</th>
-                                    <th>Action</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -106,11 +121,17 @@
                                         <td>{{ k + 1 }}</td>
                                         <td>{{ v.ten_khach_hang }}</td>
                                         <td>{{ v.email }}</td>
+                                        <td>{{ v.so_dien_thoai || 'N/A' }}</td>
+                                        <td>{{ v.ngay_sinh || 'N/A' }}</td>
                                         <td class="text-center">
-                                            <button v-on:click="doiTrangThai(v)" v-if="v.tinh_trang == 1"
-                                                class="btn btn-success">Hoạt động</button>
-                                            <button v-on:click="doiTrangThai(v)" v-else class="btn btn-primary">Tạm
-                                                dừng</button>
+                                            <button v-on:click="doiTrangThai(v)" v-if="v.is_active == 1"
+                                                class="btn btn-success">Đã kích hoạt</button>
+                                            <button v-on:click="doiTrangThai(v)" v-else class="btn btn-primary">Chưa
+                                                kích hoạt</button>
+                                        </td>
+                                        <td class="text-center">
+                                            <span v-if="v.is_block == 1" class="badge bg-danger">Khóa</span>
+                                            <span v-else class="badge bg-success">Hoạt động</span>
                                         </td>
                                         <td class="text-center">
                                             <button v-on:click="Object.assign(khach_hang_update, v)"
@@ -138,7 +159,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-
                         <div class="col-lg-6">
                             <div class="mb-2 mt-2">
                                 <label>Tên khách hàng</label>
@@ -154,33 +174,46 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="mb-2 mt-2">
-                                <label>Password</label>
+                                <label>Số điện thoại</label>
+                                <input v-model="khach_hang_update.so_dien_thoai" type="text"
+                                    class="form-control mt-2" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-2 mt-2">
+                                <label>Ngày sinh</label>
+                                <input v-model="khach_hang_update.ngay_sinh" type="date" class="form-control mt-2" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-2 mt-2">
+                                <label>Mật khẩu</label>
                                 <input v-model="khach_hang_update.password" type="password" class="form-control mt-2" />
                             </div>
                         </div>
-
                         <div class="col-lg-6">
                             <div class="mb-2 mt-2">
-                                <label>Is block</label>
-                                <input v-model="khach_hang_update.is_block" type="text" class="form-control mt-2" />
+                                <label>Tình trạng</label>
+                                <select v-model="khach_hang_update.is_block" class="form-control mt-2">
+                                    <option :value="0">Hoạt động</option>
+                                    <option :value="1">Khóa</option>
+                                </select>
                             </div>
                         </div>
-
                         <div class="col-lg-12">
                             <div class="mb-2 mt-2">
-                                <label>Tình Trạng</label>
+                                <label>Tài khoản</label>
                                 <select v-model="khach_hang_update.tinh_trang" class="form-control">
-                                    <option value="1">Hoạt Động</option>
-                                    <option value="0">Tạm Dừng</option>
+                                    <option value="1">Đã kích hoạt</option>
+                                    <option value="0">Chưa kích hoạt</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button v-on:click="capNhatKhachHang()" data-bs-dismiss="modal"
-                        class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button v-on:click="capNhatKhachHang()" data-bs-dismiss="modal" class="btn btn-primary">Lưu</button>
                 </div>
             </div>
         </div>
@@ -199,8 +232,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button v-on:click="xoaKhachHang()" type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button v-on:click="xoaKhachHang()" type="button" class="btn btn-primary">Xoá</button>
                 </div>
             </div>
         </div>
@@ -215,8 +248,24 @@ export default {
     data() {
         return {
             danh_sach_khach_hang: [],
-            khach_hang_create: {},
-            khach_hang_update: {},
+            khach_hang_create: {
+                ten_khach_hang: '',
+                email: '',
+                so_dien_thoai: '',
+                ngay_sinh: '',
+                password: '',
+                is_block: 0,
+                tinh_trang: 1,
+            },
+            khach_hang_update: {
+                ten_khach_hang: '',
+                email: '',
+                so_dien_thoai: '',
+                ngay_sinh: '',
+                password: '',
+                is_block: 0,
+                tinh_trang: 1,
+            },
             id_can_xoa: '',
         };
     },
