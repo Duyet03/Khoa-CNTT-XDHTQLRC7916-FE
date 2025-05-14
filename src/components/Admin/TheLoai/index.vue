@@ -3,7 +3,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="pt-3"><b>Thêm Mới Thể Loại</b></h5>
+                    <h5 class="pt-3"><b>Cập Nhật Thể Loại</b></h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -34,17 +34,6 @@
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
-                                <tr>
-                                    <th colspan="100%">
-                                        <div class="input-group mb-3">
-                                            <input v-model="key_search.abc" type="text" class="form-control"
-                                                placeholder="Nhập thông tin cần tìm">
-                                            <button v-on:click="searchTheLoai()" class="btn btn-primary">
-                                                <i class="fa-solid fa-magnifying-glass"></i>
-                                            </button>
-                                        </div>
-                                    </th>
-                                </tr>
                                 <tr>
                                     <th class="text-center align-middle text-nowrap">
                                         #
@@ -94,15 +83,15 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Mô tả</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         {{ mo_ta.mo_ta }}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary">Cập Nhật</button>
                     </div>
                 </div>
             </div>
@@ -134,7 +123,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
                             v-on:click="deleteTheLoai()">Xóa</button>
                     </div>
@@ -145,14 +134,14 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm Mới Phim</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm Mới Thể Loại</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="row">
                                 <div class="col-12">
-                                    <label class="form-label">Tên Phim</label>
+                                    <label class="form-label">Tên Thể Loại</label>
                                     <input v-model="edit_the_loai.ten_the_loai" type="text" class="form-control mb-3">
                                     <label class="form-label">Mô tả</label>
                                     <input v-model="edit_the_loai.mo_ta" type="text" class="form-control mb-3">
@@ -165,7 +154,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                         <button v-on:click="updateTheLoai()" data-bs-dismiss="modal" type="button"
-                            class="btn btn-primary">Cap Nhat</button>
+                            class="btn btn-primary">Cập Nhật</button>
                     </div>
                 </div>
             </div>
@@ -183,7 +172,6 @@ export default {
     data() {
         return {
             list_the_loai: [],
-            key_search: { abc: '' },
             create_the_loai: {},
             delete_the_loai: {},
             edit_the_loai: {},
@@ -197,13 +185,6 @@ export default {
         loadDataTheLoai() {
             baseRequest
                 .get('admin/the-loai-phim/lay-du-lieu')
-                .then((res) => {
-                    this.list_the_loai = res.data.the_loai;
-                });
-        },
-        searchTheLoai() {
-            baseRequest
-                .post('admin/the-loai-phim/search', this.key_search)
                 .then((res) => {
                     this.list_the_loai = res.data.the_loai;
                 });

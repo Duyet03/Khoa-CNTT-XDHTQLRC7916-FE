@@ -100,13 +100,17 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <label class="form-label">Thể Loại Phim</label>
-                                                <select v-model="create_quan_ly_phim.id_the_loai"
-                                                    class="form-control">
-                                                    <option value="" disabled selected>Chọn thể loại</option>
-                                                    <template v-for="theLoai in list_the_loai" :key="theLoai.id">
-                                                        <option :value="theLoai.id">{{ theLoai.ten_the_loai }}</option>
-                                                    </template>
-                                                </select>
+                                                <div class="form-control mt-2" style="max-height: 200px; overflow-y: auto;">
+                                                    <div v-for="theLoai in list_the_loai" :key="theLoai.id" class="form-check">
+                                                        <input class="form-check-input" type="checkbox" 
+                                                            :value="theLoai.id" 
+                                                            v-model="create_quan_ly_phim.id_the_loai"
+                                                            :id="'create-genre-' + theLoai.id">
+                                                        <label class="form-check-label" :for="'create-genre-' + theLoai.id">
+                                                            {{ theLoai.ten_the_loai }}
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label">Tình Trạng</label>
@@ -215,13 +219,17 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <label class="form-label">Thể Loại Phim</label>
-                                                <select v-model="edit_quan_ly_phim.id_the_loai"
-                                                    class="form-control mt-2">
-                                                    <option value="" disabled>Chọn thể loại</option>
-                                                    <template v-for="theLoai in list_the_loai" :key="theLoai.id">
-                                                        <option :value="theLoai.id">{{ theLoai.ten_the_loai }}</option>
-                                                    </template>
-                                                </select>
+                                                <div class="form-control mt-2" style="max-height: 200px; overflow-y: auto;">
+                                                    <div v-for="theLoai in list_the_loai" :key="theLoai.id" class="form-check">
+                                                        <input class="form-check-input" type="checkbox" 
+                                                            :value="theLoai.id" 
+                                                            v-model="edit_quan_ly_phim.id_the_loai"
+                                                            :id="'edit-genre-' + theLoai.id">
+                                                        <label class="form-check-label" :for="'edit-genre-' + theLoai.id">
+                                                            {{ theLoai.ten_the_loai }}
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label">Tình Trạng</label>
@@ -289,8 +297,7 @@
                                     <td class="text-center align-middle text-nowrap">{{ v.dien_vien }}</td>
                                     <td class="text-center align-middle text-nowrap">{{ v.nha_san_xuat }}</td>
                                     <td class="text-center align-middle text-nowrap">
-                                        {{list_the_loai.find(tl => tl.id === v.id_the_loai)?.ten_the_loai ||
-                                        v.id_the_loai }}
+                                        {{ v.the_loais ? v.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}
                                     </td>
                                     <td class="text-center align-middle text-nowrap">{{ v.gioi_han_do_tuoi }}</td>
                                     <td class="text-center align-middle text-nowrap">
@@ -335,7 +342,7 @@
                                 <div class="ms-3">
                                     <h6 class="mb-0 text-dark">Warning</h6>
                                     <div class="text-dark">
-                                        <p>Bạn có muốn xóa Phim này không?</p>
+                                        <p>Bạn có muốn xóa phim này không?</p>
                                         <p><b>Lưu ý:</b> Điều này không thể hoàn tác!</p>
                                     </div>
                                 </div>
@@ -377,11 +384,13 @@ export default {
                 trailer_ytb: '',
                 mo_ta: '',
                 nha_san_xuat: '',
-                id_the_loai: '',
+                id_the_loai: [],
                 tinh_trang: '1'
             },
             delete_quan_ly_phim: {},
-            edit_quan_ly_phim: {},
+            edit_quan_ly_phim: {
+                id_the_loai: [],
+            },
             list_the_loai: []
         };
     },
@@ -424,8 +433,8 @@ export default {
                 });
         },
         createQuanLyPhim() {
-            if (!this.create_quan_ly_phim.id_the_loai) {
-                toaster.error('Vui lòng chọn thể loại phim');
+            if (this.create_quan_ly_phim.id_the_loai.length === 0) {
+                toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
             }
             baseRequest
@@ -447,7 +456,7 @@ export default {
                             trailer_ytb: '',
                             mo_ta: '',
                             nha_san_xuat: '',
-                            id_the_loai: '',
+                            id_the_loai: [],
                             tinh_trang: '1'
                         }; // Reset form
                     } else {
@@ -498,8 +507,8 @@ export default {
                 });
         },
         updateQuanLyPhim() {
-            if (!this.edit_quan_ly_phim.id_the_loai) {
-                toaster.error('Vui lòng chọn thể loại phim');
+            if (this.edit_quan_ly_phim.id_the_loai.length === 0) {
+                toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
             }
             baseRequest

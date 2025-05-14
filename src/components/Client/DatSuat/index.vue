@@ -237,68 +237,136 @@ export default {
 </script>
 
 <style scoped>
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.1);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.card-title {
+    color: #dc3545 !important;
+}
+
+.text-primary {
+    color: #dc3545 !important;
+}
+
+.bg-primary {
+    background-color: #dc3545 !important;
+}
+
+.btn-primary {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+    transform: translateY(-2px);
+}
+
 .hover-card {
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .hover-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
+}
+
+.card-header {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    border-bottom: none;
+    color: #dc3545;
+    font-weight: bold;
 }
 
 .disabled-card {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-    position: relative;
-}
-
-.disabled-card:hover {
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.disabled-card::before {
-    content: attr(title);
-    position: absolute;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    white-space: nowrap;
-    z-index: 10;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.disabled-card::after {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 5px;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.disabled-card:hover::before,
-.disabled-card:hover::after {
-    opacity: 1;
-    visibility: visible;
 }
 
 .disabled-link {
-    pointer-events: auto !important;
-    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.badge.bg-success {
+    background-color: #28a745 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+}
+
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Alert Styling */
+.alert-warning {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: none;
+    color: #dc3545;
+}
+
+.alert-warning i {
+    color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .d-flex {
+        flex-direction: column;
+    }
+    
+    .ms-2 {
+        margin-left: 0 !important;
+    }
+}
+
+/* Movie Format Badge */
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Showtime Card */
+.card-body {
+    padding: 1.25rem;
+}
+
+.fw-bold {
+    color: #dc3545;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Date Input */
+input[type="date"] {
+    border-color: rgba(220, 53, 69, 0.2);
+    border-radius: 8px;
+}
+
+input[type="date"]:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 </style>

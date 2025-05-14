@@ -56,7 +56,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Close</button>
+                                        Đóng
+                                    </button>
                                     <button v-on:click="themChucVu()" type="button" data-bs-dismiss="modal"
                                         class="btn btn-primary">
                                         Thêm Mới
@@ -133,7 +134,7 @@
                         <div class="col-lg-6">
                             <div class="mb-2 mt-2">
                                 <label>Tên chức vụ</label>
-                                <input v-model="chuc_vu_update.ten_chuc_vu" type="text" class="form-control mt-2" />
+                                <input v-model="chuc_vu_update.ten_chuc_vu" type="text" class="form-control" />
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -148,8 +149,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button v-on:click="capNhatChucVu()" data-bs-dismiss="modal" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button v-on:click="capNhatChucVu()" data-bs-dismiss="modal" class="btn btn-primary">Cập nhật</button>
                 </div>
             </div>
         </div>
@@ -168,8 +169,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button v-on:click="xoaChucVu()" type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button v-on:click="xoaChucVu()" type="button" class="btn btn-primary">Xoá</button>
                 </div>
             </div>
         </div>

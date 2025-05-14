@@ -56,7 +56,7 @@
                             <div class="detail-item">
                                 <div class="detail-label">Thể loại</div>
                                 <div class="detail-value">
-                                    {{ phim_chi_tiet.ten_the_loai || "Kinh Dị" }}
+                                    {{ phim_chi_tiet.the_loais ? phim_chi_tiet.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}
                                 </div>
                             </div>
                             <div class="detail-item">
@@ -387,6 +387,156 @@ export default {
 /* Movie Details */
 .movie-details {
     background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(220, 53, 69, 0.1);
+    overflow: hidden;
+}
+
+.movie-poster {
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.movie-poster:hover {
+    transform: scale(1.02);
+}
+
+.movie-header {
+    border-bottom: 2px solid rgba(220, 53, 69, 0.1);
+}
+
+.movie-font {
+    color: #dc3545;
+}
+
+.movie-meta {
+    color: #666;
+}
+
+.movie-meta i {
+    color: #dc3545;
+}
+
+.detail-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #dc3545;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    color: #333;
+}
+
+/* Review Section Styling */
+.card-header {
+    background-color: #dc3545;
+    color: white;
+    border-bottom: none;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.1);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.review-item {
+    border-bottom: 1px solid rgba(220, 53, 69, 0.1);
+    padding: 15px;
+    position: relative;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.action-icons {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+.edit-icon, .delete-icon {
+    color: #dc3545;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.edit-icon:hover, .delete-icon:hover {
+    color: #c82333;
+}
+
+/* Pagination Styling */
+.pagination .page-link {
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    margin: 0 3px;
+    border-radius: 5px;
+}
+
+.pagination .page-link:hover {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Button Styling */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    transform: translateY(-2px);
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 15px 15px 0 0;
+}
+
+.btn-close {
+    color: white;
+}
+
+/* Form Controls */
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Star Rating */
+.text-warning {
+    color: #dc3545 !important;
+}
+
+/* Movie Details */
+.movie-details {
+    background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -398,10 +548,6 @@ export default {
 
 .card-body {
     padding: 1.5rem;
-}
-
-.movie-font {
-    font-family: "Poppins", sans-serif;
 }
 
 .card-title {
@@ -679,5 +825,95 @@ export default {
         gap: 0.5rem;
         align-items: flex-start;
     }
+}
+
+.text-primary {
+    color: #dc3545 !important;
+}
+
+.btn-primary {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.movie-font {
+    color: #dc3545;
+}
+
+.card-title {
+    color: #dc3545 !important;
+}
+
+.detail-label {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Star Rating */
+.text-warning {
+    color: #dc3545 !important;
+}
+
+/* Card Header */
+.card-header {
+    background-color: #7f92c7;
+    color: white;
+}
+
+.card-header h5 {
+    color: white !important;
+    margin: 0;
+}
+
+/* Review Section */
+.edit-icon, .delete-icon {
+    color: #dc3545;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.edit-icon:hover, .delete-icon:hover {
+    color: #c82333;
+}
+
+/* Pagination */
+.page-link {
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.page-link:hover {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.page-item.active .page-link {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+/* Movie Meta Icons */
+.movie-meta i {
+    color: #dc3545;
 }
 </style>

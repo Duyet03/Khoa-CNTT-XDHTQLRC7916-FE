@@ -1,14 +1,14 @@
 <template>
     <div class="container my-5">
         <div v-if="loading" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
+            <div class="spinner-border text-danger" role="status">
                 <span class="visually-hidden">Đang tải...</span>
             </div>
             <p class="mt-2">Đang tải thông tin hóa đơn...</p>
         </div>
 
         <div v-else class="card border-0 shadow">
-            <div class="card-header bg-primary text-white p-4">
+            <div class="card-header bg-danger text-white p-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h2 class="mb-0"><i class="fas fa-receipt me-2"></i>Chi tiết hóa đơn</h2>
                 </div>
@@ -23,7 +23,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="mb-3">
-                                    <span class="badge bg-primary p-2 fs-6 d-block mb-3">Mã hóa đơn: {{
+                                    <span class="badge bg-danger p-2 fs-6 d-block mb-3">Mã hóa đơn: {{
                                         hoaDon.ma_hoa_don }}</span>
                                 </div>
                                 <ul class="list-group list-group-flush">
@@ -119,7 +119,7 @@
                                     <tr v-for="(ve, index) in chiTietVes" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>
-                                            <span class="badge bg-primary">{{ ve.ten_ghe }}</span>
+                                            <span class="badge bg-danger">{{ ve.ten_ghe }}</span>
                                         </td>
                                         <td>Hàng {{ ve.hang }} - Cột {{ ve.cot }}</td>
                                         <td>
@@ -160,7 +160,7 @@
                                     <tr v-for="(ve, index) in chi_tiet_ve_dich_vus" :key="index">
                                         <td>{{ index + 1 }}</td>
                                         <td>
-                                            <span class="badge bg-primary">{{ ve.ten_dich_vu }}</span>
+                                            <span class="badge bg-danger">{{ ve.ten_dich_vu }}</span>
                                         </td>
                                         <td>
                                             <img :src="ve.hinh_anh" class="img-fluid rounded mb-3"
@@ -222,10 +222,10 @@
 
                 <!-- Nút điều hướng -->
                 <div class="text-center">
-                    <router-link to="/" class="btn btn-outline-primary me-2">
+                    <router-link to="/" class="btn btn-outline-danger me-2">
                         <i class="fas fa-home me-1"></i> Trang chủ
                     </router-link>
-                    <router-link to="/lich-su-dat-ve" class="btn btn-primary">
+                    <router-link to="/khach-hang/hoa-don" class="btn btn-danger">
                         <i class="fas fa-history me-1"></i> Lịch sử đặt vé
                     </router-link>
                 </div>
@@ -367,6 +367,10 @@ export default {
     border-radius: 5px;
 }
 
+.spinner-border {
+    color: #dc3545 !important;
+}
+
 /* Styling cho QR code đã check-in */
 .qr-code-container {
     position: relative;
@@ -388,18 +392,18 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(220, 53, 69, 0.2);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .qr-code-container.checked-in:hover .checked-in-overlay {
     opacity: 1;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(220, 53, 69, 0.4);
 }
 
 .checked-in-text {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(220, 53, 69, 0.7);
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
