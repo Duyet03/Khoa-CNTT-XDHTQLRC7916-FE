@@ -53,8 +53,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button v-on:click="xoaDanhGia()" type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button v-on:click="xoaDanhGia()" type="button" data-bs-dismiss="modal" class="btn btn-primary">Xóa</button>
                 </div>
             </div>
         </div>

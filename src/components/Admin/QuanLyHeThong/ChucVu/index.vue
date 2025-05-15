@@ -170,7 +170,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button v-on:click="xoaChucVu()" type="button" class="btn btn-primary">Xoá</button>
+                    <button v-on:click="xoaChucVu()" type="button" data-bs-dismiss="modal"  class="btn btn-primary">Xoá</button>
                 </div>
             </div>
         </div>

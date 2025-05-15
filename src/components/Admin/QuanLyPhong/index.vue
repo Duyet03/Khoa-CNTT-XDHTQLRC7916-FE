@@ -36,7 +36,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Đóng</button>
-                                    <button v-on:click="themMoiPhong()" type="button" class="btn btn-primary">Thêm
+                                    <button v-on:click="themMoiPhong()" type="button" data-bs-dismiss="modal" class="btn btn-primary">Thêm
                                         Mới</button>
                                 </div>
                             </div>
