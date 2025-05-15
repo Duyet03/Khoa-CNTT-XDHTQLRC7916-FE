@@ -32,8 +32,8 @@
                                         <th class="text-center align-middle">{{ k + 1 }}</th>
                                         <td class="text-center align-middle">{{ v.ma_hoa_don }}</td>
                                         <td class="align-middle">{{ v.ten_khach_hang }}</td>
-                                        <td class="align-middle">{{ v.ten_nhan_vien }}</td>
-                                        <td class="align-middle">{{ v.ten_phim }}</td>
+                                        <td class="align-middle">{{ v.ten_nhan_vien || 'Không có' }}</td>
+                                        <td class="align-middle">{{ v.ten_phim || 'Không có' }}</td>
                                         <td class="align-middle">{{ formatDate(v.ngay_chieu) }}</td>
                                         <td class="align-middle">{{ v.gio_bat_dau }}</td>
                                         <td class="text-end align-middle fw-bold">{{ formatVND(v.tong_tien) }}</td>
