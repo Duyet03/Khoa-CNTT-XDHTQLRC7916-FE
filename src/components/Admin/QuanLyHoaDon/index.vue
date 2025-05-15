@@ -510,7 +510,7 @@ export default {
 
             <div class="qr-section">
                 <div class="qr-header">
-                    <h5><i class="fas fa-qrcode"></i> Mã QR vé</h5>
+                    <h5><i class="fas fa-qrcode"></i> Mã QR vé và dịch vụ</h5>
                 </div>
                 <div class="qr-content">
                     <p class="qr-message">Vui lòng trình mã QR tại rạp khi xem phim</p>

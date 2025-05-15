@@ -314,7 +314,7 @@
                                             Dừng</button>
                                     </td>
                                     <td class="align-middle text-nowrap text-center">
-                                        <button v-on:click="Object.assign(edit_quan_ly_phim, v)" data-bs-toggle="modal"
+                                        <button v-on:click="editMovie(v)" data-bs-toggle="modal"
                                             data-bs-target="#capnhatModal" class="btn btn-primary"
                                             style="margin-right: 4px;">Cập
                                             Nhật</button>
@@ -389,7 +389,20 @@ export default {
             },
             delete_quan_ly_phim: {},
             edit_quan_ly_phim: {
+                ten_phim: '',
+                slug_phim: '',
+                ngay_chieu: '',
+                thoi_luong: '',
+                dao_dien: '',
+                dien_vien: '',
+                gioi_han_do_tuoi: '',
+                hinh_anh: '',
+                danh_gia: '',
+                trailer_ytb: '',
+                mo_ta: '',
+                nha_san_xuat: '',
                 id_the_loai: [],
+                tinh_trang: '1'
             },
             list_the_loai: []
         };
@@ -511,8 +524,14 @@ export default {
                 toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
             }
+            
+            // Create a copy of the data to send
+            const updateData = { ...this.edit_quan_ly_phim };
+            // Ensure id_the_loai is an array of numbers
+            updateData.id_the_loai = updateData.id_the_loai.map(id => Number(id));
+            
             baseRequest
-                .put('admin/quan-ly-phim/update', this.edit_quan_ly_phim)
+                .put('admin/quan-ly-phim/update', updateData)
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success('Thông báo<br>' + res.data.message);
@@ -528,6 +547,33 @@ export default {
                     });
                 });
         },
+        editMovie(v) {
+            // Reset the edit form first
+            this.edit_quan_ly_phim = {
+                ten_phim: '',
+                slug_phim: '',
+                ngay_chieu: '',
+                thoi_luong: '',
+                dao_dien: '',
+                dien_vien: '',
+                gioi_han_do_tuoi: '',
+                hinh_anh: '',
+                danh_gia: '',
+                trailer_ytb: '',
+                mo_ta: '',
+                nha_san_xuat: '',
+                id_the_loai: [],
+                tinh_trang: '1'
+            };
+            
+            // Copy the movie data
+            Object.assign(this.edit_quan_ly_phim, v);
+            
+            // Handle the genre IDs
+            if (v.the_loais && Array.isArray(v.the_loais)) {
+                this.edit_quan_ly_phim.id_the_loai = v.the_loais.map(tl => tl.id);
+            }
+        }
     },
 };
 </script>
