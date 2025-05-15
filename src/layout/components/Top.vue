@@ -417,7 +417,6 @@ export default {
   z-index: 801;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 60px;
 }
 
 .submenu-content {
