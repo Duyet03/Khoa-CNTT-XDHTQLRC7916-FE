@@ -81,7 +81,7 @@
                         <h5 class="mb-3">Danh Sách Ghế</h5>
                         <div class="row">
                             <div class="col-md-4 mb-2">
-                                <select v-model="filter.phong_id" class="form-select" @change="layDuLieuGhe()">
+                                <select v-model="selectedPhongId" class="form-select" @change="layGheTheoPhong">
                                     <option value="">Tất cả phòng</option>
                                     <option v-for="(phong, index) in listPhong" :key="index" :value="phong.id">
                                         {{ phong.ten_phong }}
@@ -688,6 +688,7 @@ export default {
                 .then((res) => {
                     if (res.data.status && res.data.so_do_ghe) {
                         this.soDoGhe = res.data.so_do_ghe;
+                        this.listGhe = res.data.danh_sach_ghe;
                     } else {
                         this.soDoGhe = {};
                         toaster.info("Không có dữ liệu ghế cho phòng này");
