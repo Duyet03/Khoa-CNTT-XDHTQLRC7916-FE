@@ -1,66 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0">Thêm Ghế Mới</h6>
-                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                            data-bs-target="#taoNhieuGheModal">
-                            <i class="bx bx-grid"></i> Tạo nhiều ghế
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">Tên ghế</label>
-                            <input v-model="create_ghe.ten_ghe" type="text" class="form-control"
-                                placeholder="Ví dụ: A1, B2..." />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phòng</label>
-                            <select v-model="create_ghe.phong_id" class="form-select">
-                                <option value="">-- Chọn phòng --</option>
-                                <option v-for="(phong, index) in listPhong" :key="index" :value="phong.id">
-                                    {{ phong.ten_phong }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Hàng</label>
-                            <input v-model="create_ghe.hang" type="number" class="form-control"
-                                placeholder="Số thứ tự hàng" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Cột</label>
-                            <input v-model="create_ghe.cot" type="number" class="form-control"
-                                placeholder="Số thứ tự cột" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Loại ghế</label>
-                            <select v-model="create_ghe.loai_ghe" class="form-select">
-                                <option value="0">Ghế thường</option>
-                                <option value="1">Ghế VIP</option>
-                                <option value="2">Ghế Đôi</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tình trạng ghế</label>
-                            <select v-model="create_ghe.trang_thai" class="form-select">
-                                <option value="1">Hoạt Động</option>
-                                <option value="0">Đang Bảo Trì</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid">
-                            <button v-on:click="themMoiGhe()" class="btn btn-primary">
-                                <i class="bx bx-plus-circle me-1"></i>Thêm Mới
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-9 col-md-12">
+            <div class="col-lg-12 col-md-12">
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
                         <a class="nav-link" :class="{ active: tabActive === 'list' }" @click="tabActive = 'list'"
@@ -81,7 +22,7 @@
                         <h5 class="mb-3">Danh Sách Ghế</h5>
                         <div class="row">
                             <div class="col-md-4 mb-2">
-                                <select v-model="filter.phong_id" class="form-select" @change="layDuLieuGhe()">
+                                <select v-model="selectedPhongId" class="form-select" @change="layGheTheoPhong">
                                     <option value="">Tất cả phòng</option>
                                     <option v-for="(phong, index) in listPhong" :key="index" :value="phong.id">
                                         {{ phong.ten_phong }}
@@ -92,7 +33,7 @@
                                 <div class="input-group">
                                     <input v-model="filter.search" type="text" class="form-control"
                                         placeholder="Tìm kiếm theo tên ghế..." />
-                                    <button @click="layDuLieuGhe()" class="btn btn-primary">
+                                    <button @click="searchSeat()" class="btn btn-primary">
                                         <i class="bx bx-search me-1"></i>Tìm Kiếm
                                     </button>
                                 </div>
@@ -110,50 +51,43 @@
                                         <th class="text-center">Hàng/Cột</th>
                                         <th class="text-center">Loại ghế</th>
                                         <th class="text-center">Tình Trạng</th>
-                                        <th class="text-center">Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <template v-for="(v, k) in listGhe" :key="k">
-                                    <tr>
-                                        <th class="text-center align-middle">{{ k + 1 }}</th>
-                                        <td class="text-center align-middle">{{ v.ten_ghe }}</td>
-                                        <td class="text-center align-middle">{{ getPhongName(v.phong_id) }}</td>
-                                        <td class="text-center align-middle">Hàng {{ v.hang }}, Cột {{ v.cot }}</td>
-                                        <td class="text-center align-middle">
-                                            <span v-if="v.loai_ghe == 1" class="badge bg-warning" @click="doiLoaiGhe(v)"
-                                                style="cursor: pointer">
-                                                VIP
-                                            </span>
-                                            <span v-else-if="v.loai_ghe == 0" class="badge bg-secondary" @click="doiLoaiGhe(v)"
-                                                style="cursor: pointer">
-                                                Thường
-                                            </span>
-                                            <span v-else class="badge bg-info" @click="doiLoaiGhe(v)"
-                                                style="cursor: pointer">
-                                                Đôi
-                                            </span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <button v-if="v.trang_thai == 1" @click="doiTrangThai(v)"
-                                                class="btn btn-success btn-sm">
-                                                Hoạt Động
-                                            </button>
-                                            <button v-else @click="doiTrangThai(v)" class="btn btn-danger btn-sm">
-                                                Bảo Trì
-                                            </button>
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <button v-on:click="suaGhe(v)" class="btn btn-sm btn-info me-1">
-                                                <i class="bx bx-edit-alt me-1"></i>Sửa
-                                            </button>
-                                            <button v-on:click="xacNhanXoa(v.id)" class="btn btn-sm btn-danger">
-                                                <i class="bx bx-trash me-1"></i>Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr v-if="listGhe.length === 0">
-                                        <td colspan="7" class="text-center py-3 text-muted">Không có dữ liệu ghế</td>
+                                        <tr>
+                                            <th class="text-center align-middle">{{ k + 1 }}</th>
+                                            <td class="text-center align-middle">{{ v.ten_ghe }}</td>
+                                            <td class="text-center align-middle">{{ getPhongName(v.phong_id) }}</td>
+                                            <td class="text-center align-middle">Hàng {{ v.hang }}, Cột {{ v.cot }}</td>
+                                            <td class="text-center align-middle">
+                                                <span v-if="v.loai_ghe == 1" class="badge bg-warning"
+                                                    @click="doiLoaiGhe(v)" style="cursor: pointer">
+                                                    VIP
+                                                </span>
+                                                <span v-else-if="v.loai_ghe == 0" class="badge bg-secondary"
+                                                    @click="doiLoaiGhe(v)" style="cursor: pointer">
+                                                    Thường
+                                                </span>
+                                                <span v-else class="badge bg-info" @click="doiLoaiGhe(v)"
+                                                    style="cursor: pointer">
+                                                    Đôi
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <button v-if="v.trang_thai == 1" @click="doiTrangThai(v)"
+                                                    class="btn btn-success btn-sm">
+                                                    Hoạt Động
+                                                </button>
+                                                <button v-else @click="doiTrangThai(v)" class="btn btn-danger btn-sm">
+                                                    Bảo Trì
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                        <tr v-if="listGhe.length === 0">
+                                            <td colspan="7" class="text-center py-3 text-muted">Không có dữ liệu ghế
+                                            </td>
                                         </tr>
                                     </template>
                                 </tbody>
@@ -202,7 +136,7 @@
                                     <div v-for="(ghe, cot) in hangGhe" :key="cot" class="seat-item mx-1">
                                         <button :class="[
                                             'btn btn-sm',
-                                            ghe.loai_ghe == 1 ? 'btn-warning' : 'btn-primary',
+                                            ghe.loai_ghe == 1 ? 'btn-warning' : ghe.loai_ghe == 2 ? 'btn-info' : 'btn-primary',
                                             ghe.trang_thai == 0 ? 'disabled opacity-50' : ''
                                         ]" @click="chonGhe(ghe)"
                                             :title="`${ghe.ten_ghe} - ${ghe.loai_ghe == 1 ? 'VIP' : 'Thường'}`">
@@ -218,218 +152,18 @@
                                     <span>Ghế thường</span>
                                 </div>
                                 <div class="d-flex align-items-center me-4 mb-2">
-                                    <div class="btn-sm btn-warning me-2" style="width: 30px; height: 30px;"></div>
-                                    <span>Ghế VIP</span>
+                                    <div class="btn-sm btn-warning me-2"
+                                        style="width: 30px; height: 30px; background-color: #ffc107;">
+                                    </div>
+                                    <span>Ghế VIP </span>
                                 </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="btn-sm btn-primary disabled opacity-50 me-2"
-                                        style="width: 30px; height: 30px;"></div>
-                                    <span>Ghế đang bảo trì</span>
+                                <div class="d-flex align-items-center me-4 mb-2">
+                                    <div class="btn-sm me-2"
+                                        style="width: 30px; height: 30px; background-color: #0dcaf0 ; "></div>
+                                    <span>Ghế Đôi</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal cập nhật ghế -->
-        <div class="modal fade" id="capnhapgheModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="bx bx-edit me-1"></i>Cập nhật ghế
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Tên ghế</label>
-                            <input v-model="update_ghe.ten_ghe" class="form-control" type="text" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phòng</label>
-                            <select v-model="update_ghe.phong_id" class="form-select">
-                                <option v-for="(phong, index) in listPhong" :key="index" :value="phong.id">
-                                    {{ phong.ten_phong }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Hàng</label>
-                            <input v-model="update_ghe.hang" class="form-control" type="number" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Cột</label>
-                            <input v-model="update_ghe.cot" class="form-control" type="number" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Loại ghế</label>
-                            <select v-model="update_ghe.loai_ghe" class="form-select">
-                                <option value="0">Ghế thường</option>
-                                <option value="1">Ghế VIP</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Tình Trạng</label>
-                            <select v-model="update_ghe.trang_thai" class="form-select">
-                                <option value="0">Bảo Trì</option>
-                                <option value="1">Hoạt Động</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="bx bx-x me-1"></i>Đóng
-                        </button>
-                        <button v-on:click="capNhapGhe()" type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                            <i class="bx bx-save me-1"></i>Lưu Thay Đổi
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal xóa ghế -->
-        <div class="modal fade" id="xoagheModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title">
-                            <i class="bx bx-trash me-1"></i>Xóa Ghế
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center py-4">
-                        <div class="mb-3">
-                            <i class="bx bx-error-circle text-danger" style="font-size: 4rem;"></i>
-                        </div>
-                        <h5 class="mb-2">Xác nhận xóa</h5>
-                        <p class="text-muted">Bạn có chắc chắn muốn xóa ghế này không? Hành động này không thể hoàn tác.
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                            <i class="bx bx-x me-1"></i>Hủy
-                        </button>
-                        <button v-on:click="xoaGhe()" type="button" data-bs-dismiss="modal" class="btn btn-danger">
-                            <i class="bx bx-trash me-1"></i>Xác nhận xóa
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal tạo nhiều ghế -->
-        <div class="modal fade" id="taoNhieuGheModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            <i class="bx bx-grid me-1"></i>Tạo nhiều ghế cùng lúc
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Chọn phòng</label>
-                            <select v-model="createMultiple.phong_id" class="form-select">
-                                <option value="">-- Chọn phòng --</option>
-                                <option v-for="(phong, index) in listPhong" :key="index" :value="phong.id">
-                                    {{ phong.ten_phong }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Số hàng (1-26, A-Z)</label>
-                            <input v-model="createMultiple.so_hang" type="number" min="1" max="26"
-                                class="form-control" />
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Số cột</label>
-                            <input v-model="createMultiple.so_cot" type="number" min="1" class="form-control" />
-                        </div>
-                        <div class="form-check mb-3">
-                            <input v-model="createMultiple.xoa_ghe_cu" class="form-check-input" type="checkbox"
-                                id="xoaGheCu" />
-                            <label class="form-check-label" for="xoaGheCu">
-                                Xóa tất cả ghế cũ của phòng này
-                            </label>
-                        </div>
-                        <div class="alert alert-info">
-                            <i class="bx bx-info-circle me-1"></i>
-                            Hệ thống sẽ tạo ra một sơ đồ ghế dạng lưới với các hàng là chữ cái (A, B, C...) và các cột
-                            là số (1, 2, 3...)
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="bx bx-x me-1"></i>Đóng
-                        </button>
-                        <button v-on:click="taoNhieuGhe()" type="button" class="btn btn-primary"
-                            data-bs-dismiss="modal">
-                            <i class="bx bx-check me-1"></i>Tạo Ghế
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal chi tiết ghế -->
-        <div class="modal fade" id="chiTietGheModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Chi tiết ghế</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" v-if="gheSelected">
-                        <div class="text-center mb-3">
-                            <span class="badge" :class="gheSelected.loai_ghe == 1 ? 'bg-warning' : 'bg-primary'"
-                                style="font-size: 1.5rem;">
-                                {{ gheSelected.ten_ghe }}
-                            </span>
-                        </div>
-                        <table class="table">
-                            <tr>
-                                <th>Phòng:</th>
-                                <td>{{ getPhongName(gheSelected.phong_id) }}</td>
-                            </tr>
-                            <tr>
-                                <th>Vị trí:</th>
-                                <td>Hàng {{ gheSelected.hang }}, Cột {{ gheSelected.cot }}</td>
-                            </tr>
-                            <tr>
-                                <th>Loại ghế:</th>
-                                <td>
-                                    <span class="badge"
-                                        :class="gheSelected.loai_ghe == 1 ? 'bg-warning' : 'bg-secondary'">
-                                        {{ gheSelected.loai_ghe == 1 ? 'VIP' : 'Thường' }}
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Trạng thái:</th>
-                                <td>
-                                    <span class="badge"
-                                        :class="gheSelected.trang_thai == 1 ? 'bg-success' : 'bg-danger'">
-                                        {{ gheSelected.trang_thai == 1 ? 'Hoạt động' : 'Bảo trì' }}
-                                    </span>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-info" @click="suaGhe(gheSelected)" data-bs-dismiss="modal">
-                            <i class="bx bx-edit me-1"></i>Sửa ghế
-                        </button>
-                        <button type="button" class="btn btn-primary" @click="doiLoaiGhe(gheSelected)"
-                            data-bs-dismiss="modal">
-                            <i class="bx bx-transfer me-1"></i>Đổi loại ghế
-                        </button>
                     </div>
                 </div>
             </div>
@@ -472,7 +206,9 @@ export default {
             selectedPhongId: '',
             soDoGhe: {},
             isLoading: false,
-            gheSelected: null
+            gheSelected: null,
+            foundSeat: null,
+            filteredSeats: [] // Danh sách ghế sau khi lọc
         };
     },
     mounted() {
@@ -480,16 +216,25 @@ export default {
         this.layDuLieuPhong();
     },
     methods: {
-        layDuLieuGhe() {
-            let params = {};
-            if (this.filter.phong_id) {
-                params.phong_id = this.filter.phong_id;
-            }
-            if (this.filter.search) {
-                params.search = this.filter.search;
-            }
+        //tim kiem ghe
+        searchSeat() {
+            console.log(this.filter.search);
+            const query = (this.filter.search || '').toUpperCase(); // Đảm bảo query không bị undefined hoặc null
 
-            baseRequest.get("ghe/data", { params: params })
+            // Lọc các ghế có tên giống hoặc chứa từ khóa tìm kiếm
+            const foundSeats = this.listGhe.filter(
+                ghe => ghe.ten_ghe.toUpperCase() === query
+            );
+
+            // Lưu kết quả vào foundSeat (mảng các đối tượng ghế tìm được)
+            this.foundSeat = foundSeats;
+            this.listGhe = this.foundSeat;
+            console.log(this.foundSeat);
+        }
+
+        ,
+        layDuLieuGhe() {
+            baseRequest.get("ghe/search", { params: this.filter })
                 .then((res) => {
                     this.listGhe = res.data.data;
                 })
@@ -513,94 +258,6 @@ export default {
         getPhongName(phongId) {
             const phong = this.listPhong.find(p => p.id == phongId);
             return phong ? phong.ten_phong : phongId;
-        },
-
-        themMoiGhe() {
-            if (!this.create_ghe.ten_ghe || !this.create_ghe.phong_id || !this.create_ghe.hang || !this.create_ghe.cot) {
-                toaster.error("Vui lòng nhập đầy đủ thông tin bắt buộc!");
-                return;
-            }
-
-            baseRequest.post("ghe/create", this.create_ghe)
-                .then((res) => {
-                    if (res.data.status) {
-                        toaster.success(res.data.message);
-                        this.layDuLieuGhe();
-                        this.create_ghe = {
-                            ten_ghe: "",
-                            phong_id: "",
-                            hang: "",
-                            cot: "",
-                            loai_ghe: "0",
-                            trang_thai: "1"
-                        };
-                    } else {
-                        toaster.error(res.data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi thêm ghế:", error);
-                    toaster.error("Đã xảy ra lỗi khi thêm ghế mới!");
-                });
-        },
-
-        suaGhe(ghe) {
-            this.update_ghe = JSON.parse(JSON.stringify(ghe));
-            const modal = new bootstrap.Modal(document.getElementById('capnhapgheModal'));
-            modal.show();
-        },
-
-        capNhapGhe() {
-            if (!this.update_ghe.ten_ghe || !this.update_ghe.phong_id || !this.update_ghe.hang || !this.update_ghe.cot) {
-                toaster.error("Vui lòng nhập đầy đủ thông tin bắt buộc!");
-                return;
-            }
-
-            baseRequest.put("ghe/update", this.update_ghe)
-                .then((res) => {
-                    if (res.data.status) {
-                        toaster.success(res.data.message);
-                        this.layDuLieuGhe();
-
-                        // Cập nhật lại sơ đồ ghế nếu đang ở tab map
-                        if (this.tabActive === 'map' && this.selectedPhongId) {
-                            this.layGheTheoPhong();
-                        }
-                    } else {
-                        toaster.error(res.data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi cập nhật ghế:", error);
-                    toaster.error("Đã xảy ra lỗi khi cập nhật ghế!");
-                });
-        },
-
-        xacNhanXoa(id) {
-            this.delete_ghe = id;
-            const modal = new bootstrap.Modal(document.getElementById('xoagheModal'));
-            modal.show();
-        },
-
-        xoaGhe() {
-            baseRequest.delete("ghe/delete/" + this.delete_ghe)
-                .then((res) => {
-                    if (res.data.status) {
-                        toaster.success(res.data.message);
-                        this.layDuLieuGhe();
-
-                        // Cập nhật lại sơ đồ ghế nếu đang ở tab map
-                        if (this.tabActive === 'map' && this.selectedPhongId) {
-                            this.layGheTheoPhong();
-                        }
-                    } else {
-                        toaster.error(res.data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi xóa ghế:", error);
-                    toaster.error("Đã xảy ra lỗi khi xóa ghế!");
-                });
         },
 
         doiTrangThai(ghe) {
@@ -645,38 +302,6 @@ export default {
                 });
         },
 
-        taoNhieuGhe() {
-            if (!this.createMultiple.phong_id || !this.createMultiple.so_hang || !this.createMultiple.so_cot) {
-                toaster.error("Vui lòng nhập đầy đủ thông tin!");
-                return;
-            }
-
-            if (this.createMultiple.so_hang > 26) {
-                toaster.error("Số hàng không được vượt quá 26 (A-Z)!");
-                return;
-            }
-
-            baseRequest.post("ghe/create-multiple", this.createMultiple)
-                .then((res) => {
-                    if (res.data.status) {
-                        toaster.success(res.data.message);
-                        this.layDuLieuGhe();
-                        this.createMultiple = {
-                            phong_id: "",
-                            so_hang: 8,
-                            so_cot: 10,
-                            xoa_ghe_cu: false
-                        };
-                    } else {
-                        toaster.error(res.data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi tạo nhiều ghế:", error);
-                    toaster.error("Đã xảy ra lỗi khi tạo nhiều ghế!");
-                });
-        },
-
         layGheTheoPhong() {
             if (!this.selectedPhongId) {
                 this.soDoGhe = {};
@@ -688,6 +313,7 @@ export default {
                 .then((res) => {
                     if (res.data.status && res.data.so_do_ghe) {
                         this.soDoGhe = res.data.so_do_ghe;
+                        this.listGhe = res.data.danh_sach_ghe;
                     } else {
                         this.soDoGhe = {};
                         toaster.info("Không có dữ liệu ghế cho phòng này");

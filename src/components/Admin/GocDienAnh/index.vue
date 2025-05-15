@@ -43,7 +43,7 @@
                                                 <button class="btn btn-sm btn-primary" @click="editItem(item)">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-danger" @click="deleteItem(item.id)">
+                                                <button class="btn btn-sm btn-danger" v-on:click="id_can_xoa = item.id" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -52,6 +52,24 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal xoá -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa Góc Điện Ảnh</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Bạn có chắc chắn muốn xóa góc điện ảnh này không?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" @click="deleteItem()">Xóa</button>
                     </div>
                 </div>
             </div>
@@ -94,7 +112,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" @click="closeModal">Đóng</button>
-                                <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                <button type="submit" class="btn btn-primary">Lưu Thông Tin</button>
                             </div>
                         </form>
                     </div>
@@ -115,6 +133,7 @@ export default {
             ds_goc_dien_anh: [],
             showModal: false,
             isEdit: false,
+            id_can_xoa: null,
             formData: {
                 id: null,
                 tieu_de: '',
@@ -123,7 +142,7 @@ export default {
                 ngay_dang: new Date().toISOString().split('T')[0],
                 trang_thai: true
             }
-        }
+        };
     },
     mounted() {
         this.layDuLieuGocDienAnh();
@@ -151,22 +170,26 @@ export default {
             this.formData = { ...item };
             this.showModal = true;
         },
-        deleteItem(id) {
-            if (confirm('Bạn có chắc chắn muốn xóa?')) {
-                axios
-                    .delete(`http://127.0.0.1:8000/api/goc-dien-anh/delete/${id}`, {
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem("token_admin")
-                        }
-                    })
-                    .then((res) => {
-                        toaster.success(res.data.message);
-                        this.layDuLieuGocDienAnh();
-                    })
-                    .catch((error) => {
-                        toaster.error("Lỗi khi xóa");
-                    });
+        deleteItem() {
+            if (!this.id_can_xoa) {
+                return;
             }
+            
+            axios
+                .delete(`http://127.0.0.1:8000/api/goc-dien-anh/delete/${this.id_can_xoa}`, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token_admin")
+                    }
+                })
+                .then((res) => {
+                    toaster.success(res.data.message);
+                    this.layDuLieuGocDienAnh();
+                    document.getElementById('deleteModal').querySelector('[data-bs-dismiss="modal"]').click();
+                    this.id_can_xoa = null;
+                })
+                .catch((error) => {
+                    toaster.error("Lỗi khi xóa");
+                });
         },
         doiTrangThai(id) {
             axios

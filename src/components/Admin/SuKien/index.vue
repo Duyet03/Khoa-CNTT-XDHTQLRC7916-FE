@@ -12,11 +12,13 @@
                     </div>
                     <div class="mb-2">
                         <label>Ngày Bắt Đầu</label>
-                        <input v-model="su_kien_create.ngay_bat_dau" type="date" class="form-control mt-2">
+                        <input v-model="su_kien_create.ngay_bat_dau" type="date" class="form-control mt-2" :min="getMinDate()" @change="validateDates('create')">
+                        <small class="text-danger" v-if="dateErrors.create.start">{{ dateErrors.create.start }}</small>
                     </div>
                     <div class="mb-2">
                         <label>Ngày Kết Thúc</label>
-                        <input v-model="su_kien_create.ngay_ket_thuc" type="date" class="form-control mt-2">
+                        <input v-model="su_kien_create.ngay_ket_thuc" type="date" class="form-control mt-2" :min="su_kien_create.ngay_bat_dau || getMinDate()" @change="validateDates('create')">
+                        <small class="text-danger" v-if="dateErrors.create.end">{{ dateErrors.create.end }}</small>
                     </div>
                     <div class="mb-2">
                         <label>Mô Tả</label>
@@ -102,7 +104,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
+                                            data-bs-dismiss="modal">Đóng</button>
                                         <button v-on:click="xoaSuKien()" type="button" class="btn btn-danger"
                                             data-bs-dismiss="modal">Xác Nhận Xoá</button>
                                     </div>
@@ -126,11 +128,13 @@
                                         </div>
                                         <div class="mb-2">
                                             <label>Ngày Bắt Đầu</label>
-                                            <input v-model="su_kien_update.ngay_bat_dau" type="date" class="form-control mt-2">
+                                            <input v-model="su_kien_update.ngay_bat_dau" type="date" class="form-control mt-2" :min="getMinDate()" @change="validateDates('update')">
+                                            <small class="text-danger" v-if="dateErrors.update.start">{{ dateErrors.update.start }}</small>
                                         </div>
                                         <div class="mb-2">
                                             <label>Ngày Kết Thúc</label>
-                                            <input v-model="su_kien_update.ngay_ket_thuc" type="date" class="form-control mt-2">
+                                            <input v-model="su_kien_update.ngay_ket_thuc" type="date" class="form-control mt-2" :min="su_kien_update.ngay_bat_dau || getMinDate()" @change="validateDates('update')">
+                                            <small class="text-danger" v-if="dateErrors.update.end">{{ dateErrors.update.end }}</small>
                                         </div>
                                         <div class="mb-2">
                                             <label>Mô Tả</label>
@@ -150,7 +154,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
+                                            data-bs-dismiss="modal">Đóng</button>
                                         <button v-on:click="capNhatSuKien()" type="button" class="btn btn-info"
                                             data-bs-dismiss="modal">Xác Nhận Cập Nhật</button>
                                     </div>
@@ -177,6 +181,16 @@ export default {
             },
             su_kien_update: {},
             id_can_xoa: '',
+            dateErrors: {
+                create: {
+                    start: '',
+                    end: ''
+                },
+                update: {
+                    start: '',
+                    end: ''
+                }
+            }
         }
     },
     mounted() {
@@ -190,14 +204,59 @@ export default {
                     this.ds_su_kien = res.data.data;
                 })
         },
+        getMinDate() {
+            const today = new Date();
+            return today.toISOString().split('T')[0];
+        },
+        validateDates(form) {
+            const data = form === 'create' ? this.su_kien_create : this.su_kien_update;
+            const errors = this.dateErrors[form];
+            
+            // Reset errors
+            errors.start = '';
+            errors.end = '';
+            
+            // Validate start date
+            if (data.ngay_bat_dau) {
+                const startDate = new Date(data.ngay_bat_dau);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (startDate < today) {
+                    errors.start = 'Ngày bắt đầu không được chọn ngày trong quá khứ';
+                    return false;
+                }
+            }
+            
+            // Validate end date
+            if (data.ngay_bat_dau && data.ngay_ket_thuc) {
+                const startDate = new Date(data.ngay_bat_dau);
+                const endDate = new Date(data.ngay_ket_thuc);
+                
+                if (endDate <= startDate) {
+                    errors.end = 'Ngày kết thúc phải sau ngày bắt đầu';
+                    return false;
+                }
+            }
+            
+            return true;
+        },
         themMoiSuKien() {
+            if (!this.validateDates('create')) {
+                toaster.error('Vui lòng kiểm tra lại thông tin ngày tháng');
+                return;
+            }
+            
             baseRequest
                 .post("admin/su-kien/create", this.su_kien_create)
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success(res.data.message)
                         this.layDuLieu();
-                        this.su_kien_create = {};
+                        this.su_kien_create = {
+                            tinh_trang: 1
+                        };
+                        this.dateErrors.create = { start: '', end: '' };
                     }
                 });
         },
@@ -212,12 +271,18 @@ export default {
                 });
         },
         capNhatSuKien() {
+            if (!this.validateDates('update')) {
+                toaster.error('Vui lòng kiểm tra lại thông tin ngày tháng');
+                return;
+            }
+            
             baseRequest
                 .put("admin/su-kien/update", this.su_kien_update)
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success(res.data.message)
                         this.layDuLieu();
+                        this.dateErrors.update = { start: '', end: '' };
                     }
                 });
         },

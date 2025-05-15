@@ -112,7 +112,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Ngày sinh</label>
-                                <input v-model="khach_hang_create.ngay_sinh" type="date" class="form-control" />
+                                <input v-model="khach_hang_create.ngay_sinh" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
                                 <div v-if="errors.ngay_sinh" class="text-danger"
                                     style="font-size: 15px; margin-top: 2px;">
                                     {{ errors.ngay_sinh }}
@@ -154,7 +154,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="bx bx-x me-1"></i>Đóng
                         </button>
-                        <button @click="themKhachHang()" type="button" class="btn btn-primary">
+                        <button @click="themKhachHang()" type="button" data-bs-dismiss="modal" class="btn btn-primary">
                             <i class="bx bx-check me-1"></i>Thêm mới
                         </button>
                     </div>
@@ -199,7 +199,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Ngày sinh</label>
-                                <input v-model="khach_hang_update.ngay_sinh" type="date" class="form-control" />
+                                <input v-model="khach_hang_update.ngay_sinh" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
                                 <div v-if="errors_update.ngay_sinh" class="text-danger"
                                     style="font-size: 15px; margin-top: 2px;">
                                     {{ errors_update.ngay_sinh }}
@@ -207,14 +207,14 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Tình trạng</label>
-                                <select v-model="khach_hang_update.is_block" class="form-select">
+                                <select v-model="khach_hang_update.tinh_trang" class="form-select">
                                     <option :value="0">Hoạt động</option>
                                     <option :value="1">Khóa</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Trạng thái tài khoản</label>
-                                <select v-model="khach_hang_update.tinh_trang" class="form-select">
+                                <select v-model="khach_hang_update.is_active" class="form-select">
                                     <option value="1">Đã kích hoạt</option>
                                     <option value="0">Chưa kích hoạt</option>
                                 </select>
@@ -403,6 +403,7 @@ export default {
                     if (res.data.status) {
                         this.layKhachHang();
                         $("#taoPhongModal").modal('hide');
+                        toaster.success(res.data.message);
                         this.resetCreateForm();
                     } else {
                         // Nếu BE trả về message chung
@@ -515,7 +516,8 @@ export default {
                 .then((res) => {
                     if (res.data.status) {
                         toaster.success(res.data.message);
-                        this.layKhachHang();
+                            this.layKhachHang();
+
                         // Đóng modal đúng chuẩn Bootstrap 5
                         const modalEl = document.getElementById('updateKhachHangModal');
                         const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);

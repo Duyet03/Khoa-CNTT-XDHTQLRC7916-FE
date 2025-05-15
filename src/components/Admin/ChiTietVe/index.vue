@@ -3,12 +3,10 @@
         <div class="card">
             <div class="card-body d-flex justify-content-between">
                 <h3>Quản Lý Vé</h3>
-                <!-- <button data-bs-toggle="modal" data-bs-target="#themmoi" class="btn btn-primary">
-                    <i class="fa-solid fa-plus me-2"></i>Tạo Vé
-                </button> -->
+
             </div>
         </div>
-        
+
         <!-- Filter Section -->
         <div class="card mb-3">
             <div class="card-body">
@@ -24,7 +22,8 @@
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Chọn Phòng</label>
-                        <select v-model="selectedPhong" class="form-select" @change="onPhongChange" :disabled="!selectedPhim">
+                        <select v-model="selectedPhong" class="form-select" @change="onPhongChange"
+                            :disabled="!selectedPhim">
                             <option value="">Tất cả phòng</option>
                             <option v-for="phong in listPhong" :key="phong.id" :value="phong.id">
                                 {{ phong.ten_phong }}
@@ -33,12 +32,55 @@
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Chọn Suất Chiếu</label>
-                        <select v-model="selectedSuat" class="form-select" @change="onSuatChange" :disabled="!selectedPhong">
+                        <select v-model="selectedSuat" class="form-select" @change="onSuatChange"
+                            :disabled="!selectedPhong">
                             <option value="">Tất cả suất</option>
                             <option v-for="suat in listSuat" :key="suat.id" :value="suat.id">
-                                {{ formatDate(suat.ngay_chieu) }} | {{ formatTime(suat.gio_bat_dau) }} - {{ formatTime(suat.gio_ket_thuc) }}
+                                {{ formatDate(suat.ngay_chieu) }} | {{ formatTime(suat.gio_bat_dau) }} - {{
+                                formatTime(suat.gio_ket_thuc) }}
                             </option>
                         </select>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <!-- Statistics Cards -->
+                <div class="col-12 mb-4">
+                    <div class="row">
+                        <!-- Total Revenue Card -->
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <div class="total-revenue-card">
+                                <div class="card-content">
+                                    <div class="revenue-icon">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div class="revenue-info">
+                                        <h6>Tổng số vé chưa bán</h6>
+                                        <h3>{{ tongVeChuaBan }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Orders Card -->
+                        <div class="col-md-6">
+                            <div class="total-orders-card">
+                                <div class="card-content">
+                                    <div class="orders-icon">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                    <div class="orders-info">
+                                        <h6>Tổng số vé đã bán</h6>
+                                        <h3>{{ tongVeDaBan }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,18 +132,7 @@
                                             {{ getStatusText(v.tinh_trang) }}
                                         </span>
                                     </td>
-                                    <!-- <td class="text-center align-middle">
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-primary" @click="showUpdateModal(v)"
-                                                title="Cập nhật">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger" @click="showDeleteModal(v)"
-                                                title="Xóa">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td> -->
+
                                 </tr>
                             </template>
                         </tbody>
@@ -109,58 +140,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Modal Cập nhật -->
-        <!-- <div class="modal fade" id="updateModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Cập Nhật Thông Tin Vé</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Trạng Thái</label>
-                            <select v-model="chi_tiet_ve_update.tinh_trang" class="form-select">
-                                <option value="0">Ghế trống</option>
-                                <option value="2">Đã đặt</option>
-                                <option value="1">Đang giữ</option>
-                                <option value="3">Đã hủy</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Ghi Chú</label>
-                            <textarea v-model="chi_tiet_ve_update.ghi_chu" class="form-control" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-primary" @click="capNhat">Cập Nhật</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- Modal Xóa -->
-        <!-- <div class="modal fade" id="deleteModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Xác Nhận Xóa</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger">
-                            Bạn có chắc chắn muốn xóa vé này không?
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-danger" @click="xoa">Xóa</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 </template>
 
@@ -231,7 +210,7 @@ export default {
                 this.list_chi_tiet_ve = [];
                 return;
             }
-            
+
             baseRequest.get(`chi-tiet-ve/lay-theo-suat/${this.selectedSuat}`)
                 .then((res) => {
                     if (res.data.status) {
@@ -362,6 +341,14 @@ export default {
                 this.list_chi_tiet_ve = [];
             }
         },
+    },
+    computed: {
+        tongVeChuaBan() {
+            return this.list_chi_tiet_ve.filter(ve => ve.tinh_trang === 0).length;
+        },
+        tongVeDaBan() {
+            return this.list_chi_tiet_ve.filter(ve => ve.tinh_trang === 2).length;
+        }
     }
 }
 </script>
@@ -389,5 +376,67 @@ export default {
     .no-print {
         display: none;
     }
+}
+
+.statistics-header h2 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.total-revenue-card,
+.total-orders-card {
+    background: linear-gradient(135deg, #43a047 0%, #1565c0 100%);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.total-orders-card {
+    background: linear-gradient(135deg, #43a047 0%, #1565c0 100%);
+}
+
+.total-revenue-card .card-content,
+.total-orders-card .card-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.revenue-icon,
+.orders-icon {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.revenue-icon i,
+.orders-icon i {
+    color: white;
+    font-size: 2rem;
+}
+
+.revenue-info,
+.orders-info {
+    color: white;
+}
+
+.revenue-info h6,
+.orders-info h6 {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.revenue-info h3,
+.orders-info h3 {
+    margin: 0.5rem 0 0;
+    font-size: 1.8rem;
+    font-weight: 600;
 }
 </style>

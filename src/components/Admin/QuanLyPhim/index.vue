@@ -39,7 +39,8 @@
                                             <div class="col-12">
                                                 <label class="form-label">Ngày Chiếu</label>
                                                 <input v-model="create_quan_ly_phim.ngay_chieu" type="date"
-                                                    class="form-control mb-2" placeholder="Ngày Chiếu">
+                                                    class="form-control mb-2" placeholder="Ngày Chiếu"
+                                                    :min="getTomorrowDate()">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -158,7 +159,8 @@
                                             <div class="col-12">
                                                 <label class="form-label">Ngày Chiếu</label>
                                                 <input v-model="edit_quan_ly_phim.ngay_chieu" type="date"
-                                                    class="form-control mb-3" placeholder="Ngày Chiếu">
+                                                    class="form-control mb-3" placeholder="Ngày Chiếu"
+                                                    :min="getTomorrowDate()">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -314,7 +316,7 @@
                                             Dừng</button>
                                     </td>
                                     <td class="align-middle text-nowrap text-center">
-                                        <button v-on:click="Object.assign(edit_quan_ly_phim, v)" data-bs-toggle="modal"
+                                        <button v-on:click="editMovie(v)" data-bs-toggle="modal"
                                             data-bs-target="#capnhatModal" class="btn btn-primary"
                                             style="margin-right: 4px;">Cập
                                             Nhật</button>
@@ -389,7 +391,20 @@ export default {
             },
             delete_quan_ly_phim: {},
             edit_quan_ly_phim: {
+                ten_phim: '',
+                slug_phim: '',
+                ngay_chieu: '',
+                thoi_luong: '',
+                dao_dien: '',
+                dien_vien: '',
+                gioi_han_do_tuoi: '',
+                hinh_anh: '',
+                danh_gia: '',
+                trailer_ytb: '',
+                mo_ta: '',
+                nha_san_xuat: '',
                 id_the_loai: [],
+                tinh_trang: '1'
             },
             list_the_loai: []
         };
@@ -433,6 +448,23 @@ export default {
                 });
         },
         createQuanLyPhim() {
+            if (!this.create_quan_ly_phim.ten_phim ||
+                !this.create_quan_ly_phim.slug_phim ||
+                !this.create_quan_ly_phim.ngay_chieu) {
+                toaster.error("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            // Kiểm tra ngày chiếu phải từ ngày mai trở đi
+            const tomorrow = new Date();
+            tomorrow.setHours(0, 0, 0, 0);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const selectedDate = new Date(this.create_quan_ly_phim.ngay_chieu);
+            if (selectedDate < tomorrow) {
+                toaster.error("Ngày chiếu phải từ ngày mai trở đi!");
+                return;
+            }
+
             if (this.create_quan_ly_phim.id_the_loai.length === 0) {
                 toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
@@ -507,12 +539,35 @@ export default {
                 });
         },
         updateQuanLyPhim() {
+            if (!this.edit_quan_ly_phim.ten_phim ||
+                !this.edit_quan_ly_phim.slug_phim ||
+                !this.edit_quan_ly_phim.ngay_chieu) {
+                toaster.error("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            // Kiểm tra ngày chiếu phải từ ngày mai trở đi
+            const tomorrow = new Date();
+            tomorrow.setHours(0, 0, 0, 0);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const selectedDate = new Date(this.edit_quan_ly_phim.ngay_chieu);
+            if (selectedDate < tomorrow) {
+                toaster.error("Ngày chiếu phải từ ngày mai trở đi!");
+                return;
+            }
+
             if (this.edit_quan_ly_phim.id_the_loai.length === 0) {
                 toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
             }
+            
+            // Create a copy of the data to send
+            const updateData = { ...this.edit_quan_ly_phim };
+            // Ensure id_the_loai is an array of numbers
+            updateData.id_the_loai = updateData.id_the_loai.map(id => Number(id));
+            
             baseRequest
-                .put('admin/quan-ly-phim/update', this.edit_quan_ly_phim)
+                .put('admin/quan-ly-phim/update', updateData)
                 .then((res) => {
                     if (res.data.status == true) {
                         toaster.success('Thông báo<br>' + res.data.message);
@@ -528,6 +583,38 @@ export default {
                     });
                 });
         },
+        editMovie(v) {
+            // Reset the edit form first
+            this.edit_quan_ly_phim = {
+                ten_phim: '',
+                slug_phim: '',
+                ngay_chieu: '',
+                thoi_luong: '',
+                dao_dien: '',
+                dien_vien: '',
+                gioi_han_do_tuoi: '',
+                hinh_anh: '',
+                danh_gia: '',
+                trailer_ytb: '',
+                mo_ta: '',
+                nha_san_xuat: '',
+                id_the_loai: [],
+                tinh_trang: '1'
+            };
+            
+            // Copy the movie data
+            Object.assign(this.edit_quan_ly_phim, v);
+            
+            // Handle the genre IDs
+            if (v.the_loais && Array.isArray(v.the_loais)) {
+                this.edit_quan_ly_phim.id_the_loai = v.the_loais.map(tl => tl.id);
+            }
+        },
+        getTomorrowDate() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow.toISOString().split('T')[0];
+        }
     },
 };
 </script>
