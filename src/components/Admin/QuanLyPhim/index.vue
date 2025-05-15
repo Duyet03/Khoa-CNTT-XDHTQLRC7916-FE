@@ -39,7 +39,8 @@
                                             <div class="col-12">
                                                 <label class="form-label">Ngày Chiếu</label>
                                                 <input v-model="create_quan_ly_phim.ngay_chieu" type="date"
-                                                    class="form-control mb-2" placeholder="Ngày Chiếu">
+                                                    class="form-control mb-2" placeholder="Ngày Chiếu"
+                                                    :min="getTomorrowDate()">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -158,7 +159,8 @@
                                             <div class="col-12">
                                                 <label class="form-label">Ngày Chiếu</label>
                                                 <input v-model="edit_quan_ly_phim.ngay_chieu" type="date"
-                                                    class="form-control mb-3" placeholder="Ngày Chiếu">
+                                                    class="form-control mb-3" placeholder="Ngày Chiếu"
+                                                    :min="getTomorrowDate()">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -446,6 +448,23 @@ export default {
                 });
         },
         createQuanLyPhim() {
+            if (!this.create_quan_ly_phim.ten_phim ||
+                !this.create_quan_ly_phim.slug_phim ||
+                !this.create_quan_ly_phim.ngay_chieu) {
+                toaster.error("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            // Kiểm tra ngày chiếu phải từ ngày mai trở đi
+            const tomorrow = new Date();
+            tomorrow.setHours(0, 0, 0, 0);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const selectedDate = new Date(this.create_quan_ly_phim.ngay_chieu);
+            if (selectedDate < tomorrow) {
+                toaster.error("Ngày chiếu phải từ ngày mai trở đi!");
+                return;
+            }
+
             if (this.create_quan_ly_phim.id_the_loai.length === 0) {
                 toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
@@ -520,6 +539,23 @@ export default {
                 });
         },
         updateQuanLyPhim() {
+            if (!this.edit_quan_ly_phim.ten_phim ||
+                !this.edit_quan_ly_phim.slug_phim ||
+                !this.edit_quan_ly_phim.ngay_chieu) {
+                toaster.error("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            // Kiểm tra ngày chiếu phải từ ngày mai trở đi
+            const tomorrow = new Date();
+            tomorrow.setHours(0, 0, 0, 0);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const selectedDate = new Date(this.edit_quan_ly_phim.ngay_chieu);
+            if (selectedDate < tomorrow) {
+                toaster.error("Ngày chiếu phải từ ngày mai trở đi!");
+                return;
+            }
+
             if (this.edit_quan_ly_phim.id_the_loai.length === 0) {
                 toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
@@ -573,6 +609,11 @@ export default {
             if (v.the_loais && Array.isArray(v.the_loais)) {
                 this.edit_quan_ly_phim.id_the_loai = v.the_loais.map(tl => tl.id);
             }
+        },
+        getTomorrowDate() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow.toISOString().split('T')[0];
         }
     },
 };

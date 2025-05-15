@@ -49,6 +49,8 @@
         </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -61,14 +63,14 @@ export default {
         paginatedMovies() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
-            return this.list_phim.slice(start, end);
+            return this.list_phim_sap_chieu.slice(start, end);
         },
         totalPages() {
-            return Math.ceil(this.list_phim.length / this.itemsPerPage);
+            return Math.ceil(this.list_phim_sap_chieu.length / this.itemsPerPage);
         }
     },
     mounted() {
-        this.getListPhimSapChieu();
+        this.getDataPhimSapChieu();
     },
     methods: {
         changePage(page) {
@@ -89,6 +91,9 @@ export default {
                 .then((res) => {
                     this.list_phim_sap_chieu = res.data.data;
                 })
+                .catch((error) => {
+                    console.error('Error fetching movies:', error);
+                });
         },
     }
 }

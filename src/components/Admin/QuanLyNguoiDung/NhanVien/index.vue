@@ -36,7 +36,7 @@
                                         <div class="col-md-6">
                                             <label class="form-label">Ngày sinh</label>
                                             <input v-model="nhan_vien_create.ngay_sinh" type="date"
-                                                class="form-control" />
+                                                class="form-control" :max="new Date().toISOString().split('T')[0]" />
                                             <div v-if="errors_nv.ngay_sinh" class="text-danger small mt-1">
                                                 {{ errors_nv.ngay_sinh }}
                                             </div>
@@ -68,7 +68,7 @@
                                         <div class="col-md-6">
                                             <label class="form-label">Ngày bắt đầu làm việc</label>
                                             <input v-model="nhan_vien_create.ngay_bat_dau" type="date"
-                                                class="form-control" />
+                                                class="form-control"/>
                                             <div v-if="errors_nv.ngay_bat_dau" class="text-danger small mt-1">
                                                 {{ errors_nv.ngay_bat_dau }}
                                             </div>
@@ -108,7 +108,7 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Đóng
                                     </button>
-                                    <button v-on:click="themNhanVien()" type="button" class="btn btn-primary">
+                                    <button v-on:click="themNhanVien()" type="button" data-bs-dismiss="modal" class="btn btn-primary">
                                         <i class="bx bxs-save me-1"></i> Thêm mới
                                     </button>
                                 </div>
@@ -207,7 +207,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Ngày sinh</label>
-                            <input v-model="nhan_vien_update.ngay_sinh" type="date" class="form-control" />
+                            <input v-model="nhan_vien_update.ngay_sinh" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
                             <div v-if="errors_update.ngay_sinh" class="text-danger small mt-1">
                                 {{ errors_update.ngay_sinh }}
                             </div>
@@ -238,7 +238,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Ngày bắt đầu làm việc</label>
-                            <input v-model="nhan_vien_update.ngay_bat_dau" type="date" class="form-control" />
+                            <input v-model="nhan_vien_update.ngay_bat_dau" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
                             <div v-if="errors_update.ngay_bat_dau" class="text-danger small mt-1">
                                 {{ errors_update.ngay_bat_dau }}
                             </div>
@@ -283,7 +283,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-                    <button v-on:click="xoaNhanVien()" type="button" class="btn btn-danger">
+                    <button v-on:click="xoaNhanVien()" type="button" data-bs-dismiss="modal" class="btn btn-danger">
                         <i class="bx bxs-trash me-1"></i> Xoá
                     </button>
                 </div>
