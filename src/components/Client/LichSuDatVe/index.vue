@@ -22,8 +22,6 @@
                                         <th>Tên Phim</th>
                                         <th>Ngày Chiếu</th>
                                         <th>Giờ Bắt Đầu</th>
-                                        <th>Định Dạng</th>
-                                        <th>Ngôn Ngữ</th>
                                         <th>Tổng Tiền</th>
                                         <th>Trạng Thái</th>
                                         <th>Hành Động</th>
@@ -36,8 +34,6 @@
                                             <td class="movie-title">{{ item.ten_phim }}</td>
                                             <td>{{ formatDate(item.ngay_chieu) }}</td>
                                             <td>{{ item.gio_bat_dau }}</td>
-                                            <td>{{ item.dinh_dang }}</td>
-                                            <td>{{ item.ngon_ngu }}</td>
                                             <td class="price">{{ formatCurrency(item.tong_tien) }}</td>
                                             <td>
                                                 <span :class="getStatusClass(item.trang_thai)" class="status-badge">
