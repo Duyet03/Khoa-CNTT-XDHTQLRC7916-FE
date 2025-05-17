@@ -35,8 +35,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Ngày sinh</label>
-                                            <input v-model="nhan_vien_create.ngay_sinh" type="date"
-                                                class="form-control" :max="new Date().toISOString().split('T')[0]" />
+                                            <input v-model="nhan_vien_create.ngay_sinh" type="date" class="form-control"
+                                                :max="new Date().toISOString().split('T')[0]" />
                                             <div v-if="errors_nv.ngay_sinh" class="text-danger small mt-1">
                                                 {{ errors_nv.ngay_sinh }}
                                             </div>
@@ -68,7 +68,7 @@
                                         <div class="col-md-6">
                                             <label class="form-label">Ngày bắt đầu làm việc</label>
                                             <input v-model="nhan_vien_create.ngay_bat_dau" type="date"
-                                                class="form-control"/>
+                                                class="form-control" />
                                             <div v-if="errors_nv.ngay_bat_dau" class="text-danger small mt-1">
                                                 {{ errors_nv.ngay_bat_dau }}
                                             </div>
@@ -108,7 +108,7 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Đóng
                                     </button>
-                                    <button v-on:click="themNhanVien()" type="button" data-bs-dismiss="modal" class="btn btn-primary">
+                                    <button v-on:click="themNhanVien()" type="button" class="btn btn-primary">
                                         <i class="bx bxs-save me-1"></i> Thêm mới
                                     </button>
                                 </div>
@@ -207,7 +207,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Ngày sinh</label>
-                            <input v-model="nhan_vien_update.ngay_sinh" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
+                            <input v-model="nhan_vien_update.ngay_sinh" type="date" class="form-control"
+                                :max="new Date().toISOString().split('T')[0]" />
                             <div v-if="errors_update.ngay_sinh" class="text-danger small mt-1">
                                 {{ errors_update.ngay_sinh }}
                             </div>
@@ -238,7 +239,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Ngày bắt đầu làm việc</label>
-                            <input v-model="nhan_vien_update.ngay_bat_dau" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
+                            <input v-model="nhan_vien_update.ngay_bat_dau" type="date" class="form-control"
+                                :max="new Date().toISOString().split('T')[0]" />
                             <div v-if="errors_update.ngay_bat_dau" class="text-danger small mt-1">
                                 {{ errors_update.ngay_bat_dau }}
                             </div>
@@ -252,6 +254,21 @@
                             </select>
                             <div v-if="errors_update.id_chuc_vu" class="text-danger small mt-1">
                                 {{ errors_update.id_chuc_vu }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ảnh đại diện (URL)</label>
+                            <div class="input-group">
+                                <input v-model="nhan_vien_update.avatar" type="text" class="form-control"
+                                    placeholder="Nhập đường dẫn ảnh" />
+                                <span class="input-group-text">
+                                    <img v-if="nhan_vien_update.avatar" :src="nhan_vien_update.avatar"
+                                        class="img-thumbnail rounded-circle"
+                                        style="width: 40px; height: 40px; object-fit: cover;" alt="Preview">
+                                </span>
+                            </div>
+                            <div v-if="errors_update.avatar" class="text-danger small mt-1">
+                                {{ errors_update.avatar }}
                             </div>
                         </div>
                     </div>
@@ -320,7 +337,8 @@ export default {
                 ngay_bat_dau: '',
                 id_chuc_vu: '',
                 avatar: '',
-                tinh_trang: ''
+                tinh_trang: '',
+                avatar: '',
             },
             danh_sach_nhan_vien: [],
             list_chuc_vu: [],
@@ -347,7 +365,14 @@ export default {
                 avatar: '',
                 tinh_trang: ''
             };
-
+            if (this.nhan_vien_update.avatar) {
+                try {
+                    new URL(this.nhan_vien_update.avatar);
+                } catch (e) {
+                    this.errors_update.avatar = 'URL ảnh không hợp lệ!';
+                    isValid = false;
+                }
+            }
             // Tên nhân viên
             if (!this.nhan_vien_update.ten_nhan_vien) {
                 this.errors_update.ten_nhan_vien = 'Tên nhân viên không được để trống!';

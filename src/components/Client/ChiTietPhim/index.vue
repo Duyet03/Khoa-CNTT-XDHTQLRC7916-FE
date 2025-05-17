@@ -82,7 +82,7 @@
                             </router-link>
                             <button v-else class="btn btn-secondary btn-lg" disabled>
                                 <i class="bi bi-ticket-perforated me-2"></i>
-                                Đã hết hạn đặt vé
+                                Vé chưa được mở bán
                             </button>
                         </div>
                     </div>
@@ -252,6 +252,7 @@ export default {
             if (!this.phim_chi_tiet.ngay_chieu) return false;
             const showDate = new Date(this.phim_chi_tiet.ngay_chieu);
             const now = new Date();
+            now.setDate(now.getDate() + 1);
             return showDate < now;
         }
     },

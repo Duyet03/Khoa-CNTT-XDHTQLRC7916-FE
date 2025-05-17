@@ -1,4 +1,3 @@
-
 <template>
     <!-- them -->
     <div class="row">
@@ -26,7 +25,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        
+
                                         <div class="col-lg-6">
                                             <div class="mb-2 mt-2">
                                                 <label>Tên chức vụ</label>
@@ -95,9 +94,13 @@
                                         <td>{{ k + 1 }}</td>
                                         <td>{{ v.ten_chuc_vu }}</td>
                                         <td class="text-center">
-                                            <button v-on:click="doiMaster(v)" v-if="v.is_master"
-                                                class="btn btn-success">Yes</button>
-                                            <button v-on:click="doiMaster(v)" v-else class="btn btn-primary">No</button>
+                                            <div v-if="(ten_chuc_vu === 'Quản lý') || (ten_chuc_vu === 'Admin')"
+                                                class="">
+                                                <button v-on:click="doiMaster(v)" v-if="v.is_master"
+                                                    class="btn btn-success">Yes</button>
+                                                <button v-on:click="doiMaster(v)" v-else
+                                                    class="btn btn-primary">No</button>
+                                            </div>
                                         </td>
                                         <td class="text-center">
                                             <button v-on:click="doiTrangThai(v)" v-if="v.tinh_trang"
@@ -130,7 +133,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        
+
                         <div class="col-lg-6">
                             <div class="mb-2 mt-2">
                                 <label>Tên chức vụ</label>
@@ -150,7 +153,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button v-on:click="capNhatChucVu()" data-bs-dismiss="modal" class="btn btn-primary">Cập nhật</button>
+                    <button v-on:click="capNhatChucVu()" data-bs-dismiss="modal" class="btn btn-primary">Cập
+                        nhật</button>
                 </div>
             </div>
         </div>
@@ -170,7 +174,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button v-on:click="xoaChucVu()" type="button" data-bs-dismiss="modal"  class="btn btn-primary">Xoá</button>
+                    <button v-on:click="xoaChucVu()" type="button" data-bs-dismiss="modal"
+                        class="btn btn-primary">Xoá</button>
                 </div>
             </div>
         </div>
@@ -188,6 +193,7 @@ export default {
             chuc_vu_create: {},
             chuc_vu_update: {},
             id_can_xoa: '',
+            ten_chuc_vu: '',
         };
     },
     mounted() {
@@ -200,6 +206,9 @@ export default {
                 .then((res) => {
                     this.danh_sach_chuc_vu = res.data.data;
                     console.log(this.danh_sach_chuc_vu);
+                    this.ten_chuc_vu = res.data.quyen;
+                    console.log(this.ten_chuc_vu);
+
                 });
         },
         themChucVu() {

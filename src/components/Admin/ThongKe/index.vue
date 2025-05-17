@@ -371,16 +371,18 @@ export default {
             return colors[index % colors.length]
         },
         async fetchData() {
-            try {
-                const response = await baseRequest.get('admin/thong-ke/doanh-thu')
+            const response = await baseRequest.get('admin/thong-ke/doanh-thu')
+            if(response.data.status==false){
+                toaster.error(response.data.message)
+            }else{
+                try {    
                 const data = response.data
-
                 const paymentMethods = data.thong_ke_theo_phuong_thuc
                 const backgroundColors = paymentMethods.map((_, index) => this.getChartColors(index))
-
                 // Calculate total orders
                 this.totalOrders = paymentMethods.reduce((sum, method) => sum + method.so_luong_hoa_don, 0)
-
+                
+                
                 // Prepare data for pie chart
                 this.pieChartData = {
                     labels: paymentMethods.map(item => this.getPaymentMethodLabel(item.phuong_thuc_thanh_toan)),
@@ -389,7 +391,7 @@ export default {
                         data: paymentMethods.map(item => item.so_luong_hoa_don)
                     }]
                 }
-
+                
                 // Prepare data for bar chart
                 this.barChartData = {
                     labels: paymentMethods.map(item => this.getPaymentMethodLabel(item.phuong_thuc_thanh_toan)),
@@ -403,9 +405,10 @@ export default {
                 this.tongDoanhThu = data.tong_doanh_thu
                 this.loaded = true
                 toaster.success(data.message)
-            } catch (error) {
+            } catch (error) {               
                 console.error('Error fetching statistics:', error)
                 toaster.error('Có lỗi xảy ra khi tải dữ liệu thống kê')
+            }
             }
         },
         handlePeriodChange() {

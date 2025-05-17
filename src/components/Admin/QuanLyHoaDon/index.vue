@@ -6,7 +6,7 @@
                     <div class="card-header bg-primary text-white d-flex justify-content-between">
                         <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Quản lý hóa đơn</h5>
                         <router-link to="/admin/dat-ve">
-                            <button class="btn btn-info">Thêm mới hoá đơn</button>
+                            <button v-if="quyen" class="btn btn-info">Thêm mới hoá đơn</button>
                         </router-link>
                     </div>
                     <div class="card-body">
@@ -196,7 +196,9 @@ export default {
             chi_tiet_thue: [],
             selectedHoaDon: null,
             isLoadingDetail: false,
-            searchTerm: ''
+            searchTerm: '',
+            quyen: false,
+            quyen2: false,
         }
     },
     computed: {
@@ -213,8 +215,19 @@ export default {
     },
     mounted() {
         this.loadData();
+        this.checkQuyen();
     },
     methods: {
+        checkQuyen(){
+            baseRequest
+                .get("hoa-don/quyen")
+                .then((res) => {
+                    if (res.data.status) {
+                        this.quyen=true;
+                        this.quyen2=true;
+                    }
+                })
+        },
         formatVND(number) {
             return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
         },
