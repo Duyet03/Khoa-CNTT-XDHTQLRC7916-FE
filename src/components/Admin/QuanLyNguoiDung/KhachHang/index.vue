@@ -154,7 +154,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="bx bx-x me-1"></i>Đóng
                         </button>
-                        <button @click="themKhachHang()" type="button" data-bs-dismiss="modal" class="btn btn-primary">
+                        <button @click="themKhachHang()" type="button" class="btn btn-primary">
                             <i class="bx bx-check me-1"></i>Thêm mới
                         </button>
                     </div>
@@ -207,16 +207,9 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Tình trạng</label>
-                                <select v-model="khach_hang_update.tinh_trang" class="form-select">
+                                <select v-model="khach_hang_update.is_block" class="form-select">
                                     <option :value="0">Hoạt động</option>
                                     <option :value="1">Khóa</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Trạng thái tài khoản</label>
-                                <select v-model="khach_hang_update.tinh_trang" class="form-select">
-                                    <option value="1">Đã kích hoạt</option>
-                                    <option value="0">Chưa kích hoạt</option>
                                 </select>
                             </div>
                         </div>
