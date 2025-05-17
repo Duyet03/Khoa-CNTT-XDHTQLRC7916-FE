@@ -50,7 +50,8 @@
                                                 </button>
                                             </td>
                                             <td class="text-center">
-                                                <button v-on:click="doiTrangThai(v)" :class="['btn btn-sm', v.is_block == 1 ? 'btn-danger' : 'btn-success']">
+                                                <button v-on:click="doiTrangThai(v)"
+                                                    :class="['btn btn-sm', v.is_block == 1 ? 'btn-danger' : 'btn-success']">
                                                     <i class="bx me-1"
                                                         :class="v.is_block == 1 ? 'bx-lock-alt' : 'bx-lock-open-alt'"></i>
                                                     {{ v.is_block == 1 ? 'Khóa' : 'Hoạt động' }}
@@ -112,7 +113,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Ngày sinh</label>
-                                <input v-model="khach_hang_create.ngay_sinh" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
+                                <input v-model="khach_hang_create.ngay_sinh" type="date" class="form-control"
+                                    :max="new Date().toISOString().split('T')[0]" />
                                 <div v-if="errors.ngay_sinh" class="text-danger"
                                     style="font-size: 15px; margin-top: 2px;">
                                     {{ errors.ngay_sinh }}
@@ -199,7 +201,8 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Ngày sinh</label>
-                                <input v-model="khach_hang_update.ngay_sinh" type="date" class="form-control" :max="new Date().toISOString().split('T')[0]" />
+                                <input v-model="khach_hang_update.ngay_sinh" type="date" class="form-control"
+                                    :max="new Date().toISOString().split('T')[0]" />
                                 <div v-if="errors_update.ngay_sinh" class="text-danger"
                                     style="font-size: 15px; margin-top: 2px;">
                                     {{ errors_update.ngay_sinh }}
@@ -331,8 +334,11 @@ export default {
             }
 
             // Số điện thoại (nếu nhập thì phải đúng định dạng)
-            const phoneRegex = /^([0-9\s\-\+\(\)]*)$/;
-            if (this.khach_hang_create.so_dien_thoai) {
+            if (!this.khach_hang_create.so_dien_thoai) {
+                this.errors.so_dien_thoai = 'Vui lòng nhập số điện thoại!';
+                isValid = false;
+            } else {
+                const phoneRegex = /^([0-9\s\-\+\(\)]*)$/;
                 if (!phoneRegex.test(this.khach_hang_create.so_dien_thoai)) {
                     this.errors.so_dien_thoai = 'Số điện thoại không đúng định dạng!';
                     isValid = false;
@@ -390,7 +396,7 @@ export default {
                 return;
             }
             console.log(this.khach_hang_create);
-            
+
             // Nếu không có lỗi thì gửi lên BE
             baseRequest.post('khach-hang/create', this.khach_hang_create)
                 .then((res) => {
@@ -471,8 +477,11 @@ export default {
             }
 
             // Số điện thoại (nếu nhập thì phải đúng định dạng)
-            const phoneRegex = /^([0-9\s\-\+\(\)]*)$/;
-            if (this.khach_hang_update.so_dien_thoai) {
+            if (!this.khach_hang_update.so_dien_thoai) {
+                this.errors_update.so_dien_thoai = 'Vui lòng nhập số điện thoại!';
+                isValid = false;
+            } else {
+                const phoneRegex = /^([0-9\s\-\+\(\)]*)$/;
                 if (!phoneRegex.test(this.khach_hang_update.so_dien_thoai)) {
                     this.errors_update.so_dien_thoai = 'Số điện thoại không đúng định dạng!';
                     isValid = false;
@@ -505,13 +514,13 @@ export default {
                 return;
             }
             console.log(this.khach_hang_update);
-            
+
             // Nếu không có lỗi thì gửi lên BE
             baseRequest.put('khach-hang/update', this.khach_hang_update)
                 .then((res) => {
                     if (res.data.status) {
                         toaster.success(res.data.message);
-                            this.layKhachHang();
+                        this.layKhachHang();
 
                         // Đóng modal đúng chuẩn Bootstrap 5
                         const modalEl = document.getElementById('updateKhachHangModal');

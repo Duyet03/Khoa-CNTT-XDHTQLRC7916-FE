@@ -85,7 +85,7 @@
                             <label class="form-label">Ngày Sinh</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                                <input type="date" class="form-control" v-model="data_dang_ky.ngay_sinh" :max="new Date().toISOString().split('T')[0]">
+                                <input type="date" class="form-control" v-model="data_dang_ky.ngay_sinh">
                             </div>
                         </div>
                         <div class="col-12">
@@ -173,14 +173,6 @@ export default {
             }
             if (!this.data_dang_ky.ngay_sinh) {
                 toaster.error("Vui lòng chọn ngày sinh!");
-                return false;
-            }
-            // Kiểm tra ngày sinh không được là ngày tương lai
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const birthDate = new Date(this.data_dang_ky.ngay_sinh);
-            if (birthDate > today) {
-                toaster.error("Ngày sinh không được là ngày tương lai!");
                 return false;
             }
             if (!this.acceptTerms) {
