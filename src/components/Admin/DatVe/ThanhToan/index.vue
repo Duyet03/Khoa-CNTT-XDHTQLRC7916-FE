@@ -167,7 +167,15 @@
                                             
                                             <!-- Thông tin khách hàng khi thanh toán tiền mặt -->
                                             <div v-if="phuong_thuc_thanh_toan === 'TIEN_MAT'" class="mt-3">
-                                                <div class="mb-3">
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="checkbox" 
+                                                        v-model="want_email" id="wantEmail">
+                                                    <label class="form-check-label" for="wantEmail">
+                                                        <i class="fas fa-envelope me-2"></i>
+                                                        Nhận hóa đơn qua email
+                                                    </label>
+                                                </div>
+                                                <div class="mb-3" v-if="want_email">
                                                     <label for="email" class="form-label">Email khách hàng <span class="text-danger">*</span></label>
                                                     <input type="email" class="form-control" id="email" 
                                                         v-model="email_khach" placeholder="Nhập email khách hàng">
@@ -270,6 +278,7 @@ export default {
             itemsPerPage: 4,
             itemsPerPageDichVuDaDat: 2,
             email_khach: '',
+            want_email: false,
         }
     },
 
@@ -345,7 +354,7 @@ export default {
         async thanhToan() {
             try {
                 // Kiểm tra thông tin khách hàng khi thanh toán tiền mặt
-                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT' && this.want_email) {
                     if (!this.email_khach.trim()) {
                         toaster.error("Vui lòng nhập email khách hàng!");
                         return;
@@ -369,8 +378,8 @@ export default {
                     tong_tien: this.tong_tien + this.tong_tien_dich_vu
                 };
 
-                // Thêm email nếu thanh toán tiền mặt
-                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                // Thêm email nếu thanh toán tiền mặt và muốn nhận email
+                if (this.phuong_thuc_thanh_toan === 'TIEN_MAT' && this.want_email) {
                     paymentData.email_khach = this.email_khach;
                 }
 
@@ -402,7 +411,7 @@ export default {
                         processingModal.hide();
                         this.processing = false;
                         toaster.success("Thanh toán thành công!");
-                        if (this.phuong_thuc_thanh_toan === 'TIEN_MAT') {
+                        if (this.phuong_thuc_thanh_toan === 'TIEN_MAT' && this.want_email) {
                             toaster.success("Email xác nhận đã được gửi đến " + this.email_khach);
                         }
                         // Chuyển đến trang chi tiết hóa đơn
