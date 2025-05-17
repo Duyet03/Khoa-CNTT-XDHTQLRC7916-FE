@@ -95,6 +95,9 @@ export default {
                         localStorage.setItem('ho_ten_admin', res.data.ho_ten_admin);
                         localStorage.setItem('avatar_admin', res.data.avatar_admin);
                         localStorage.setItem("id_nhan_vien", res.data.id_nhan_vien);
+                        localStorage.setItem("id_chuc_vu", res.data.id_chuc_vu);
+                        localStorage.setItem("ten_chuc_vu", res.data.ten_chuc_vu);
+                        localStorage.setItem("is_master", res.data.is_master);
                         this.$router.push('/admin/phan-quyen');
                     }
                     else {

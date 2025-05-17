@@ -42,7 +42,7 @@
                                             <td class="text-center">{{ v.so_dien_thoai || 'N/A' }}</td>
                                             <td class="text-center">{{ v.ngay_sinh || 'N/A' }}</td>
                                             <td class="text-center">
-                                                <button @click="doiTrangThai(v)"
+                                                <button
                                                     :class="['btn btn-sm', v.is_active == 1 ? 'btn-success' : 'btn-warning']">
                                                     <i class="bx me-1"
                                                         :class="v.is_active == 1 ? 'bx-check' : 'bx-x'"></i>
@@ -50,11 +50,11 @@
                                                 </button>
                                             </td>
                                             <td class="text-center">
-                                                <span :class="['badge', v.is_block == 1 ? 'bg-danger' : 'bg-success']">
+                                                <button v-on:click="doiTrangThai(v)" :class="['btn btn-sm', v.is_block == 1 ? 'btn-danger' : 'btn-success']">
                                                     <i class="bx me-1"
                                                         :class="v.is_block == 1 ? 'bx-lock-alt' : 'bx-lock-open-alt'"></i>
                                                     {{ v.is_block == 1 ? 'Khóa' : 'Hoạt động' }}
-                                                </span>
+                                                </button>
                                             </td>
                                             <td class="text-center">
                                                 <div class="btn-group">
@@ -143,7 +143,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Trạng thái tài khoản</label>
-                                <select v-model="khach_hang_create.tinh_trang" class="form-select">
+                                <select v-model="khach_hang_create.is_active" class="form-select">
                                     <option value="1">Đã kích hoạt</option>
                                     <option value="0">Chưa kích hoạt</option>
                                 </select>
@@ -154,7 +154,7 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="bx bx-x me-1"></i>Đóng
                         </button>
-                        <button @click="themKhachHang()" type="button" data-bs-dismiss="modal" class="btn btn-primary">
+                        <button @click="themKhachHang()" type="button" class="btn btn-primary">
                             <i class="bx bx-check me-1"></i>Thêm mới
                         </button>
                     </div>
@@ -207,16 +207,9 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Tình trạng</label>
-                                <select v-model="khach_hang_update.tinh_trang" class="form-select">
+                                <select v-model="khach_hang_update.is_block" class="form-select">
                                     <option :value="0">Hoạt động</option>
                                     <option :value="1">Khóa</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Trạng thái tài khoản</label>
-                                <select v-model="khach_hang_update.is_active" class="form-select">
-                                    <option value="1">Đã kích hoạt</option>
-                                    <option value="0">Chưa kích hoạt</option>
                                 </select>
                             </div>
                         </div>
@@ -396,7 +389,8 @@ export default {
                 // Nếu có lỗi thì không gửi lên BE
                 return;
             }
-
+            console.log(this.khach_hang_create);
+            
             // Nếu không có lỗi thì gửi lên BE
             baseRequest.post('khach-hang/create', this.khach_hang_create)
                 .then((res) => {
@@ -510,7 +504,8 @@ export default {
                 // Nếu có lỗi thì không gửi lên BE
                 return;
             }
-
+            console.log(this.khach_hang_update);
+            
             // Nếu không có lỗi thì gửi lên BE
             baseRequest.put('khach-hang/update', this.khach_hang_update)
                 .then((res) => {

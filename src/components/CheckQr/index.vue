@@ -17,11 +17,15 @@
                 </div>
 
                 <div v-if="maHoaDon" class="button-group">
-                    <button class="btn btn-primary" @click="checkInVe">
+                    <button class="btn btn-primary" 
+                            @click="checkInVe" 
+                            :disabled="!canCheckInVe">
                         <i class="fas fa-check-circle"></i>
                         Check-in Vé
                     </button>
-                    <button class="btn btn-secondary" @click="checkInDichVu">
+                    <button class="btn btn-secondary" 
+                            @click="checkInDichVu"
+                            :disabled="!canCheckInDichVu">
                         <i class="fas fa-concierge-bell"></i>
                         Check-in Dịch Vụ
                     </button>
@@ -46,17 +50,36 @@ export default {
         return {
             maHoaDon: '',
             message: '',
-            token: null
+            token: null,
+            tenChucVu: '',
+            isMaster: false
         };
+    },
+    computed: {
+        canCheckInVe() {
+            return this.isMaster || this.tenChucVu === 'Check-in vé';
+        },
+        canCheckInDichVu() {
+            return this.isMaster || this.tenChucVu === 'Check-in dịch vụ';
+        }
     },
     mounted() {
         const params = new URLSearchParams(window.location.search);
         this.maHoaDon = params.get('ma_hoa_don') || '';
         this.token = localStorage.getItem("token_admin");
+        this.tenChucVu = localStorage.getItem("ten_chuc_vu") || '';
+        this.isMaster = localStorage.getItem("is_master") === '1';
         
         if (!this.token) {
             this.message = "❌ Bạn cần đăng nhập để thực hiện chức năng này";
             toaster.error(this.message);
+            return;
+        }
+
+        if (!this.isMaster && !this.tenChucVu) {
+            this.message = "❌ Bạn không có quyền truy cập chức năng này";
+            toaster.error(this.message);
+            return;
         }
     },
     methods: {
@@ -80,6 +103,11 @@ export default {
 
         async checkInVe() {
             if (!this.verifyToken()) return;
+            if (!this.canCheckInVe) {
+                this.message = "❌ Bạn không có quyền thực hiện chức năng check-in vé";
+                toaster.error(this.message);
+                return;
+            }
             if (!this.maHoaDon) {
                 this.message = "❌ Mã hóa đơn không hợp lệ";
                 toaster.error(this.message);
@@ -115,6 +143,11 @@ export default {
 
         async checkInDichVu() {
             if (!this.verifyToken()) return;
+            if (!this.canCheckInDichVu) {
+                this.message = "❌ Bạn không có quyền thực hiện chức năng check-in dịch vụ";
+                toaster.error(this.message);
+                return;
+            }
             if (!this.maHoaDon) {
                 this.message = "❌ Mã hóa đơn không hợp lệ";
                 toaster.error(this.message);

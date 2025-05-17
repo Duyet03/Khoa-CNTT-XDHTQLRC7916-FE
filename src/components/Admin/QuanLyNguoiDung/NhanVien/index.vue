@@ -108,7 +108,7 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         Đóng
                                     </button>
-                                    <button v-on:click="themNhanVien()" type="button" data-bs-dismiss="modal" class="btn btn-primary">
+                                    <button v-on:click="themNhanVien()" type="button" class="btn btn-primary">
                                         <i class="bx bxs-save me-1"></i> Thêm mới
                                     </button>
                                 </div>
