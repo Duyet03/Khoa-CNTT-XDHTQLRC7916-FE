@@ -165,18 +165,27 @@ export default {
 
 			try {
 				let response;
+				// Lấy lịch sử tin nhắn (bỏ qua tin nhắn hệ thống như lời chào)
+				const messageHistory = this.messages
+					.filter(msg => !msg.text.includes('Cinema Assistant, tôi có thể giúp bạn'))
+					.map(msg => ({
+						role: msg.sender === 'user' ? 'user' : 'assistant',
+						content: msg.text
+					}));
 
 				// Kiểm tra nếu là yêu cầu xem lịch sử đặt vé
 				if (this.userInput.toLowerCase().includes('lịch sử') &&
 					(this.userInput.toLowerCase().includes('đặt vé') || this.userInput.toLowerCase().includes('hóa đơn'))) {
 					response = await axios.post('http://127.0.0.1:8000/api/chatbot/bill-history', {
-						userId: this.userId
+						userId: this.userId,
+						messages: messageHistory
 					});
 				} else {
-					// Gửi câu hỏi đến API mặc định
+					// Gửi câu hỏi đến API mặc định kèm theo lịch sử tin nhắn
 					response = await axios.post('http://127.0.0.1:8000/api/chatbot/query', {
 						message: this.userInput,
-						userId: this.userId
+						userId: this.userId,
+						messages: messageHistory
 					});
 				}
 
