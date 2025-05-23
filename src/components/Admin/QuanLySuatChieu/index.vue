@@ -92,7 +92,7 @@
                                                                 <span class="badge bg-primary me-2">Suất {{ index + 1 }}</span>
                                                                 <span>{{ suat }}</span>
                                                             </div>
-                                                            <button @click="xoaSuat(index)" class="btn btn-danger btn-sm">
+                                                            <button @click="xoaSuat1(index)" class="btn btn-danger btn-sm">
                                                                 <i class="fas fa-times"></i>
                                                             </button>
                                                         </div>
@@ -879,7 +879,7 @@ export default {
             return `${hours}:${minutes}`;
         },
 
-        xoaSuat(index) {
+        xoaSuat1(index) {
             this.suat_create.danh_sach_suat.splice(index, 1);
         },
 
