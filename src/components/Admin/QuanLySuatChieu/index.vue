@@ -58,7 +58,8 @@
                                         <div class="mb-2">
                                             <label>Cài đặt suất chiếu</label>
                                             <div class="form-check mt-2">
-                                                <input class="form-check-input" type="checkbox" v-model="suat_create.tao_nhieu_suat" id="multipleTimeSlots">
+                                                <input class="form-check-input" type="checkbox"
+                                                    v-model="suat_create.tao_nhieu_suat" id="multipleTimeSlots">
                                                 <label class="form-check-label" for="multipleTimeSlots">
                                                     Tạo nhiều suất chiếu
                                                 </label>
@@ -67,17 +68,20 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label>Thời gian dọn dẹp (phút)</label>
-                                                        <input v-model="suat_create.thoi_gian_don_dep" type="number" class="form-control mt-2" min="0" value="10">
+                                                        <input v-model="suat_create.thoi_gian_don_dep" type="number"
+                                                            class="form-control mt-2" min="0" value="10">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Thời gian quảng cáo (phút)</label>
-                                                        <input v-model="suat_create.thoi_gian_quang_cao" type="number" class="form-control mt-2" min="0" value="10">
+                                                        <input v-model="suat_create.thoi_gian_quang_cao" type="number"
+                                                            class="form-control mt-2" min="0" value="10">
                                                     </div>
                                                 </div>
                                                 <div class="mt-3">
                                                     <label class="d-block mb-2">Chọn suất chiếu đầu tiên</label>
                                                     <div class="input-group">
-                                                        <input type="time" class="form-control" v-model="suat_create.gio_bat_dau">
+                                                        <input type="time" class="form-control"
+                                                            v-model="suat_create.gio_bat_dau">
                                                         <button @click="tinhToanSuatChieu" class="btn btn-primary">
                                                             <i class="fas fa-calculator me-1"></i>Tính toán suất chiếu
                                                         </button>
@@ -86,13 +90,16 @@
                                                 <div v-if="suat_create.danh_sach_suat.length > 0" class="mt-3">
                                                     <label class="d-block mb-2">Danh sách suất chiếu trong ngày</label>
                                                     <div class="list-group">
-                                                        <div v-for="(suat, index) in suat_create.danh_sach_suat" :key="index" 
+                                                        <div v-for="(suat, index) in suat_create.danh_sach_suat"
+                                                            :key="index"
                                                             class="list-group-item d-flex justify-content-between align-items-center">
                                                             <div>
-                                                                <span class="badge bg-primary me-2">Suất {{ index + 1 }}</span>
+                                                                <span class="badge bg-primary me-2">Suất {{ index + 1
+                                                                }}</span>
                                                                 <span>{{ suat }}</span>
                                                             </div>
-                                                            <button @click="xoaSuat(index)" class="btn btn-danger btn-sm">
+                                                            <button @click="xoaSuat1(index)"
+                                                                class="btn btn-danger btn-sm">
                                                                 <i class="fas fa-times"></i>
                                                             </button>
                                                         </div>
@@ -101,7 +108,8 @@
                                             </div>
                                             <div v-else class="mt-2">
                                                 <label>Giờ Bắt Đầu</label>
-                                                <input v-model="suat_create.gio_bat_dau" type="time" class="form-control mt-2">
+                                                <input v-model="suat_create.gio_bat_dau" type="time"
+                                                    class="form-control mt-2">
                                             </div>
                                         </div>
                                         <div class="mb-2">
@@ -110,11 +118,13 @@
                                         </div>
                                         <div class="mb-2">
                                             <label>Giá Vé Vip</label>
-                                            <input v-model="suat_create.gia_ve_vip"  type="number" class="form-control mt-2">
+                                            <input v-model="suat_create.gia_ve_vip" type="number"
+                                                class="form-control mt-2">
                                         </div>
                                         <div class="mb-2">
                                             <label>Giá Vé Đôi</label>
-                                            <input v-model="suat_create.gia_ve_doi"  type="number" class="form-control mt-2">
+                                            <input v-model="suat_create.gia_ve_doi" type="number"
+                                                class="form-control mt-2">
                                         </div>
                                         <div class="mb-2">
                                             <label>Định Dạng</label>
@@ -189,17 +199,20 @@
                                         <h5 class="mt-2">Danh Sách Suất Chiếu</h5>
                                         <div class="d-flex align-items-center">
                                             <div class="btn-group me-3">
-                                                <button class="btn btn-outline-primary" @click="chuyenNgay(-1)" :disabled="!coNgayTruoc">
+                                                <button class="btn btn-outline-primary" @click="chuyenNgay(-1)"
+                                                    :disabled="!coNgayTruoc">
                                                     <i class="fas fa-chevron-left"></i>
                                                 </button>
                                                 <button class="btn btn-outline-primary" style="min-width: 200px">
                                                     {{ formatDate(ngayHienTai) || 'Chọn ngày' }}
                                                 </button>
-                                                <button class="btn btn-outline-primary" @click="chuyenNgay(1)" :disabled="!coNgaySau">
+                                                <button class="btn btn-outline-primary" @click="chuyenNgay(1)"
+                                                    :disabled="!coNgaySau">
                                                     <i class="fas fa-chevron-right"></i>
                                                 </button>
                                             </div>
-                                            <button class="btn btn-outline-primary" v-on:click="capNhatTrangThaiTuDong()">
+                                            <button class="btn btn-outline-primary"
+                                                v-on:click="capNhatTrangThaiTuDong()">
                                                 <i class="bx bx-refresh me-1"></i>Cập nhật trạng thái tự động
                                             </button>
                                         </div>
@@ -248,13 +261,15 @@
                                                                     class="badge bg-warning">Hết vé</span>
                                                                 <span v-else-if="v.trang_thai === 'Hủy'"
                                                                     class="badge bg-danger">Hủy</span>
-                                                                <span v-else class="badge bg-primary">{{ v.trang_thai }}</span>
+                                                                <span v-else class="badge bg-primary">{{ v.trang_thai
+                                                                }}</span>
                                                             </td>
                                                             <td class="text-center text-nowrap align-middle">
-                                                                <button v-on:click="suaSuatChieu(v)" data-bs-toggle="modal"
-                                                                    data-bs-target="#updateModal"
+                                                                <button v-on:click="suaSuatChieu(v)"
+                                                                    data-bs-toggle="modal" data-bs-target="#updateModal"
                                                                     class="btn btn-info me-1">Cập Nhật</button>
-                                                                <button data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                                <button data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteModal"
                                                                     v-on:click="id_can_xoa = v.id"
                                                                     class="btn btn-danger">Xoá Bỏ</button>
                                                             </td>
@@ -719,7 +734,7 @@ export default {
 
             // Gửi request tạo nhiều suất
             baseRequest
-                .post("suat-chieu/create-multiple", { 
+                .post("suat-chieu/create-multiple", {
                     danh_sach_suat: danhSachSuat,
                     thoi_gian_don_dep: this.suat_create.thoi_gian_don_dep,
                     thoi_gian_quang_cao: this.suat_create.thoi_gian_quang_cao
@@ -825,15 +840,15 @@ export default {
             this.suat_create.danh_sach_suat = [];
 
             // Thời lượng một suất = thời lượng phim + thời gian dọn dẹp + thời gian quảng cáo
-            const tongThoiLuong = parseInt(phim.thoi_luong) + 
-                                parseInt(this.suat_create.thoi_gian_don_dep) + 
-                                parseInt(this.suat_create.thoi_gian_quang_cao);
+            const tongThoiLuong = parseInt(phim.thoi_luong) +
+                parseInt(this.suat_create.thoi_gian_don_dep) +
+                parseInt(this.suat_create.thoi_gian_quang_cao);
 
             // Tính toán các suất chiếu trong ngày
             let gioHienTai = this.parseTime(this.suat_create.gio_bat_dau);
             // Làm tròn giờ bắt đầu lên 10 phút
             gioHienTai = this.lamTronThoiGian(gioHienTai);
-            
+
             const gioKetThuc = new Date(gioHienTai);
             gioKetThuc.setHours(23, 59, 59);
 
@@ -855,14 +870,14 @@ export default {
             const minutes = date.getMinutes();
             const roundedMinutes = Math.ceil(minutes / 10) * 10;
             const newDate = new Date(date);
-            
+
             if (roundedMinutes === 60) {
                 // Nếu làm tròn lên 60 phút, tăng giờ lên 1 và đặt phút về 0
                 newDate.setHours(date.getHours() + 1, 0, 0, 0);
             } else {
                 newDate.setMinutes(roundedMinutes, 0, 0);
             }
-            
+
             return newDate;
         },
 
@@ -879,7 +894,7 @@ export default {
             return `${hours}:${minutes}`;
         },
 
-        xoaSuat(index) {
+        xoaSuat1(index) {
             this.suat_create.danh_sach_suat.splice(index, 1);
         },
 
@@ -932,7 +947,7 @@ export default {
     border-radius: 4px !important;
 }
 
-.time-slots .btn-check:checked + .btn {
+.time-slots .btn-check:checked+.btn {
     background-color: #0d6efd;
     color: white;
 }
