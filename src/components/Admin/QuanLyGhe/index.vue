@@ -240,7 +240,7 @@ export default {
                 })
                 .catch((error) => {
                     console.error("Lỗi khi lấy dữ liệu ghế:", error);
-                    toaster.error("Đã xảy ra lỗi khi tải dữ liệu ghế!");
+                    toaster.error("Xảy ra lỗi khi tải dữ liệu ghế!");
                 });
         },
 
