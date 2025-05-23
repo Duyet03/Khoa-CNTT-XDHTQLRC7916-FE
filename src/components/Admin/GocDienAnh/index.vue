@@ -43,7 +43,8 @@
                                                 <button class="btn btn-sm btn-primary" @click="editItem(item)">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-danger" v-on:click="id_can_xoa = item.id" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                <button class="btn btn-sm btn-danger" v-on:click="id_can_xoa = item.id"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModal">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -174,7 +175,7 @@ export default {
             if (!this.id_can_xoa) {
                 return;
             }
-            
+
             axios
                 .delete(`http://127.0.0.1:8000/api/goc-dien-anh/delete/${this.id_can_xoa}`, {
                     headers: {
@@ -213,7 +214,11 @@ export default {
 
             const method = 'post';
 
-            axios[method](url, this.formData)
+            axios.post(url, this.formData, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token_admin")
+                }
+            })
                 .then((res) => {
                     toaster.success(res.data.message);
                     this.closeModal();

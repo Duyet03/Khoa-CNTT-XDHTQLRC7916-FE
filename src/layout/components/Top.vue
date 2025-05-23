@@ -143,7 +143,7 @@
       <div class="submenu-content">
         <router-link to="/admin/noi-dung" @click="handleSubmenuClick">
           <a href="/admin/noi-dung" class="submenu-item">
-            <i class="bx bx-right-arrow-alt"></i>Nội Dung</a>
+            <i class="bx bx-right-arrow-alt"></i>Slide</a>
         </router-link>
         <router-link to="/admin/goc-dien-anh" @click="handleSubmenuClick">
           <a href="/admin/goc-dien-anh" class="submenu-item">

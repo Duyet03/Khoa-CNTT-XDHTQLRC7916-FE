@@ -98,7 +98,7 @@ export default {
                         localStorage.setItem("id_chuc_vu", res.data.id_chuc_vu);
                         localStorage.setItem("ten_chuc_vu", res.data.ten_chuc_vu);
                         localStorage.setItem("is_master", res.data.is_master);
-                        this.$router.push('/admin/phan-quyen');
+                        this.$router.push('/admin/chi-tiet-ve');
                     }
                     else {
                         toaster.error(res.data.message)

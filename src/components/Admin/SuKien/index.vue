@@ -202,6 +202,9 @@ export default {
                 .get('admin/su-kien/data')
                 .then((res) => {
                     this.ds_su_kien = res.data.data;
+                    if(res.data.status != true){
+                        toaster.error(res.data.message)
+                    }
                 })
         },
         getMinDate() {
@@ -257,6 +260,8 @@ export default {
                             tinh_trang: 1
                         };
                         this.dateErrors.create = { start: '', end: '' };
+                    }else{
+                        toaster.error(res.data.message)
                     }
                 });
         },
