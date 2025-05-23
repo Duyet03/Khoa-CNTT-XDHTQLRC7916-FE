@@ -153,7 +153,6 @@
 <script>
 import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
-import { error } from "jquery";
 const toaster = createToaster({ position: "top-right" });
 import { timeouts } from "../../../router/timeouts";
 import { kiemTraTrangThaiGheAPI } from "../../../router/veHelpers";
