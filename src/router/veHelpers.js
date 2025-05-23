@@ -21,7 +21,7 @@ export function kiemTraTrangThaiGheAPI(id_suat, id_ghe, id_khach_hang, onDone) {
                 }
                 setTimeout(() => {
                     window.location.reload();
-                }, 10000); 
+                }, 9000000); 
             }
         })
         .catch((error) => {

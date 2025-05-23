@@ -62,14 +62,14 @@
                                             <td class="text-center align-middle">Hàng {{ v.hang }}, Cột {{ v.cot }}</td>
                                             <td class="text-center align-middle">
                                                 <span v-if="v.loai_ghe == 1" class="badge bg-warning"
-                                                    @click="doiLoaiGhe(v)" style="cursor: pointer">
+                                                     style="cursor: pointer">
                                                     VIP
                                                 </span>
                                                 <span v-else-if="v.loai_ghe == 0" class="badge bg-secondary"
-                                                    @click="doiLoaiGhe(v)" style="cursor: pointer">
+                                                     style="cursor: pointer">
                                                     Thường
                                                 </span>
-                                                <span v-else class="badge bg-info" @click="doiLoaiGhe(v)"
+                                                <span v-else class="badge bg-info" 
                                                     style="cursor: pointer">
                                                     Đôi
                                                 </span>

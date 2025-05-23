@@ -95,7 +95,7 @@
                                                             class="list-group-item d-flex justify-content-between align-items-center">
                                                             <div>
                                                                 <span class="badge bg-primary me-2">Suất {{ index + 1
-                                                                }}</span>
+                                                                    }}</span>
                                                                 <span>{{ suat }}</span>
                                                             </div>
                                                             <button @click="xoaSuat1(index)"
@@ -114,17 +114,18 @@
                                         </div>
                                         <div class="mb-2">
                                             <label>Giá Vé</label>
-                                            <input v-model="suat_create.gia_ve" type="number" class="form-control mt-2">
+                                            <input v-model="suat_create.gia_ve" type="number" min="0" step="1000"
+                                                class="form-control mt-2" oninput="this.value = Math.abs(this.value)">
                                         </div>
                                         <div class="mb-2">
                                             <label>Giá Vé Vip</label>
-                                            <input v-model="suat_create.gia_ve_vip" type="number"
-                                                class="form-control mt-2">
+                                            <input v-model="suat_create.gia_ve_vip" type="number" min="0" step="1000"
+                                                class="form-control mt-2" oninput="this.value = Math.abs(this.value)">
                                         </div>
                                         <div class="mb-2">
                                             <label>Giá Vé Đôi</label>
-                                            <input v-model="suat_create.gia_ve_doi" type="number"
-                                                class="form-control mt-2">
+                                            <input v-model="suat_create.gia_ve_doi" type="number" min="0" step="1000"
+                                                class="form-control mt-2" oninput="this.value = Math.abs(this.value)">
                                         </div>
                                         <div class="mb-2">
                                             <label>Định Dạng</label>
@@ -262,7 +263,7 @@
                                                                 <span v-else-if="v.trang_thai === 'Hủy'"
                                                                     class="badge bg-danger">Hủy</span>
                                                                 <span v-else class="badge bg-primary">{{ v.trang_thai
-                                                                }}</span>
+                                                                    }}</span>
                                                             </td>
                                                             <td class="text-center text-nowrap align-middle">
                                                                 <button v-on:click="suaSuatChieu(v)"
@@ -361,9 +362,24 @@
                                                                 :disabled="suat_update.da_co_nguoi_dat">
                                                         </div>
                                                         <div class="mb-2">
-                                                            <label>Giá Vé</label>
-                                                            <input v-model="suat_update.gia_ve" type="number"
-                                                                class="form-control mt-2">
+                                                            <div class="mb-2">
+                                                                <label>Giá Vé</label>
+                                                                <input v-model="suat_update.gia_ve" type="number"
+                                                                    min="0" step="1000" class="form-control mt-2"
+                                                                    oninput="this.value = Math.abs(this.value)">
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <label>Giá Vé Vip</label>
+                                                                <input v-model="suat_update.gia_ve_vip" type="number"
+                                                                    min="0" step="1000" class="form-control mt-2"
+                                                                    oninput="this.value = Math.abs(this.value)">
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <label>Giá Vé Đôi</label>
+                                                                <input v-model="suat_update.gia_ve_doi" type="number"
+                                                                    min="0" step="1000" class="form-control mt-2"
+                                                                    oninput="this.value = Math.abs(this.value)">
+                                                            </div>
                                                         </div>
                                                         <div class="mb-2">
                                                             <label>Định Dạng</label>
@@ -686,6 +702,12 @@ export default {
 
             if (ngayBatDau < today) {
                 toaster.error("Không thể tạo suất chiếu cho ngày trong quá khứ!");
+                return;
+            }
+
+            // Validate ticket prices
+            if (this.suat_create.gia_ve < 0 || this.suat_create.gia_ve_vip < 0 || this.suat_create.gia_ve_doi < 0) {
+                toaster.error("Giá vé không được nhỏ hơn 0!");
                 return;
             }
 

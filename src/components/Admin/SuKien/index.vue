@@ -202,7 +202,7 @@ export default {
                 .get('admin/su-kien/data')
                 .then((res) => {
                     this.ds_su_kien = res.data.data;
-                    if(res.data.status != true){
+                    if(res.data.status == false){
                         toaster.error(res.data.message)
                     }
                 })
@@ -272,6 +272,8 @@ export default {
                     if (res.data.status == true) {
                         toaster.success(res.data.message)
                         this.layDuLieu();
+                    }else{
+                        toaster.error(res.data.message)
                     }
                 });
         },
@@ -288,6 +290,8 @@ export default {
                         toaster.success(res.data.message)
                         this.layDuLieu();
                         this.dateErrors.update = { start: '', end: '' };
+                    }else{
+                        toaster.error(res.data.message)
                     }
                 });
         },

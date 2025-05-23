@@ -188,7 +188,7 @@ export default {
         },
 
         validatePhone(phone) {
-            const re = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+            const re = /(84|0[3|5|7|8|9|2|])+([0-9]{8})\b/;
             return re.test(phone);
         },
 

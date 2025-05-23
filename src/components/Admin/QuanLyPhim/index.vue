@@ -101,13 +101,16 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <label class="form-label">Thể Loại Phim</label>
-                                                <div class="form-control mt-2" style="max-height: 200px; overflow-y: auto;">
-                                                    <div v-for="theLoai in list_the_loai" :key="theLoai.id" class="form-check">
-                                                        <input class="form-check-input" type="checkbox" 
-                                                            :value="theLoai.id" 
+                                                <div class="form-control mt-2"
+                                                    style="max-height: 200px; overflow-y: auto;">
+                                                    <div v-for="theLoai in list_the_loai" :key="theLoai.id"
+                                                        class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            :value="theLoai.id"
                                                             v-model="create_quan_ly_phim.id_the_loai"
                                                             :id="'create-genre-' + theLoai.id">
-                                                        <label class="form-check-label" :for="'create-genre-' + theLoai.id">
+                                                        <label class="form-check-label"
+                                                            :for="'create-genre-' + theLoai.id">
                                                             {{ theLoai.ten_the_loai }}
                                                         </label>
                                                     </div>
@@ -221,13 +224,15 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <label class="form-label">Thể Loại Phim</label>
-                                                <div class="form-control mt-2" style="max-height: 200px; overflow-y: auto;">
-                                                    <div v-for="theLoai in list_the_loai" :key="theLoai.id" class="form-check">
-                                                        <input class="form-check-input" type="checkbox" 
-                                                            :value="theLoai.id" 
-                                                            v-model="edit_quan_ly_phim.id_the_loai"
+                                                <div class="form-control mt-2"
+                                                    style="max-height: 200px; overflow-y: auto;">
+                                                    <div v-for="theLoai in list_the_loai" :key="theLoai.id"
+                                                        class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            :value="theLoai.id" v-model="edit_quan_ly_phim.id_the_loai"
                                                             :id="'edit-genre-' + theLoai.id">
-                                                        <label class="form-check-label" :for="'edit-genre-' + theLoai.id">
+                                                        <label class="form-check-label"
+                                                            :for="'edit-genre-' + theLoai.id">
                                                             {{ theLoai.ten_the_loai }}
                                                         </label>
                                                     </div>
@@ -296,18 +301,28 @@
                                     <td class="text-center align-middle text-nowrap">{{ v.ngay_chieu }}</td>
                                     <td class="text-center align-middle text-nowrap">{{ v.thoi_luong }}</td>
                                     <td class="text-center align-middle text-nowrap">{{ v.dao_dien }}</td>
-                                    <td class="text-center align-middle text-nowrap">{{ v.dien_vien }}</td>
+                                    <td class="text-center align-middle text-nowrap"><i
+                                            v-on:click="Object.assign(dien_vien, v)" data-bs-toggle="modal"
+                                            data-bs-target="#dienvien" class="fa-2x fa-solid fa-users"></i></td>
                                     <td class="text-center align-middle text-nowrap">{{ v.nha_san_xuat }}</td>
                                     <td class="text-center align-middle text-nowrap">
-                                        {{ v.the_loais ? v.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}
+                                        {{v.the_loais ? v.the_loais.map(tl => tl.ten_the_loai).join(', ') : "Đang cập nhật" }}
                                     </td>
                                     <td class="text-center align-middle text-nowrap">{{ v.gioi_han_do_tuoi }}</td>
                                     <td class="text-center align-middle text-nowrap">
                                         <img :src="v.hinh_anh" alt="" style="height: 50px;">
                                     </td>
-                                    <td class="text-center align-middle text-nowrap">{{ v.trailer_ytb }}</td>
+                                    <td class="text-center align-middle text-nowrap">
+                                        <iframe width="330" height="180"
+                                            :src="v.trailer_ytb"
+                                            title="YouTube video player" frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    </td>
                                     <td class="text-center align-middle text-nowrap">{{ v.danh_gia }}</td>
-                                    <td class="text-center align-middle text-nowrap">{{ v.mo_ta }}</td>
+                                    <td class="text-center align-middle text-nowrap"><i
+                                            v-on:click="Object.assign(mo_ta, v)" data-bs-toggle="modal"
+                                            data-bs-target="#mota" class="fa-2x fa-solid fa-bookmark"></i></td>
                                     <td class="text-center align-middle text-nowrap">
                                         <button v-on:click="doiTrangThai(v)" v-if="v.tinh_trang == 1"
                                             class="btn btn-primary">Hoạt
@@ -359,6 +374,38 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="dienvien" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Diễn viên</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ dien_vien.dien_vien }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="mota" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Mô tả</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ mo_ta.mo_ta }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -405,7 +452,9 @@ export default {
                 id_the_loai: [],
                 tinh_trang: '1'
             },
-            list_the_loai: []
+            list_the_loai: [],
+            dien_vien: {},
+            mo_ta: {}
         };
     },
     mounted() {
@@ -559,12 +608,12 @@ export default {
                 toaster.error('Vui lòng chọn ít nhất một thể loại phim');
                 return;
             }
-            
+
             // Create a copy of the data to send
             const updateData = { ...this.edit_quan_ly_phim };
             // Ensure id_the_loai is an array of numbers
             updateData.id_the_loai = updateData.id_the_loai.map(id => Number(id));
-            
+
             baseRequest
                 .put('admin/quan-ly-phim/update', updateData)
                 .then((res) => {
@@ -600,10 +649,10 @@ export default {
                 id_the_loai: [],
                 tinh_trang: '1'
             };
-            
+
             // Copy the movie data
             Object.assign(this.edit_quan_ly_phim, v);
-            
+
             // Handle the genre IDs
             if (v.the_loais && Array.isArray(v.the_loais)) {
                 this.edit_quan_ly_phim.id_the_loai = v.the_loais.map(tl => tl.id);

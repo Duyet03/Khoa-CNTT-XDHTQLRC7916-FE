@@ -28,14 +28,18 @@
                                         <tr v-for="(item, index) in ds_goc_dien_anh" :key="index">
                                             <td>{{ item.id }}</td>
                                             <td>{{ item.tieu_de }}</td>
-                                            <td>{{ item.noi_dung }}</td>
+                                            <td class="text-center align-middle"> <i
+                                                    v-on:click="Object.assign(su_kien, item)"
+                                                    data-bs-toggle="modal" data-bs-target="#noidung"
+                                                    class="fa-solid fa-2x fa-pen-nib"></i></td>
                                             <td>
                                                 <img :src="item.hinh_anh" :alt="item.tieu_de" class="img-thumbnail"
                                                     style="max-width: 100px;">
                                             </td>
                                             <td>{{ formatDate(item.ngay_dang) }}</td>
-                                            <td>
-                                                <span :class="['badge', item.trang_thai ? 'bg-success' : 'bg-danger']">
+                                            <td class="text-center align-middle">
+                                                <span v-on:click="doiTrangThai(item.id)"
+                                                    :class="['badge', item.trang_thai ? 'bg-success' : 'bg-danger']">
                                                     {{ item.trang_thai ? 'Hiển thị' : 'Ẩn' }}
                                                 </span>
                                             </td>
@@ -120,6 +124,22 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="noidung" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Nội dung</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ su_kien.noi_dung }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -142,7 +162,8 @@ export default {
                 hinh_anh: '',
                 ngay_dang: new Date().toISOString().split('T')[0],
                 trang_thai: true
-            }
+            },
+            su_kien: {}
         };
     },
     mounted() {

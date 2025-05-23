@@ -121,7 +121,7 @@ export default {
     methods: {
         layDuLieuTinTuc() {
             axios
-                .get('http://127.0.0.1:8000/api/goc-dien-anh/data')
+                .get('http://127.0.0.1:8000/api/goc-dien-anh/data/open')
                 .then((res) => {
                     this.ds_tin_tuc = res.data.data;
                 })

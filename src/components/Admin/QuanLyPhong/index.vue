@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-lg-12">
+        <!-- <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="row">
         <div class="col-lg-12">
@@ -60,25 +60,25 @@
                                     <th class="text-center">#</th>
                                     <th class="text-center">Tên Phòng</th>
                                     <th class="text-center">Tình Trạng</th>
-                                    <th class="text-center">Action</th>
+                                    <!-- <th class="text-center">Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(v, k) in ds_phong" :key="k">
                                     <th class="text-center align-middle">{{ k + 1 }}</th>
-                                    <td class="align-middle">{{ v.ten_phong }}</td>
+                                    <td class="text-center align-middle">{{ v.ten_phong }}</td>
                                     <td class="text-center">
                                         <button v-on:click="doiTrangThai(v)" v-if="v.tinh_trang == 1"
                                             class="btn btn-success">Hoạt động</button>
                                         <button v-on:click="doiTrangThai(v)" v-else class="btn btn-primary">Tạm
                                             dừng</button>
                                     </td>
-                                    <td class="text-center text-nowrap align-middle">
+                                    <!-- <td class="text-center text-nowrap align-middle">
                                         <button v-on:click="Object.assign(phong_update, v)" data-bs-toggle="modal"
                                             data-bs-target="#updateModal" class="btn btn-info me-1">Cập Nhật</button>
                                         <button data-bs-toggle="modal" data-bs-target="#deleteModal"
                                             v-on:click="id_can_xoa = v.id" class="btn btn-danger">Xoá Bỏ</button>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
