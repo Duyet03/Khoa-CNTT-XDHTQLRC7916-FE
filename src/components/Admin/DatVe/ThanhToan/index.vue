@@ -370,7 +370,7 @@ export default {
                 // Hiển thị modal đang xử lý
                 this.processing = true;
                 const processingModal = new bootstrap.Modal(document.getElementById('processingModal'));
-                processingModal.show();
+                //processingModal.show();
 
                 const paymentData = {
                     id_suat: this.id_suat,

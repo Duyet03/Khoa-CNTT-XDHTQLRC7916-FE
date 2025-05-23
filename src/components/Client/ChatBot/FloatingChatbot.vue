@@ -6,14 +6,29 @@
       <i v-else class="bx bx-x"></i>
       <span class="notification-badge" v-if="!isOpen && hasNewMessage">1</span>
     </button>
-    
+
     <!-- Chat window -->
     <div class="chat-window" :class="{ 'open': isOpen }">
-      
+      <!-- Header -->
+      <div class="chat-header1">
+        <div class="header-left">
+          <div class="avatar">
+            <i class="bx bx-bot"></i>
+          </div>
+          <div class="header-info">
+            <div class="header-title">Cinema Assistant</div>
+            <div class="header-status">
+              <div class="status-dot"></div>
+              <span>Online</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Messages -->
       <div class="chat-messages" ref="messagesContainer">
-        <div v-for="(message, index) in messages" :key="index" 
-             :class="['message', message.sender === 'user' ? 'user-message' : 'bot-message']">
+        <div v-for="(message, index) in messages" :key="index"
+          :class="['message', message.sender === 'user' ? 'user-message' : 'bot-message']">
           <div class="message-content" v-html="message.text"></div>
           <div class="message-time" v-if="message.time">{{ message.time }}</div>
         </div>
@@ -22,7 +37,7 @@
             <span></span><span></span><span></span>
           </div>
         </div>
-        
+
         <!-- Quick actions - Hiển thị khi chưa có tin nhắn người dùng -->
         <div v-if="!messages.some(m => m.sender === 'user') && isLoggedIn" class="quick-actions">
           <div class="quick-title">Câu hỏi phổ biến:</div>
@@ -31,22 +46,14 @@
               <i class="bx bx-movie-play"></i>
               <span>Phim đang chiếu</span>
             </button>
-            <button @click="handleQuickAction('Xem lịch sử đặt vé')" class="quick-btn">
-              <i class="bx bx-history"></i>
-              <span>Lịch sử đặt vé</span>
-            </button>
           </div>
         </div>
       </div>
-      
+
       <!-- Input -->
       <div class="chat-input">
-        <input 
-          type="text" 
-          v-model="userInput" 
-          @keyup.enter="sendMessage" 
-          placeholder="Hỏi về phim, lịch chiếu, đặt vé..."
-        />
+        <input type="text" v-model="userInput" @keyup.enter="sendMessage"
+          placeholder="Hỏi về phim, lịch chiếu, đặt vé..." />
         <button @click="sendMessage" :disabled="!userInput.trim()" class="send-btn">
           <i class="bx bx-send"></i>
         </button>
@@ -63,13 +70,7 @@ export default {
     return {
       isOpen: false,
       hasNewMessage: false,
-      messages: [
-        {
-          text: 'Xin chào! Tôi là trợ lý ảo của Cinema. Tôi có thể giúp gì cho bạn?',
-          sender: 'bot',
-          time: this.getCurrentTime()
-        }
-      ],
+      messages: [],
       userInput: '',
       isLoading: false,
       userId: null,
@@ -115,6 +116,18 @@ export default {
       this.isOpen = !this.isOpen;
       if (this.isOpen) {
         this.hasNewMessage = false;
+        // Thêm tin nhắn chào mừng khi mở chatbot
+        if (this.messages.length === 0) {
+          this.messages.push({
+            text: `Xin chào! Tôi là Cinema Assistant, tôi có thể giúp bạn:<br>
+						- Tìm kiếm thông tin phim<br>
+						- Xem lịch chiếu phim<br>
+						- Kiểm tra lịch sử đặt vé<br>
+						- Và nhiều thông tin khác về rạp phim`,
+            sender: 'bot',
+            time: this.getCurrentTime()
+          });
+        }
         this.$nextTick(() => {
           this.scrollToBottom();
         });
@@ -152,18 +165,27 @@ export default {
 
       try {
         let response;
-        
+        // Lấy lịch sử tin nhắn (bỏ qua tin nhắn hệ thống như lời chào)
+        const messageHistory = this.messages
+          .filter(msg => !msg.text.includes('Cinema Assistant, tôi có thể giúp bạn'))
+          .map(msg => ({
+            role: msg.sender === 'user' ? 'user' : 'assistant',
+            content: msg.text
+          }));
+
         // Kiểm tra nếu là yêu cầu xem lịch sử đặt vé
-        if (this.userInput.toLowerCase().includes('lịch sử') && 
-            (this.userInput.toLowerCase().includes('đặt vé') || this.userInput.toLowerCase().includes('hóa đơn'))) {
+        if (this.userInput.toLowerCase().includes('lịch sử') &&
+          (this.userInput.toLowerCase().includes('đặt vé') || this.userInput.toLowerCase().includes('hóa đơn'))) {
           response = await axios.post('http://127.0.0.1:8000/api/chatbot/bill-history', {
-            userId: this.userId
+            userId: this.userId,
+            messages: messageHistory
           });
         } else {
-          // Gửi câu hỏi đến API mặc định
+          // Gửi câu hỏi đến API mặc định kèm theo lịch sử tin nhắn
           response = await axios.post('http://127.0.0.1:8000/api/chatbot/query', {
             message: this.userInput,
-            userId: this.userId
+            userId: this.userId,
+            messages: messageHistory
           });
         }
 
@@ -193,7 +215,7 @@ export default {
       if (!this.isLoggedIn) {
         return;
       }
-      
+
       this.userInput = question;
       this.sendMessage();
     },
@@ -265,22 +287,11 @@ export default {
   position: relative;
   transition: transform 0.3s, background 0.3s;
   margin-bottom: 15px;
-  animation: pulse 2s infinite alternate;
   z-index: 9999;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  }
-  100% {
-    box-shadow: 0 4px 20px rgba(229, 9, 20, 0.5);
-  }
 }
 
 .chat-bubble i {
   font-size: 28px;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
 
 .chat-bubble:hover {
@@ -291,14 +302,13 @@ export default {
 .chat-bubble.expanded {
   background: #333;
   transform: scale(1);
-  animation: none;
 }
 
 .notification-badge {
   position: absolute;
   top: -8px;
   right: -8px;
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: #007bff;
   color: white;
   font-size: 12px;
   width: 22px;
@@ -308,18 +318,7 @@ export default {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   border: 2px solid white;
-  animation: bounce 1s infinite alternate;
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-4px);
-  }
 }
 
 /* Chat Window */
@@ -349,15 +348,13 @@ export default {
 }
 
 /* Header */
-.chat-header {
+.chat-header1 {
   padding: 15px;
   background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .header-left {
@@ -374,7 +371,6 @@ export default {
   align-items: center;
   justify-content: center;
   margin-right: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .avatar i {
@@ -390,7 +386,6 @@ export default {
 .header-title {
   font-weight: 600;
   font-size: 16px;
-  letter-spacing: 0.3px;
 }
 
 .header-status {
@@ -407,34 +402,6 @@ export default {
   background-color: #4CAF50;
   border-radius: 50%;
   margin-right: 5px;
-  position: relative;
-}
-
-.status-dot::after {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background-color: rgba(76, 175, 80, 0.4);
-  border-radius: 50%;
-  animation: pulse-status 2s infinite;
-}
-
-@keyframes pulse-status {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
 }
 
 .close-chat-btn {
@@ -462,8 +429,6 @@ export default {
   padding: 15px;
   overflow-y: auto;
   background-color: #f8f9fa;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .message {
@@ -471,8 +436,6 @@ export default {
   display: flex;
   flex-direction: column;
   animation: message-appear 0.3s ease;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 @keyframes message-appear {
@@ -480,6 +443,7 @@ export default {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -538,22 +502,11 @@ export default {
   animation: bounce 1.3s infinite;
 }
 
-.typing span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* Input */
 .chat-input {
   display: flex;
   padding: 15px;
   background-color: white;
   border-top: 1px solid #eee;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .chat-input input {
@@ -582,55 +535,34 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s, transform 0.2s;
+  transition: background-color 0.2s;
 }
 
 .send-btn:hover {
   background-color: #c80812;
-  transform: scale(1.05);
 }
 
 .send-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-  transform: none;
 }
 
 /* Mobile styles */
 @media (max-width: 768px) {
   .chat-window {
-    position: fixed;
     width: 100%;
     height: 100%;
     bottom: 0;
     right: 0;
     left: 0;
     border-radius: 0;
-    box-sizing: border-box;
   }
 
-  .chat-header {
-    width: 100%;
-    border-radius: 0;
-    box-sizing: border-box;
-  }
-
-  .chat-messages {
-    height: calc(100% - 130px);
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .chat-input {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
   .chat-bubble {
     width: 55px;
     height: 55px;
   }
-  
+
   .floating-chatbot {
     bottom: 15px;
     right: 15px;
@@ -641,7 +573,6 @@ export default {
 .quick-actions {
   margin-top: 10px;
   padding: 10px 0;
-  width: 100%;
 }
 
 .quick-title {
@@ -679,28 +610,5 @@ export default {
 .quick-btn:hover {
   background-color: #f0f0f0;
   border-color: #ccc;
-}
-
-/* Additional fix for mobile display */
-@media (max-width: 480px) {
-  .chat-window {
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-    margin: 0;
-    border-radius: 0;
-    position: fixed;
-  }
-  
-  .chat-header, 
-  .chat-messages, 
-  .chat-input {
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 0;
-  }
 }
 </style>

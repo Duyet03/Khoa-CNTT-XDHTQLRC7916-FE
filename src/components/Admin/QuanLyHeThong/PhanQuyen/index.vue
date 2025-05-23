@@ -17,7 +17,7 @@
                                     <th>Cấp Quyền</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center align-middle">
+                            <tbody v-if="quyen==true" class="text-center align-middle">
                                 <tr v-for="(v, k) in list_chuc_vu" :key="k" class="align-middl">
                                     <th class="text-center">{{ k + 1 }}</th>
                                     <td>{{ v.ten_chuc_vu }}</td>
@@ -148,7 +148,8 @@ export default {
         }
     },
     mounted() {
-        this.loadChucVuOP()
+        this.loadChucVuOP(),
+        this.checkQuyen()
     },
     methods: {
         checkQuyen() {
@@ -157,6 +158,8 @@ export default {
                 .then((res) => {
                     if(res.data.status){
                         this.quyen=true;
+                        console.log(this.quyen);
+                        
                     }else{
                         toaster.error("Bạn không có quyền này");
                     }

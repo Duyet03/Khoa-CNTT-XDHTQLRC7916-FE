@@ -165,7 +165,7 @@ export default {
         },
         layDuLieuSlide() {
             axios
-                .get('http://127.0.0.1:8000/api/slide/data')
+                .get('http://127.0.0.1:8000/api/slide/data-client')
                 .then((res) => {
                     console.log("Dữ liệu từ API:", res.data.slide);
                     this.ds_slide = res.data.slide;
